@@ -12,6 +12,6 @@ public class DesktopLauncher {
 		config.setWindowedMode(MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
 		config.setWindowSizeLimits(MyGdxGame.WIDTH, MyGdxGame.HEIGHT, MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
 		config.setTitle(MyGdxGame.TITLE);
-		new Lwjgl3Application(new MyGdxGame(), config);
+		new Lwjgl3Application(new MyGdxGame(new DesktopInterfaceClass()), config);
 	}
 }

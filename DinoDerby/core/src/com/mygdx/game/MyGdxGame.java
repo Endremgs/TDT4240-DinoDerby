@@ -13,13 +13,22 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	public static final String TITLE = "Dino Derby";
 
+	FireBaseInterface FBIC;
+
 	private GameStateManager gsm;
 	SpriteBatch batch;
+
+	public MyGdxGame(FireBaseInterface FBIC) {
+		this.FBIC = FBIC;
+	}
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		gsm = new GameStateManager();
 		gsm.push(new MenuState(gsm));
+		FBIC.SomeFunction();
+		FBIC.firstFireBaseText();
 	}
 
 	@Override
