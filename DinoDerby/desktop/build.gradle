@@ -41,6 +41,10 @@ task dist(type: Jar) {
     with jar
 }
 
+//dependencies {
+//    implementation 'com.google.firebase:firebase-database:19.2.1'
+//}
+
 
 dist.dependsOn classes
 

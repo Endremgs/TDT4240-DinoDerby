@@ -1,3 +1,4 @@
+apply plugin: 'com.google.gms.google-services'
 android {
     buildToolsVersion "29.0.3"
     compileSdkVersion 30
@@ -89,4 +90,9 @@ task run(type: Exec) {
     commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.mygdx.game/com.mygdx.game.AndroidLauncher'
 }
 
+dependencies {
+    implementation 'com.google.firebase:firebase-database:19.2.1'
+}
+
 eclipse.project.name = appName + "-android"
+apply plugin: 'com.google.gms.google-services'
