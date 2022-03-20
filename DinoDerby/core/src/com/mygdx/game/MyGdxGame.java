@@ -36,6 +36,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		ScreenUtils.clear(0, 0, 0, 1);
 		gsm.update(Gdx.graphics.getDeltaTime());
 		gsm.render(batch);
+
 	}
 	
 	@Override

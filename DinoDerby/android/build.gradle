@@ -1,4 +1,3 @@
-apply plugin: 'com.google.gms.google-services'
 android {
     buildToolsVersion "29.0.3"
     compileSdkVersion 30
@@ -13,6 +12,10 @@ android {
             jniLibs.srcDirs = ['libs']
         }
 
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     packagingOptions {
         exclude 'META-INF/robovm/ios/robovm.xml'

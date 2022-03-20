@@ -1,13 +1,14 @@
 {
   "project_info": {
     "project_number": "803301764569",
+    "firebase_url": "https://dino-derby-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "dino-derby",
     "storage_bucket": "dino-derby.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:803301764569:android:0e7c328f0ca787f4f8bdc8",
+        "mobilesdk_app_id": "1:803301764569:android:5df949455d2321ecf8bdc8",
         "android_client_info": {
           "package_name": "com.mygdx.game"
         }

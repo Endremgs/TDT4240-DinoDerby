@@ -17,7 +17,7 @@ public class AndroidInterfaceClass implements FireBaseInterface {
     DatabaseReference myRef;
     public AndroidInterfaceClass() {
         // Write a message to the database
-        this.database = FirebaseDatabase.getInstance();
+        this.database = FirebaseDatabase.getInstance("https://dino-derby-default-rtdb.europe-west1.firebasedatabase.app");
         this.myRef = database.getReference("message");
 
         myRef.setValue("Hello, World!");
@@ -25,13 +25,23 @@ public class AndroidInterfaceClass implements FireBaseInterface {
 
     @Override
     public void SomeFunction() {
+        try {
+            myRef.setValue("hallelujah");
         System.out.println("det funker");
+
+        }
+        catch (Exception e){
+            System.out.println("oh no");
+            System.out.println(e);
+        }
+
     }
 
     @Override
     public void firstFireBaseText() {
+        System.out.println(myRef);
         if (myRef != null) {
-            myRef.setValue("hello world!");
+            myRef.setValue("Det funker faktisk");
         }
     }
 

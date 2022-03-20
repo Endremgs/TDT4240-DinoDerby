@@ -2,8 +2,8 @@ package com.mygdx.game;
 
 public interface FireBaseInterface {
 
-    public void SomeFunction();
+    void SomeFunction();
 
-    public void firstFireBaseText();
+    void firstFireBaseText();
 
 }
