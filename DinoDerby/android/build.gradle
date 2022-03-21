@@ -13,6 +13,10 @@ android {
         }
 
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     packagingOptions {
         exclude 'META-INF/robovm/ios/robovm.xml'
     }
@@ -89,4 +93,9 @@ task run(type: Exec) {
     commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.mygdx.game/com.mygdx.game.AndroidLauncher'
 }
 
+dependencies {
+    implementation 'com.google.firebase:firebase-database:19.2.1'
+}
+
 eclipse.project.name = appName + "-android"
+apply plugin: 'com.google.gms.google-services'

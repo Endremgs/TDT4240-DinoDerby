@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "803301764569",
+    "firebase_url": "https://dino-derby-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "dino-derby",
+    "storage_bucket": "dino-derby.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:803301764569:android:5df949455d2321ecf8bdc8",
+        "android_client_info": {
+          "package_name": "com.mygdx.game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "803301764569-bbnusnlu6modt4v305kqmnddcocsl894.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAW0fpYElNSB3VPRFNILvYfx163bwjAxXY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "803301764569-bbnusnlu6modt4v305kqmnddcocsl894.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
