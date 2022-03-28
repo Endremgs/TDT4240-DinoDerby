@@ -16,7 +16,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	FireBaseInterface FBIC;
 
 	private GameStateManager gsm;
-	SpriteBatch batch;
+	 SpriteBatch batch;
 
 	public MyGdxGame(FireBaseInterface FBIC) {
 		this.FBIC = FBIC;
