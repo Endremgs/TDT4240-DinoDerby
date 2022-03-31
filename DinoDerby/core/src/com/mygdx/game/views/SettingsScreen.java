@@ -1,4 +1,4 @@
-package com.mygdx.game.screens;
+package com.mygdx.game.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -16,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.MyGdxGame;
-import com.mygdx.game.GameSettings;
 
 public class SettingsScreen implements Screen {
 
@@ -49,11 +48,11 @@ public class SettingsScreen implements Screen {
 
         //music
         final Slider musicSlider = new Slider(0, 1f, 0.1f, false, skin);
-        musicSlider.setValue(parent.getPrefrences().getMusicVolume());
+        musicSlider.setValue(parent.getSettings().getMusicVolume());
         musicSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                parent.getPrefrences().setMusicVolume(musicSlider.getMusicVolume());
+                parent.getSettings().setMusicVolume(musicSlider.getMusicVolume());
                 return false;
             }
         });
@@ -63,18 +62,18 @@ public class SettingsScreen implements Screen {
             @Override
             public boolean handle(Event event) {
                 boolean enabled = musicCheckbox.isChecked();
-                parent.getPrefrences().setMusicEnabled(enabled);
+                parent.getSettings().setMusicEnabled(enabled);
                 return false;
             }
         });
 
         //sound
         final Slider soundSlider = new Slider(0, 1f, 0.1f, false, skin);
-        musicSlider.setValue(parent.getPrefrences().getSoundVolume());
+        musicSlider.setValue(parent.getSettings().getSoundVolume());
         musicSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                parent.getPrefrences().setSoundVolume(soundSlider.getSoundVolume());
+                parent.getSettings().setSoundVolume(soundSlider.getSoundVolume());
                 return false;
             }
         });
@@ -84,7 +83,7 @@ public class SettingsScreen implements Screen {
             @Override
             public boolean handle(Event event) {
                 boolean enabled = soundCheckbox.isChecked();
-                parent.getPrefrences().setSoundEnabled(enabled);
+                parent.getSettings().setSoundEnabled(enabled);
                 return false;
             }
         });

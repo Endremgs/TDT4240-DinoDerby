@@ -32,9 +32,14 @@ public class MyGdxGame extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		gsm = new GameStateManager();
+		settings = new GameSettings();
 		gsm.push(new MenuState(gsm));
 		FBIC.SomeFunction();
 		FBIC.firstFireBaseText();
+	}
+
+	public GameSettings getSettings(){
+		return this.settings;
 	}
 
 	@Override
