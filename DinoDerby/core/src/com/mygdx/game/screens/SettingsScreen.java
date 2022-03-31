@@ -104,8 +104,21 @@ public class SettingsScreen implements Screen {
         soundEnabled = new Label(null, skin);
 
         //adding our labels to the table
-
-
+        table.add(title);
+        table.row();
+        table.add(musicSlider);
+        table.add(musicSlider);
+        table.row();
+        table.add(musicEnabled);
+        table.add(musicCheckbox);
+        table.row();
+        table.add(soundLabel);
+        table.add(soundSlicer);
+        table.row();
+        table.add(soundEnabled);
+        table.add(soundCheckbox);
+        table.row();
+        table.add(back);
     }
 
     @Override
