@@ -11,6 +11,12 @@ public class MyGdxGame extends ApplicationAdapter {
 	public static final int WIDTH = 480;
 	public static final int HEIGHT = 800;
 
+
+	private GameSettings settings;
+
+	public static final int MENU = 0;
+	public static final int SETTINGS = 1;
+
 	public static final String TITLE = "Dino Derby";
 
 	FireBaseInterface FBIC;
@@ -38,7 +44,16 @@ public class MyGdxGame extends ApplicationAdapter {
 		gsm.render(batch);
 
 	}
-	
+
+	public void changeScreen(int screen){
+		switch (screen){
+			case SETTINGS:
+				if (settings == null) settings = new GameSettings();
+				this.setScreen(settings);
+				break;
+		}
+	}
+
 	@Override
 	public void dispose () {
 		batch.dispose();
