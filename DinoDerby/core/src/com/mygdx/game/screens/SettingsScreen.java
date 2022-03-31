@@ -69,7 +69,7 @@ public class SettingsScreen implements Screen {
         });
 
         //sound
-        final Slider soundSlicer = new Slider(0, 1f, 0.1f, false, skin);
+        final Slider soundSlider = new Slider(0, 1f, 0.1f, false, skin);
         musicSlider.setValue(parent.getPrefrences().getSoundVolume());
         musicSlider.addListener(new EventListener() {
             @Override
@@ -113,7 +113,7 @@ public class SettingsScreen implements Screen {
         table.add(musicCheckbox);
         table.row();
         table.add(soundLabel);
-        table.add(soundSlicer);
+        table.add(soundSlider);
         table.row();
         table.add(soundEnabled);
         table.add(soundCheckbox);
