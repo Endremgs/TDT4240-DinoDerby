@@ -49,8 +49,6 @@ public class MyGdxGame extends Game {
 		gsm = new GameStateManager();
 		gsm.push(new MenuState(gsm));
 		 */
-		FBIC.SomeFunction();
-		FBIC.firstFireBaseText();
 
 		menuScreen = new MenuScreen(this);
 		setScreen(menuScreen);

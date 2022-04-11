@@ -1,5 +1,8 @@
 package com.mygdx.game;
 
+import java.util.HashMap;
+import java.util.List;
+
 public class DesktopInterfaceClass implements FireBaseInterface {
 
 
@@ -8,14 +11,26 @@ public class DesktopInterfaceClass implements FireBaseInterface {
 
     }
 
+
     @Override
-    public void SomeFunction() {
-        System.out.println("det funker");
+    public void createGame(String playerID) {
+
     }
 
     @Override
-    public void firstFireBaseText() {
+    public void joinGame(String gameID, String playerID) {
 
     }
+
+    @Override
+    public List<HashMap> getPlayersInGame(String gameID, String playerID) {
+        return null;
+    }
+
+    @Override
+    public void updatePlayerInGame(String gameID, String playerID, Integer xPos, Integer yPos, Integer zPos) {
+
+    }
+
 
 }
