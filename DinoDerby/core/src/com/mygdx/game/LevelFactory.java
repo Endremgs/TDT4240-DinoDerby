@@ -69,7 +69,7 @@ public class LevelFactory {
         engine.addEntity(entity);
     }
 
-    public void createRoad() {
+    /*public void createRoad() {
         Entity entity = engine.createEntity();
         BodyComponent body = engine.createComponent(BodyComponent.class);
         TransformComponent position = engine.createComponent(TransformComponent.class);
@@ -88,6 +88,10 @@ public class LevelFactory {
         entity.add(texture);
 
         engine.addEntity(entity);
+    }*/
+
+    public void update(float dt){
+
     }
 
 }

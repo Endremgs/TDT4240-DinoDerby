@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
@@ -32,11 +35,19 @@ public class PlayScreen implements Screen {
     private final OrthographicCamera cam;
     private final Engine engine;
 
+    private TmxMapLoader mapLoader;
+    private TiledMap map;
+    private OrthogonalTiledMapRenderer mapRenderer;
+
     public PlayScreen(MyGdxGame myGdxGame) {
         parent = myGdxGame;
         world = new World(new Vector2(0, -10f), true);
         bodyFactory = BodyFactory.getInstance(world);
 
+        //teste å rendre map her
+        mapLoader = new TmxMapLoader();
+        map = mapLoader.load("DinoDerbyMap1.tmx");
+        mapRenderer = new OrthogonalTiledMapRenderer(map);
 
         sb = new SpriteBatch();
         RenderingSystem renderingSystem = new RenderingSystem(sb);
@@ -50,7 +61,7 @@ public class PlayScreen implements Screen {
         engine.addSystem(new PhysicsSystem(world));
 
         createPlayer();
-        createRoad();
+        //createRoad();
 
     }
 
@@ -113,7 +124,7 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         engine.update(delta);
-
+        mapRenderer.render();
     }
 
     @Override
