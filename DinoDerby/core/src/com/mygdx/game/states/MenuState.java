@@ -5,7 +5,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.MyGdxGame;
 
+//TODO - Old code, rm if unneccessary
 public class MenuState extends State{
+
+
     private Texture background;
 
     public MenuState(GameStateManager gsm) {

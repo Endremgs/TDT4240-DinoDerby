@@ -43,6 +43,11 @@ public class MyGdxGame extends Game {
 		this.FBIC = FBIC;
 	}
 
+
+	public FireBaseInterface getFireBaseInstance() {
+		return this.FBIC;
+	}
+
 	@Override
 	public void create () {
 		/*batch = new SpriteBatch();

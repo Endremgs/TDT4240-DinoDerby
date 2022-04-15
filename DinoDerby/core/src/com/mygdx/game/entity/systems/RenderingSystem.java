@@ -23,7 +23,7 @@ public class RenderingSystem extends SortedIteratingSystem {
     static final float FRUSTUM_WIDTH = Gdx.graphics.getWidth()/PPM;
     static final float FRUSTUM_HEIGHT = Gdx.graphics.getWidth()/PPM;
 
-    public static final float PIXEL_TO_METERS = 1.0f / PPM;
+    public static final float PIXEL_TO_METERS = 1.5f / PPM;
 
     /*
     public RenderingSystem(Family family, Comparator<Entity> comparator) {
