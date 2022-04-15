@@ -36,14 +36,16 @@ public class PhysicsSystem extends IteratingSystem {
         if (accumulator >= MAX_STEP_TIME) {
             world.step(MAX_STEP_TIME, 6, 2);
             accumulator -= MAX_STEP_TIME;
-
             for (Entity entity : bodiesQueue) {
-                TransformComponent transform = cmTransform.get(entity);
-                BodyComponent body = cmBody.get(entity);
-                Vector2 position = body.body.getPosition();
-                transform.position.x = position.x;
-                transform.position.y = position.y;
-                transform.rotation = body.body.getAngle() * MathUtils.radiansToDegrees;
+                //Checking if position is non static to check if it should move or not
+                if (!entity.getComponent(TransformComponent.class).isStatic) {
+                    TransformComponent transform = cmTransform.get(entity);
+                    BodyComponent body = cmBody.get(entity);
+                    Vector2 position = body.body.getPosition();
+                    transform.position.x = position.x;
+                    transform.position.y = position.y;
+                    transform.rotation = body.body.getAngle() * MathUtils.radiansToDegrees;
+                }
             }
         }
         bodiesQueue.clear();
