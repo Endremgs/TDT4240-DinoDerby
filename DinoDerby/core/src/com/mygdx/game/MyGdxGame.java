@@ -1,11 +1,6 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.mygdx.game.states.GameStateManager;
-import com.mygdx.game.states.MenuState;
 
 import com.mygdx.game.views.MenuScreen;
 import com.mygdx.game.views.PlayScreen;
