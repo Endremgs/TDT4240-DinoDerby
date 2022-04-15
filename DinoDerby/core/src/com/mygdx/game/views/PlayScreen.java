@@ -16,9 +16,11 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.BodyFactory;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.entity.components.BodyComponent;
+import com.mygdx.game.entity.components.CollisionComponent;
 import com.mygdx.game.entity.components.PlayerComponent;
 import com.mygdx.game.entity.components.TextureComponent;
 import com.mygdx.game.entity.components.TransformComponent;
+import com.mygdx.game.entity.systems.CollisionSystem;
 import com.mygdx.game.entity.systems.PhysicsSystem;
 import com.mygdx.game.entity.systems.PlayerControlSystem;
 import com.mygdx.game.entity.systems.RenderingSystem;
@@ -48,10 +50,37 @@ public class PlayScreen implements Screen {
         engine.addSystem(renderingSystem);
         engine.addSystem(new PlayerControlSystem());
         engine.addSystem(new PhysicsSystem(world));
+        engine.addSystem(new CollisionSystem());
 
         createPlayer();
         createRoad();
+        createObstacle(3, 50);
+    }
 
+    private void createObstacle(int posX, int posY) {
+        Entity entity = engine.createEntity();
+
+        BodyComponent body = engine.createComponent(BodyComponent.class);
+        TransformComponent position = engine.createComponent(TransformComponent.class);
+        //Configures the obstacle to have a static position
+        position.setIsStatic(true);
+        TextureComponent texture = engine.createComponent(TextureComponent.class);
+        CollisionComponent collision = engine.createComponent(CollisionComponent.class);
+
+        //TODO - create obstacle textures
+        texture.region = new TextureRegion(new Texture("player2.png"));
+        body.body = bodyFactory.makeBody(posX, posY,
+                getTextureSize(texture.region).x, getTextureSize(texture.region).y,
+                BodyDef.BodyType.DynamicBody, true);
+        position.position.set(posX, posY, 0);
+        body.body.setUserData(entity);
+
+        entity.add(body);
+        entity.add(position);
+        entity.add(texture);
+        entity.add(collision);
+
+        engine.addEntity(entity);
     }
 
     private void createPlayer() {
