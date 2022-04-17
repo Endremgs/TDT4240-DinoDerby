@@ -8,6 +8,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.entity.components.TextureComponent;
 import com.mygdx.game.entity.components.TransformComponent;
@@ -43,7 +46,9 @@ public class RenderingSystem extends SortedIteratingSystem {
 
     private ComponentMapper<TextureComponent> cmTexture;
     private ComponentMapper<TransformComponent> cmTransform;
-    private Texture background = new Texture("bg.jpg");
+    private TiledMap background = new TmxMapLoader().load("maps/DinoDerbyMap2.tmx");
+    //private Texture background = new Texture("bg.png");
+    private OrthogonalTiledMapRenderer mapRenderer;
 
     @SuppressWarnings("unchecked")
     public RenderingSystem(SpriteBatch sb) {
@@ -75,8 +80,11 @@ public class RenderingSystem extends SortedIteratingSystem {
         sb.setProjectionMatrix(cam.combined);
         sb.enableBlending();
         sb.begin();
-        sb.draw(background, 0, 0, FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
 
+
+
+        //sb.draw(background, 0, 0, FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
+        mapRenderer = new OrthogonalTiledMapRenderer(background);
         for (Entity entity : renderQueue) {
             TextureComponent texture = cmTexture.get(entity);
             TransformComponent transform = cmTransform.get(entity);

@@ -49,7 +49,7 @@ public class PlayScreen implements Screen {
 
 
         //teste å rendre map her
-       // mapLoader = new TmxMapLoader();
+        //mapLoader = new TmxMapLoader();
         //map = mapLoader.load("DinoDerbyMap2.tmx");
         //mapRenderer = new OrthogonalTiledMapRenderer(map);
 
@@ -120,7 +120,7 @@ public class PlayScreen implements Screen {
     @Override
     public void show() {
         TmxMapLoader loader = new TmxMapLoader();
-        map = loader.load("DinoDerbyMap2.tmx");
+        map = loader.load("maps/DinoDerbyMap2.tmx");
 
         mapRenderer = new OrthogonalTiledMapRenderer(map);
     }
