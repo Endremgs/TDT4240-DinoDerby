@@ -35,17 +35,13 @@ public class LevelFactory {
     public int currentLevel = 0;
     private TextureRegion groundTexture;
 
-    public LevelFactory(PooledEngine eng, MyGdxGame parent) {
+    public LevelFactory(PooledEngine eng, TiledMap maps) {
         world = new World(new Vector2(0, 10f), true);
-
+        map = maps;
         engine = eng;
-        this.parent = parent;
-        world.setContactListener();
 
         bodyFactory = BodyFactory.getInstance(world);
     }
-
-
 
     private Vector2 getTextureSize(TextureRegion region) {
         return new Vector2(RenderingSystem.PixelToMeters(region.getRegionWidth()) / 2,
@@ -56,7 +52,7 @@ public class LevelFactory {
     public void createMap(TiledMap map){
         //load the map and renderer
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("DinoDerbyMap2.tmx");
+        map = mapLoader.load("maps/DinoDerbyMap2.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map);
     }
 
@@ -83,5 +79,7 @@ public class LevelFactory {
 
         engine.addEntity(entity);
     }
+
+
 
 }
