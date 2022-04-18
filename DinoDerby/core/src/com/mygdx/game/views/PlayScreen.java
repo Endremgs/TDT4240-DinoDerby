@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Pool;
 import com.mygdx.game.BodyFactory;
 import com.mygdx.game.LevelFactory;
 import com.mygdx.game.MyGdxGame;
@@ -26,7 +27,7 @@ public class PlayScreen implements Screen {
     private final LevelFactory levelFactory;
     private final SpriteBatch sb;
     private final OrthographicCamera cam;
-    private final Engine engine;
+    private final PooledEngine engine;
 
     public PlayScreen(MyGdxGame myGdxGame) {
         parent = myGdxGame;
@@ -34,22 +35,23 @@ public class PlayScreen implements Screen {
         world = new World(new Vector2(0, -10f), true);
         bodyFactory = BodyFactory.getInstance(world);
 
-        
+        engine = new PooledEngine();
+
+        levelFactory = new LevelFactory(engine);
+        levelFactory.createPlayer();
+        levelFactory.createMap();
+
         sb = new SpriteBatch();
-        RenderingSystem renderingSystem = new RenderingSystem(sb);
+        RenderingSystem renderingSystem = new RenderingSystem(sb, levelFactory.getMap());
         cam = renderingSystem.getCamera();
         sb.setProjectionMatrix(cam.combined);
 
-        engine = new PooledEngine();
 
         engine.addSystem(renderingSystem);
         engine.addSystem(new PlayerControlSystem());
         engine.addSystem(new PhysicsSystem(world));
 
-        levelFactory.createPlayer();
-        TiledMap map = new TiledMap();
-        levelFactory.createMap(map);
-        
+
     }
     private Vector2 getTextureSize(TextureRegion region) {
         return new Vector2(RenderingSystem.PixelToMeters(region.getRegionWidth()) / 2,
