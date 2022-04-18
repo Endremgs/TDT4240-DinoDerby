@@ -2,12 +2,10 @@ package com.mygdx.game;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
@@ -27,11 +25,6 @@ public class LevelFactory {
     //loading the map
     private TmxMapLoader mapLoader;
     private TiledMap map;
-    private Entity ground;
-
-
-    public int currentLevel = 0;
-    private TextureRegion groundTexture;
 
     public LevelFactory(PooledEngine eng) {
         world = new World(new Vector2(0, 10f), true);
@@ -48,7 +41,7 @@ public class LevelFactory {
 
 
     public void createMap(){
-        //load the map and renderer
+        //load the map
         mapLoader = new TmxMapLoader();
         this.map = mapLoader.load("maps/DinoDerbyMap2.tmx");
     }

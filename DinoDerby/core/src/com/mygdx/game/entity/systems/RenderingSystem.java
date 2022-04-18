@@ -68,7 +68,7 @@ public class RenderingSystem extends SortedIteratingSystem {
         cam = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
         cam.position.set(FRUSTUM_WIDTH / 2f, FRUSTUM_HEIGHT/ 2f, 0);
 
-        this.mapRenderer = new OrthogonalTiledMapRenderer(map);
+        this.mapRenderer = new OrthogonalTiledMapRenderer(map, 1/16f);
         mapRenderer.setView(cam);
         System.out.println("Created rendering system");
     }
@@ -85,6 +85,7 @@ public class RenderingSystem extends SortedIteratingSystem {
         sb.begin();
 
         mapRenderer.render();
+
 
 //        sb.draw(background, 0, 0, FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
 
