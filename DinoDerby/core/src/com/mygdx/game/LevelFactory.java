@@ -10,7 +10,6 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.entity.components.BodyComponent;
 import com.mygdx.game.entity.components.PlayerComponent;
@@ -25,9 +24,11 @@ public class LevelFactory {
     private PooledEngine engine;
     private MyGdxGame parent;
 
+    //loading the map
     private TmxMapLoader mapLoader;
     private TiledMap map;
     private OrthogonalTiledMapRenderer mapRenderer;
+    private Entity ground;
 
     private OrthographicCamera camera;
 
@@ -39,11 +40,9 @@ public class LevelFactory {
 
         engine = eng;
         this.parent = parent;
-        //world.setContactListener();
+        world.setContactListener();
 
         bodyFactory = BodyFactory.getInstance(world);
-        mapLoader = new TmxMapLoader();
-        map = mapLoader.load("DinoDerbyMap2.tmx");
     }
 
 
@@ -55,11 +54,10 @@ public class LevelFactory {
 
 
     public void createMap(TiledMap map){
-        Entity entity = engine.createEntity();
-        BodyComponent box2D = engine.createComponent(BodyComponent.class);
-        TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
-
-
+        //load the map and renderer
+        mapLoader = new TmxMapLoader();
+        map = mapLoader.load("DinoDerbyMap2.tmx");
+        mapRenderer = new OrthogonalTiledMapRenderer(map);
     }
 
     public void createPlayer(){
@@ -84,31 +82,6 @@ public class LevelFactory {
         entity.add(player);
 
         engine.addEntity(entity);
-    }
-
-    /*public void createRoad() {
-        Entity entity = engine.createEntity();
-        BodyComponent body = engine.createComponent(BodyComponent.class);
-        TransformComponent position = engine.createComponent(TransformComponent.class);
-        TextureComponent texture = engine.createComponent(TextureComponent.class);
-
-
-        position.position.set(0,0, -1);
-        texture.region = new TextureRegion(new Texture("road.png"));
-
-        body.body = bodyFactory.makeGround(0, 0,
-                getTextureSize(texture.region).x, getTextureSize(texture.region).y);
-        body.body.setUserData(entity);
-
-        entity.add(body);
-        entity.add(position);
-        entity.add(texture);
-
-        engine.addEntity(entity);
-    }*/
-
-    public void update(float dt){
-
     }
 
 }
