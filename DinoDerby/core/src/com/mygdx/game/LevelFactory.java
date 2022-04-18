@@ -30,16 +30,16 @@ public class LevelFactory {
     private OrthogonalTiledMapRenderer mapRenderer;
     private Entity ground;
 
+    private static LevelFactory thisLevel;
+
     private OrthographicCamera camera;
 
-    public int currentLevel = 0;
     private TextureRegion groundTexture;
 
-    public LevelFactory(PooledEngine eng, TiledMap maps) {
+    public LevelFactory(PooledEngine eng) {
         world = new World(new Vector2(0, 10f), true);
-        map = maps;
+        //map = maps;
         engine = eng;
-
         bodyFactory = BodyFactory.getInstance(world);
     }
 
@@ -48,8 +48,7 @@ public class LevelFactory {
                 RenderingSystem.PixelToMeters(region.getRegionHeight()) / 2);
     }
 
-
-    public void createMap(TiledMap map){
+    public void createMap(){
         //load the map and renderer
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("maps/DinoDerbyMap2.tmx");

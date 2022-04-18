@@ -34,7 +34,6 @@ public class PlayScreen implements Screen {
         world = new World(new Vector2(0, -10f), true);
         bodyFactory = BodyFactory.getInstance(world);
 
-        
         sb = new SpriteBatch();
         RenderingSystem renderingSystem = new RenderingSystem(sb);
         cam = renderingSystem.getCamera();
@@ -42,13 +41,14 @@ public class PlayScreen implements Screen {
 
         engine = new PooledEngine();
 
+        levelFactory = new LevelFactory((PooledEngine) engine);
+
         engine.addSystem(renderingSystem);
         engine.addSystem(new PlayerControlSystem());
         engine.addSystem(new PhysicsSystem(world));
 
         levelFactory.createPlayer();
-        TiledMap map = new TiledMap();
-        levelFactory.createMap(map);
+        levelFactory.createMap();
         
     }
     private Vector2 getTextureSize(TextureRegion region) {
