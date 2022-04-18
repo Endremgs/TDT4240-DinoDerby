@@ -12,6 +12,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.LevelFactory;
 import com.mygdx.game.entity.components.TextureComponent;
 import com.mygdx.game.entity.components.TransformComponent;
 
@@ -28,6 +29,7 @@ public class RenderingSystem extends SortedIteratingSystem {
 
     public static final float PIXEL_TO_METERS = 1.0f / PPM;
 
+
     /*
     public RenderingSystem(Family family, Comparator<Entity> comparator) {
         super(family, comparator);
@@ -43,15 +45,13 @@ public class RenderingSystem extends SortedIteratingSystem {
     private Array<Entity> renderQueue;
     private Comparator<Entity> comparator;
     private OrthographicCamera cam;
+    private OrthogonalTiledMapRenderer mapRenderer;
 
     private ComponentMapper<TextureComponent> cmTexture;
     private ComponentMapper<TransformComponent> cmTransform;
-    private TiledMap background = new TmxMapLoader().load("maps/DinoDerbyMap2.tmx");
-    //private Texture background = new Texture("bg.png");
-    private OrthogonalTiledMapRenderer mapRenderer;
 
     @SuppressWarnings("unchecked")
-    public RenderingSystem(SpriteBatch sb) {
+    public RenderingSystem(SpriteBatch sb, TiledMap map) {
         super(Family.all(TransformComponent.class, TextureComponent.class).get(), new ZComparator());
 
         comparator = new ZComparator();
@@ -67,6 +67,9 @@ public class RenderingSystem extends SortedIteratingSystem {
 
         cam = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
         cam.position.set(FRUSTUM_WIDTH / 2f, FRUSTUM_HEIGHT/ 2f, 0);
+
+        this.mapRenderer = new OrthogonalTiledMapRenderer(map);
+        mapRenderer.setView(cam);
         System.out.println("Created rendering system");
     }
 
@@ -81,10 +84,10 @@ public class RenderingSystem extends SortedIteratingSystem {
         sb.enableBlending();
         sb.begin();
 
+        mapRenderer.render();
 
+//        sb.draw(background, 0, 0, FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
 
-        //sb.draw(background, 0, 0, FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
-        mapRenderer = new OrthogonalTiledMapRenderer(background);
         for (Entity entity : renderQueue) {
             TextureComponent texture = cmTexture.get(entity);
             TransformComponent transform = cmTransform.get(entity);
