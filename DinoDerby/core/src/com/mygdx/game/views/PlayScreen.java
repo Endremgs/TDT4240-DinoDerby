@@ -93,7 +93,12 @@ public class PlayScreen implements Screen {
     public void resize(int width, int height) {
         cam.viewportWidth = width;
         cam.viewportHeight = height;
+        cam.setToOrtho(false, cam.viewportWidth/2,
+                cam.viewportHeight/2);
+        //cam.position.set(cam.viewportWidth/2, cam.viewportHeight/2, 0 );
+
         cam.update();
+
     }
 
     @Override
