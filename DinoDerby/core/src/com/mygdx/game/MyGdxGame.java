@@ -49,9 +49,6 @@ public class MyGdxGame extends Game {
 	@Override
 	public void create () {
 
-		FBIC.SomeFunction();
-		FBIC.firstFireBaseText();
-
 		menuScreen = new MenuScreen(this);
 		setScreen(menuScreen);
 
