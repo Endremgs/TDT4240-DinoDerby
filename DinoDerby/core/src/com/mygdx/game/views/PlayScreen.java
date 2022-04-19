@@ -101,7 +101,6 @@ public class PlayScreen implements Screen {
         cam.viewportHeight = height;
         cam.setToOrtho(false, cam.viewportWidth/2,
                 cam.viewportHeight/2);
-        //cam.position.set(cam.viewportWidth/2, cam.viewportHeight/2, 0 );
 
         cam.update();
 

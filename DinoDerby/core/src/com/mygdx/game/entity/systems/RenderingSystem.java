@@ -52,7 +52,7 @@ public class RenderingSystem extends SortedIteratingSystem {
     private ComponentMapper<TextureComponent> cmTexture;
     private ComponentMapper<TransformComponent> cmTransform;
     private ComponentMapper<GhostComponent> cmGhost;
-    //private Texture background = new Texture("bg.jpg");
+    
 
     @SuppressWarnings("unchecked")
     public RenderingSystem(SpriteBatch sb, TiledMap map) {
@@ -71,7 +71,7 @@ public class RenderingSystem extends SortedIteratingSystem {
 
         cam = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
         cam.position.set(FRUSTUM_WIDTH / 2f, FRUSTUM_HEIGHT/ 2f, 0);
-        //mapRenderer.setView(cam);
+
         System.out.println("Created rendering system");
     }
 
