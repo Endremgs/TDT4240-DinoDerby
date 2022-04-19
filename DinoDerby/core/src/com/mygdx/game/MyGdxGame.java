@@ -7,20 +7,26 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.views.LobbyScreen;
 import com.mygdx.game.views.MenuScreen;
 import com.mygdx.game.views.PlayScreen;
 
 public class MyGdxGame extends Game {
-	public static final int WIDTH = 480;
-	public static final int HEIGHT = 800;
+	public static final int WIDTH = 1600;
+	public static final int HEIGHT = 960;
 
 	public static final String TITLE = "Dino Derby";
 
 	private MenuScreen menuScreen;
 	private PlayScreen playScreen;
+	private LobbyScreen lobbyScreen;
 
 	public static final int MENU = 0;
 	public static final int PLAY = 1;
+	public static final int LOBBY = 2;
+
+
+
 
 	FireBaseInterface FBIC;
 
@@ -37,6 +43,10 @@ public class MyGdxGame extends Game {
 			case PLAY:
 				if (playScreen == null) playScreen = new PlayScreen(this);
 				this.setScreen(playScreen);
+				break;
+			case LOBBY:
+				if (lobbyScreen == null) lobbyScreen = new LobbyScreen(this);
+				this.setScreen(lobbyScreen);
 				break;
 		}
 

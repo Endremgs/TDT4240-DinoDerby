@@ -27,7 +27,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
-        // Create a table that fills the screen. Everything else will go inside this table.
+        // table fills screen. table will be filled with ui elements
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
@@ -50,7 +50,7 @@ public class MenuScreen implements Screen {
         play.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                parent.changeScreen(MyGdxGame.PLAY);
+                parent.changeScreen(MyGdxGame.LOBBY);
             }
         });
     }
