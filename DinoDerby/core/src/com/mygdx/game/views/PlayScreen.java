@@ -17,6 +17,7 @@ import com.mygdx.game.BodyFactory;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.entity.components.BodyComponent;
 import com.mygdx.game.entity.components.CollisionComponent;
+import com.mygdx.game.entity.components.GhostComponent;
 import com.mygdx.game.entity.components.PlayerComponent;
 import com.mygdx.game.entity.components.TextureComponent;
 import com.mygdx.game.entity.components.TransformComponent;
@@ -53,6 +54,7 @@ public class PlayScreen implements Screen {
         engine.addSystem(new CollisionSystem());
 
         createPlayer();
+        createGhost("bobbbb");
         createRoad();
         createObstacle(3, 50);
     }
@@ -103,6 +105,22 @@ public class PlayScreen implements Screen {
         entity.add(position);
         entity.add(texture);
         entity.add(player);
+
+        engine.addEntity(entity);
+    }
+    private void createGhost(String playerID) {
+        Entity entity = engine.createEntity();
+
+        TransformComponent position = engine.createComponent(TransformComponent.class);
+        TextureComponent texture = engine.createComponent(TextureComponent.class);
+        GhostComponent ghost = engine.createComponent(GhostComponent.class);
+        ghost.playerID = playerID;
+
+        texture.region = new TextureRegion(new Texture("player2.png"));
+        position.position.set(10, 5, 0);
+        entity.add(position);
+        entity.add(texture);
+        entity.add(ghost);
 
         engine.addEntity(entity);
     }
