@@ -18,10 +18,23 @@ public class PlayerControlSystem extends IteratingSystem {
     public PlayerControlSystem() {
         super(Family.all(PlayerComponent.class).get());
 
+        cmPlayer = ComponentMapper.getFor(PlayerComponent.class);
+        cmBody = ComponentMapper.getFor(BodyComponent.class);
+
+    }
+
+    @Override
+    protected void processEntity(Entity entity, float dt) {
+        final BodyComponent b2body = cmBody.get(entity);
         Gdx.input.setInputProcessor(new SimpleDirectionGestureDetector(new SimpleDirectionGestureDetector.DirectionListener() {
             @Override
             public void onUp() {
                 System.out.println("up input");
+                System.out.println(b2body.body.getPosition());
+                b2body.body.setLinearVelocity(b2body.body.getLinearVelocity().x + 0.5f, b2body.body.getLinearVelocity().y);
+//                b2body.body.
+                b2body.body.
+                System.out.println(b2body.body.getPosition());
             }
 
             @Override
@@ -29,14 +42,6 @@ public class PlayerControlSystem extends IteratingSystem {
                 System.out.println("down input");
             }
         }));
-
-        cmPlayer = ComponentMapper.getFor(PlayerComponent.class);
-        cmBody = ComponentMapper.getFor(BodyComponent.class);
-    }
-
-    @Override
-    protected void processEntity(Entity entity, float dt) {
-        BodyComponent body = cmBody.get(entity);
         //body.body.setLinearVelocity(body.body.getLinearVelocity().x + 0.5f, body.body.getLinearVelocity().y);
 
     }

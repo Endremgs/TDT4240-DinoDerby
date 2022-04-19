@@ -100,6 +100,7 @@ public class PlayScreen implements Screen {
                 BodyDef.BodyType.DynamicBody, true);
         position.position.set(5, 10, 0);
         body.body.setUserData(entity);
+        System.out.println(body.body.getPosition());
 
         entity.add(body);
         entity.add(position);
