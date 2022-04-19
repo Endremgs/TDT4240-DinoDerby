@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -25,6 +26,9 @@ public class LevelFactory {
     //loading the map
     private TmxMapLoader mapLoader;
     private TiledMap map;
+
+    private TiledMapTileLayer collisionLayer;
+    boolean collisionX;
 
     public LevelFactory(PooledEngine eng) {
         world = new World(new Vector2(0, 10f), true);
@@ -63,7 +67,9 @@ public class LevelFactory {
         body.body = bodyFactory.makeBody(5, 10,
                 getTextureSize(texture.region).x, getTextureSize(texture.region).y,
                 BodyDef.BodyType.DynamicBody, true);
-        position.position.set(5, 10, 0);
+
+
+        //position.position.set(5, 10, 0);
         body.body.setUserData(entity);
 
         entity.add(body);
