@@ -35,7 +35,7 @@ public class PlayScreen implements Screen {
     public PlayScreen(MyGdxGame myGdxGame) {
         parent = myGdxGame;
 
-        world = new World(new Vector2(0, -10f), true);
+        world = new World(new Vector2(0, 0), true);
         bodyFactory = BodyFactory.getInstance(world);
 
         engine = new PooledEngine();
@@ -55,7 +55,6 @@ public class PlayScreen implements Screen {
         engine.addSystem(new PhysicsSystem(world));
         engine.addSystem(new CollisionSystem());
 
-        createRoad();
     }
     private Vector2 getTextureSize(TextureRegion region) {
         return new Vector2(RenderingSystem.PixelToMeters(region.getRegionWidth()) / 2,

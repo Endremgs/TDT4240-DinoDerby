@@ -111,7 +111,7 @@ public class RenderingSystem extends SortedIteratingSystem {
             sb.draw(texture.region,
                     transform.position.x - originX, transform.position.y -originY,
                     originX, originY,
-                    width, height,
+                    width*20, height*20,
                     PixelToMeters(transform.scale.x), PixelToMeters(transform.scale.y),
                     transform.rotation);
         }
