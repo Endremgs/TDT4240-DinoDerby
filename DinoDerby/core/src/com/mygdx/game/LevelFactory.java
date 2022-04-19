@@ -69,7 +69,7 @@ public class LevelFactory {
                 BodyDef.BodyType.DynamicBody, true);
 
 
-        //position.position.set(5, 10, 0);
+        position.position.set(5, 10, 0);
         body.body.setUserData(entity);
 
         entity.add(body);
@@ -78,6 +78,7 @@ public class LevelFactory {
         entity.add(player);
 
         engine.addEntity(entity);
+
     }
 
 
