@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface FireBaseInterface {
 
-    void createGame(String playerID);
+    String createGame(String playerID);
 
     void joinGame(String gameID, String playerID);
     List<HashMap> getPlayersInGame(String gameID, String playerID);

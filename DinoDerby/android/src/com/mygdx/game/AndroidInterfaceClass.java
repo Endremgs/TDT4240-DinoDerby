@@ -13,28 +13,33 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AndroidInterfaceClass implements FireBaseInterface {
 
-    FirebaseDatabase database;
-    DatabaseReference myRef;
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
+
     public AndroidInterfaceClass() {
         this.database = FirebaseDatabase.getInstance("https://dino-derby-default-rtdb.europe-west1.firebasedatabase.app");
     }
 
     @Override
-    public void createGame(String playerID) {
+    public String createGame(String playerID) {
         String gameID = UUID.randomUUID().toString();
         try {
             myRef = database.getReference(gameID+"/"+playerID);
             HashMap playerData = this.createPlayerMap();
             myRef.setValue(playerData);
+            return gameID;
         } catch (Error err) {
             throw new IllegalArgumentException("Failed creating game with gameID: " + gameID + " for player: " + playerID + err);
         }
     }
 
     @Override
-    public void joinGame(String gameID, String playerID) {
+    public void joinGame(String gameID, String playerID) throws IllegalArgumentException{
+        System.out.println("playerID: "+ playerID);
+        System.out.println("gameID: "+ gameID);
         if (this.gameExists(gameID)) {
             try {
+                System.out.println("game exists, gameID: "+ gameID);
                 myRef = database.getReference(gameID+"/"+playerID);
                 myRef.setValue(this.createPlayerMap());
             } catch (Error err) {
@@ -110,20 +115,27 @@ public class AndroidInterfaceClass implements FireBaseInterface {
         return playerData;
     }
 
-    private boolean gameExists(String gameID) {
+    private boolean gameExists(String gameID) throws IllegalArgumentException{
         AtomicBoolean gameExists = new AtomicBoolean(false);
         String refString = gameID;
         myRef = database.getReference(gameID);
+        System.out.println(myRef.getRef());
         myRef.get().addOnCompleteListener(task -> {
+            System.out.println("checking if task is successfull");
             if (task.isSuccessful()) {
+                System.out.println("Task is succesfull");
                 if (task.getResult().exists()) {
+                    System.out.println("game exists");
                     gameExists.set(true);
+                    return gameExists.get();
                 }
             }
             else {
                 throw new IllegalArgumentException("Failed to retrieve data for reference: " + refString);
             }
         });
+        System.out.println("checking atomic boolean");
+        System.out.println(gameExists.get());
         return gameExists.get();
     }
 

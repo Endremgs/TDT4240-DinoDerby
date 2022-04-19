@@ -11,6 +11,8 @@ import com.mygdx.game.views.LobbyScreen;
 import com.mygdx.game.views.MenuScreen;
 import com.mygdx.game.views.PlayScreen;
 
+import java.util.UUID;
+
 public class MyGdxGame extends Game {
 	public static final int WIDTH = 1600;
 	public static final int HEIGHT = 960;
@@ -34,6 +36,24 @@ public class MyGdxGame extends Game {
 	protected OrthographicCamera camera;
 	Viewport viewport;
 
+	private String playerID;
+	private String currGameID;
+
+	public String getPlayerID() {
+		return this.playerID;
+	}
+
+	public String getCurrGameID() {
+		return this.currGameID;
+	}
+
+	public void setCurrGameID(String gameID) {
+		this.currGameID = gameID;
+	}
+
+	public FireBaseInterface getFirebaseInstance() {
+		return this.FBIC;
+	}
 	public void changeScreen(int screen) {
 		switch (screen) {
 			case MENU:
@@ -54,6 +74,7 @@ public class MyGdxGame extends Game {
 
 	public MyGdxGame(FireBaseInterface FBIC) {
 		this.FBIC = FBIC;
+		this.playerID = UUID.randomUUID().toString();
 	}
 
 	@Override

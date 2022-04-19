@@ -42,7 +42,7 @@ public class LobbyScreen implements Screen {
 
         joinGame = new TextButton("Join game", skin);
         createGame = new TextButton("create game", skin);
-        lobbyIdField = new TextField("game-code", skin);
+        lobbyIdField = new TextField("", skin);
 
         table.add(lobbyIdField).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
@@ -57,14 +57,29 @@ public class LobbyScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //temporary play link
-                parent.changeScreen(MyGdxGame.PLAY);
+                try {
+                    System.out.println("GameID: " + lobbyIdField.getText());
+                    parent.getFirebaseInstance().joinGame(lobbyIdField.getText(),parent.getPlayerID());
+                    parent.changeScreen(MyGdxGame.PLAY);
+
+                }catch (Error err) {
+                    System.err.println(err);
+                }
             }
         });
         createGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //temporary play link
-                parent.changeScreen(MyGdxGame.PLAY);
+                try {
+                    String gameID = parent.getFirebaseInstance().createGame(parent.getPlayerID());
+                    parent.setCurrGameID(gameID);
+                    System.out.println("GameID: " + gameID);
+                    parent.changeScreen(MyGdxGame.PLAY);
+
+                }catch (Error err) {
+                    System.err.println(err);
+                }
             }
         });
 

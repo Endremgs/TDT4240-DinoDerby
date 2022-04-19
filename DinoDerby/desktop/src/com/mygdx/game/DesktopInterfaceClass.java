@@ -13,13 +13,12 @@ public class DesktopInterfaceClass implements FireBaseInterface {
 
 
     @Override
-    public void createGame(String playerID) {
-
+    public String createGame(String playerID) {
+        return "";
     }
 
     @Override
     public void joinGame(String gameID, String playerID) {
-
     }
 
     @Override
