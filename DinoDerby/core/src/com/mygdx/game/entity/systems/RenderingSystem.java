@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.LevelFactory;
+import com.mygdx.game.entity.components.GhostComponent;
 import com.mygdx.game.entity.components.TextureComponent;
 import com.mygdx.game.entity.components.TransformComponent;
 
@@ -49,6 +51,8 @@ public class RenderingSystem extends SortedIteratingSystem {
 
     private ComponentMapper<TextureComponent> cmTexture;
     private ComponentMapper<TransformComponent> cmTransform;
+    private ComponentMapper<GhostComponent> cmGhost;
+    //private Texture background = new Texture("bg.jpg");
 
     @SuppressWarnings("unchecked")
     public RenderingSystem(SpriteBatch sb, TiledMap map) {
@@ -59,7 +63,7 @@ public class RenderingSystem extends SortedIteratingSystem {
         // component mappers
         cmTexture = ComponentMapper.getFor(TextureComponent.class);
         cmTransform = ComponentMapper.getFor(TransformComponent.class);
-
+        cmGhost = ComponentMapper.getFor(GhostComponent.class);
         // array for rendering entities
         renderQueue = new Array<Entity>();
 
@@ -83,6 +87,8 @@ public class RenderingSystem extends SortedIteratingSystem {
         sb.setProjectionMatrix(cam.combined);
         sb.enableBlending();
         sb.begin();
+
+        //sb.draw(background, 0, 0, FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
         mapRenderer.setView(cam);
         mapRenderer.render();
 
@@ -103,6 +109,11 @@ public class RenderingSystem extends SortedIteratingSystem {
             float originX = width / 2f;
             float originY = height / 2f;
 
+            Color c = sb.getColor();
+            //Changing opacity if entity is ghost
+            if (cmGhost.has(entity)) {
+                sb.setColor(c.r, c.g, c.b, 0.75f);
+            }
             sb.draw(texture.region,
                     transform.position.x - originX, transform.position.y -originY,
                     originX, originY,

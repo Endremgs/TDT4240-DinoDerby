@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.BodyFactory;
 import com.mygdx.game.LevelFactory;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.entity.systems.CollisionSystem;
 import com.mygdx.game.entity.systems.PhysicsSystem;
 import com.mygdx.game.entity.systems.PlayerControlSystem;
 import com.mygdx.game.entity.systems.RenderingSystem;
@@ -47,6 +48,7 @@ public class PlayScreen implements Screen {
         engine.addSystem(renderingSystem);
         engine.addSystem(new PlayerControlSystem());
         engine.addSystem(new PhysicsSystem(world));
+        engine.addSystem(new CollisionSystem());
 
 
     }
