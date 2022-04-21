@@ -35,7 +35,7 @@ public class PlayScreen implements Screen {
     public PlayScreen(MyGdxGame myGdxGame) {
         parent = myGdxGame;
 
-        world = new World(new Vector2(0, 0), true);
+        world = new World(new Vector2(0, -1000), true);
         bodyFactory = BodyFactory.getInstance(world);
 
         engine = new PooledEngine();
@@ -51,7 +51,7 @@ public class PlayScreen implements Screen {
 
 
         engine.addSystem(renderingSystem);
-        engine.addSystem(new PlayerControlSystem());
+        engine.addSystem(new PlayerControlSystem(cam));
         engine.addSystem(new PhysicsSystem(world));
         engine.addSystem(new CollisionSystem());
 
