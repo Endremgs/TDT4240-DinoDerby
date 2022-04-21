@@ -27,7 +27,7 @@ public class MyGdxGame extends Game {
 
 	FireBaseInterface FBIC;
 
-	public SpriteBatch batch;
+
 	protected OrthographicCamera camera;
 	Viewport viewport;
 
