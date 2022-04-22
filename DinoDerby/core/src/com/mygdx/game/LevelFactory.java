@@ -13,9 +13,11 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.entity.components.BodyComponent;
 import com.mygdx.game.entity.components.CollisionComponent;
 import com.mygdx.game.entity.components.GhostComponent;
+import com.mygdx.game.entity.components.ObstacleComponent;
 import com.mygdx.game.entity.components.PlayerComponent;
 import com.mygdx.game.entity.components.TextureComponent;
 import com.mygdx.game.entity.components.TransformComponent;
+import com.mygdx.game.entity.components.TypeComponent;
 import com.mygdx.game.entity.systems.RenderingSystem;
 
 public class LevelFactory {
@@ -59,21 +61,23 @@ public class LevelFactory {
     public void createPlayer(){
         Entity entity = engine.createEntity();
 
+        TypeComponent type = engine.createComponent(TypeComponent.class);
         BodyComponent body = engine.createComponent(BodyComponent.class);
         TransformComponent position = engine.createComponent(TransformComponent.class);
         TextureComponent texture = engine.createComponent(TextureComponent.class);
         PlayerComponent player = engine.createComponent(PlayerComponent.class);
 
-
+        type.type = TypeComponent.PLAYER;
         texture.region = new TextureRegion(new Texture("player2.png"));
         body.body = bodyFactory.makeBody(5, 10,
                 getTextureSize(texture.region).x, getTextureSize(texture.region).y,
                 BodyDef.BodyType.DynamicBody, true);
 
 
-        position.position.set(5, 10, 0);
+        position.position.set(5, 50, 0);
         body.body.setUserData(entity);
 
+        entity.add(type);
         entity.add(body);
         entity.add(position);
         entity.add(texture);
@@ -86,6 +90,7 @@ public class LevelFactory {
     public void createGhost(String playerID) {
         Entity entity = engine.createEntity();
 
+        TypeComponent type = engine.createComponent(TypeComponent.class);
         TransformComponent position = engine.createComponent(TransformComponent.class);
         TextureComponent texture = engine.createComponent(TextureComponent.class);
         GhostComponent ghost = engine.createComponent(GhostComponent.class);
@@ -93,9 +98,11 @@ public class LevelFactory {
 
         texture.region = new TextureRegion(new Texture("player2.png"));
         position.position.set(10, 5, 0);
+        type.type = TypeComponent.GHOST;
         entity.add(position);
         entity.add(texture);
         entity.add(ghost);
+        entity.add(type);
 
         engine.addEntity(entity);
     }
@@ -103,24 +110,27 @@ public class LevelFactory {
     public void createObstacle(int posX, int posY) {
         Entity entity = engine.createEntity();
 
+        TypeComponent type = engine.createComponent(TypeComponent.class);
         BodyComponent body = engine.createComponent(BodyComponent.class);
         TransformComponent position = engine.createComponent(TransformComponent.class);
-        //Configures the obstacle to have a static position
-        position.setIsStatic(true);
+        ObstacleComponent obstacle = engine.createComponent(ObstacleComponent.class);
         TextureComponent texture = engine.createComponent(TextureComponent.class);
         CollisionComponent collision = engine.createComponent(CollisionComponent.class);
 
+        type.type = TypeComponent.OBSTACLE;
         texture.region = new TextureRegion(new Texture("player2.png"));
-        body.body = bodyFactory.makeBody(posX, posY,
+        body.body = bodyFactory.makeBody(5, 10,
                 getTextureSize(texture.region).x, getTextureSize(texture.region).y,
                 BodyDef.BodyType.DynamicBody, true);
         position.position.set(posX, posY, 0);
         body.body.setUserData(entity);
 
+        entity.add(type);
         entity.add(body);
         entity.add(position);
         entity.add(texture);
         entity.add(collision);
+        entity.add(obstacle);
 
         engine.addEntity(entity);
     }
