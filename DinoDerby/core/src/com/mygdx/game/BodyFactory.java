@@ -41,4 +41,16 @@ public class BodyFactory {
         return body;
     }
 
+    /*public Body makeBodyW(float posX, float posY) {
+
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.x = posX;
+        bodyDef.position.y = posY;
+
+        Body body = world.createBody(bodyDef);
+        PolygonShape poly = new PolygonShape();
+
+        return body;
+    }*/
 }

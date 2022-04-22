@@ -4,11 +4,17 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.entity.components.BodyComponent;
 import com.mygdx.game.entity.components.CollisionComponent;
@@ -30,13 +36,14 @@ public class LevelFactory {
     private TiledMap map;
 
     private TiledMapTileLayer collisionLayer;
-    boolean collisionX;
+    private int objectLayerID = 2;
+    private PolygonShape shape;
 
     public LevelFactory(PooledEngine eng) {
         world = new World(new Vector2(0, 10f), true);
         map = new TiledMap();
         engine = eng;
-
+        PolygonShape shape = new PolygonShape();
         bodyFactory = BodyFactory.getInstance(world);
     }
 
@@ -50,6 +57,15 @@ public class LevelFactory {
         //load the map
         mapLoader = new TmxMapLoader();
         this.map = mapLoader.load("maps/DinoDerbyMap2.tmx");
+
+        MapObjects objects = map.getLayers().get(objectLayerID).getObjects();
+        for(MapObject object : objects){
+            if(object instanceof RectangleMapObject){
+                Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
+                // do somthing with rect, må hente player body og si at det er en collision
+                //rectangle.overlaps(shape instanceof PolygonShape);
+            }
+        }
     }
 
     public TiledMap getMap() {
