@@ -36,7 +36,7 @@ public class PlayScreen implements Screen {
     public PlayScreen(MyGdxGame myGdxGame) {
         parent = myGdxGame;
 
-        world = new World(new Vector2(0, -10000), true);
+        world = new World(new Vector2(0, 0), true);
         world.setContactListener(new B2dContactListener());
         bodyFactory = BodyFactory.getInstance(world);
 
@@ -45,7 +45,7 @@ public class PlayScreen implements Screen {
         levelFactory = new LevelFactory(engine);
         levelFactory.createPlayer();
 //        levelFactory.createPlayer();
-        levelFactory.createObstacle(5, 5);
+        levelFactory.createObstacle(500, 5);
         levelFactory.createMap();
 
         sb = new SpriteBatch();
