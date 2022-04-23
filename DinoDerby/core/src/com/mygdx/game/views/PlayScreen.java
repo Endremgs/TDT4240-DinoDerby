@@ -36,7 +36,7 @@ public class PlayScreen implements Screen {
     public PlayScreen(MyGdxGame myGdxGame) {
         parent = myGdxGame;
 
-        world = new World(new Vector2(0, 0), true);
+        world = new World(new Vector2(0, -10000), true);
         world.setContactListener(new B2dContactListener());
         bodyFactory = BodyFactory.getInstance(world);
 
@@ -55,7 +55,7 @@ public class PlayScreen implements Screen {
 
 
         engine.addSystem(renderingSystem);
-        engine.addSystem(new PlayerControlSystem());
+        engine.addSystem(new PlayerControlSystem(cam));
         engine.addSystem(new PhysicsSystem(world));
         engine.addSystem(new CollisionSystem(parent));
 
