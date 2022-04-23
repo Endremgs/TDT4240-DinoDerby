@@ -3,9 +3,9 @@ package com.mygdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.views.GameOverScreen;
 import com.mygdx.game.views.MenuScreen;
 import com.mygdx.game.views.PlayScreen;
+import com.mygdx.game.views.GameOverScreen;
 
 public class MyGdxGame extends Game {
 	public static final int WIDTH = 480;
