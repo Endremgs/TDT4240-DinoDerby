@@ -20,6 +20,7 @@ public class PlayerControlSystem extends IteratingSystem {
     OrthographicCamera camera;
     float velocity = 5;
     int jump = 0;
+    int position = 200;
 
     public PlayerControlSystem(OrthographicCamera camera) {
         super(Family.all(PlayerComponent.class).get());
@@ -28,11 +29,12 @@ public class PlayerControlSystem extends IteratingSystem {
         cmBody = ComponentMapper.getFor(BodyComponent.class);
         this.camera = camera;
 
+
         Gdx.input.setInputProcessor(new SimpleDirectionGestureDetector(new SimpleDirectionGestureDetector.DirectionListener() {
             @Override
             public void onUp() {
                 System.out.println("up input");
-                jump = 25;
+                jump = 50;
             }
 
             @Override
@@ -50,13 +52,16 @@ public class PlayerControlSystem extends IteratingSystem {
         // moves the player towards the right
         body.body.applyForceToCenter(100000, 0, true);
         if(jump > 0) {
-            body.body.applyForceToCenter(100000, 1000000, true);
+            body.body.applyForceToCenter(10000, 100000,false);
             jump--;
+        } else if (body.body.getPosition().y >= 10) {
+            body.body.applyForceToCenter(10000, -100000, false);
         }
         // camera follows player
-        camera.position.x = body.body.getPosition().x + camera.viewportWidth/2 - 100;
+        if (body.body.getPosition().x >= camera.viewportWidth/2 - position)
+        camera.position.x = body.body.getPosition().x + position;
 
-        System.out.printf("test: %s %s\n", body.body.getLinearVelocity(), body.body.getPosition());
+        //System.out.printf("test: %s %s\n", body.body.getLinearVelocity(), body.body.getPosition());
 
     }
 }
