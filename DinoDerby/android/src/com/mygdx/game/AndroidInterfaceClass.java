@@ -28,13 +28,31 @@ public class AndroidInterfaceClass implements FireBaseInterface {
         this.parent = parent;
     }
 
+    public void setGameStarted(String gameID, Boolean gameStarted) {
+        if (gameExists(gameID)) {
+            try {
+
+            myRef = database.getReference(gameID);
+            myRef.child("gameStarted").setValue(gameStarted);
+            }catch (Error err) {
+                throw new IllegalArgumentException(err);
+            }
+        }
+        else {
+            throw  new IllegalArgumentException("Game does not exist");
+        }
+    }
+
     @Override
     public void createGame(String playerID) {
         String gameID = UUID.randomUUID().toString();
         try {
-            myRef = database.getReference(gameID+"/"+playerID);
+            myRef = database.getReference(gameID);
+            myRef.child("gameStarted").setValue("false");
+            myRef = database.getReference(gameID+"/players/"+playerID);
             myRef.setValue(this.createPlayerMap());
             this.getPlayersInGame(gameID, playerID);
+            parent.setCurrGameID(gameID);
         } catch (Error err) {
             throw new IllegalArgumentException("Failed creating game with gameID: " + gameID + " for player: " + playerID + err);
         }
@@ -45,9 +63,10 @@ public class AndroidInterfaceClass implements FireBaseInterface {
         if (this.gameExists(gameID)) {
             System.out.println("gamet du prøver å joine fins");
             try {
-                myRef = database.getReference(gameID+"/"+playerID);
+                myRef = database.getReference(gameID+"/players/"+playerID);
                 myRef.setValue(this.createPlayerMap());
                 this.getPlayersInGame(gameID, playerID);
+                parent.setCurrGameID(gameID);
             } catch (Error err) {
                 System.out.println("kaster exception");
                 throw new IllegalArgumentException("Failed joining game: " + gameID + " for player: " + playerID + err);
@@ -61,7 +80,7 @@ public class AndroidInterfaceClass implements FireBaseInterface {
     public void updatePlayerInGame(String gameID, String playerID, Integer xPos, Integer yPos, Integer zPos) {
         if (this.playerIsInGame(gameID, playerID)) {
             try {
-                myRef = database.getReference(gameID+"/"+playerID);
+                myRef = database.getReference(gameID+"/players/"+playerID);
                 myRef.setValue(createPlayerMap(xPos, yPos, zPos));
             } catch (Error err) {
                 throw new IllegalArgumentException("Failed updating player in game: " + gameID + " for player: " + playerID + err);
@@ -85,9 +104,14 @@ public class AndroidInterfaceClass implements FireBaseInterface {
                         if (snapshot.exists()) {
                             //clear List
                             Map<String, Map<String, Integer>> players = new HashMap<>();
-                            for (DataSnapshot player : snapshot.getChildren()) {
+                            System.out.println("-----------");
+                            System.out.println("checking if game has started");
+                            System.out.println(snapshot.child("gameStarted").getValue());
+                            parent.checkGameStarted((Boolean) snapshot.child("gameStarted").getValue());
+                            DataSnapshot playersSnapshot = snapshot.child("players");
+                            for (DataSnapshot player : playersSnapshot.getChildren()) {
                                 System.out.println("i ondata change i getPlayersInGame()");
-                                System.out.println(player);
+//                                System.out.println(player.);
                                 System.out.println(player.getKey());
                                 Map<String, Integer> playerMap = (Map<String, Integer>) player.getValue();
                                 players.put(player.getKey(), playerMap);
@@ -181,7 +205,7 @@ public class AndroidInterfaceClass implements FireBaseInterface {
         }
         AtomicBoolean reqFinished = new AtomicBoolean(false);
         AtomicBoolean playerInGame = new AtomicBoolean(false);
-        String refString = gameID+"/"+playerID;
+        String refString = gameID+"/players/"+playerID;
         myRef = database.getReference(refString);
         myRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {

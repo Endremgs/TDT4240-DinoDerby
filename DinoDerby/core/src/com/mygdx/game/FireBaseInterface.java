@@ -6,7 +6,7 @@ import java.util.Map;
 public interface FireBaseInterface {
 
     void createGame(String playerID);
-
+    void setGameStarted(String gameID, Boolean gameStarted);
     void joinGame(String gameID, String playerID);
     void getPlayersInGame(String gameID, String playerID);
     void updatePlayerInGame(String gameID, String playerID, Integer xPos, Integer yPos, Integer zPos);

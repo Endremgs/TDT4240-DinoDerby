@@ -26,7 +26,8 @@ public class LobbyScreen implements Screen {
     }
     @Override
     public void show() {
-
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         Table table = new Table();
         Table leftTable = new Table();
@@ -79,6 +80,7 @@ public class LobbyScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 try {
+                    parent.getFirebaseInstance().setGameStarted(parent.getCurrGameID(), true);
                     parent.changeScreen(MyGdxGame.PLAY);
                 }catch (IllegalArgumentException i) {
                     System.out.println(i);

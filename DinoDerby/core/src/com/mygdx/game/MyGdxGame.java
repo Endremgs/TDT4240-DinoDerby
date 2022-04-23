@@ -33,6 +33,7 @@ public class MyGdxGame extends Game {
 	public static final int JOINGAME = 3;
 	public static final int LOBBY = 4;
 	private int currentScreen;
+	private Boolean gameStarted = false;
 
 
 	FireBaseInterface FBIC;
@@ -44,6 +45,15 @@ public class MyGdxGame extends Game {
 	private String playerID;
 	private String currGameID;
 	private Map<String, Map<String, Integer>> players;
+
+	public void checkGameStarted(Boolean gameStarted) {
+		System.out.println("checkGameStarted() i mygdxGame");
+		System.out.println(this.gameStarted);
+		System.out.println(gameStarted);
+		if (gameStarted != this.gameStarted) {
+			this.changeScreen(MyGdxGame.PLAY);
+		}
+	}
 
 	public String getPlayerID() {
 		return this.playerID;
@@ -63,7 +73,7 @@ public class MyGdxGame extends Game {
 		System.out.println(this.players);
 
 		if (this.currentScreen == MyGdxGame.LOBBY) {
-			this.lobbyScreen.render(Gdx.graphics.getDeltaTime());
+			this.lobbyScreen.show();
 		}
 	}
 
