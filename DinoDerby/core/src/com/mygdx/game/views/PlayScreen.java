@@ -17,6 +17,7 @@ import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.entity.components.BodyComponent;
 import com.mygdx.game.entity.components.TextureComponent;
 import com.mygdx.game.entity.components.TransformComponent;
+import com.mygdx.game.entity.systems.B2dContactListener;
 import com.mygdx.game.entity.systems.CollisionSystem;
 import com.mygdx.game.entity.systems.PhysicsSystem;
 import com.mygdx.game.entity.systems.PlayerControlSystem;
@@ -35,13 +36,16 @@ public class PlayScreen implements Screen {
     public PlayScreen(MyGdxGame myGdxGame) {
         parent = myGdxGame;
 
-        world = new World(new Vector2(0, -1000), true);
+        world = new World(new Vector2(0, -10000), true);
+        world.setContactListener(new B2dContactListener());
         bodyFactory = BodyFactory.getInstance(world);
 
         engine = new PooledEngine();
 
         levelFactory = new LevelFactory(engine);
         levelFactory.createPlayer();
+//        levelFactory.createPlayer();
+        levelFactory.createObstacle(5, 5);
         levelFactory.createMap();
 
         sb = new SpriteBatch();
@@ -53,7 +57,7 @@ public class PlayScreen implements Screen {
         engine.addSystem(renderingSystem);
         engine.addSystem(new PlayerControlSystem(cam));
         engine.addSystem(new PhysicsSystem(world));
-        engine.addSystem(new CollisionSystem());
+        engine.addSystem(new CollisionSystem(parent));
 
     }
     private Vector2 getTextureSize(TextureRegion region) {

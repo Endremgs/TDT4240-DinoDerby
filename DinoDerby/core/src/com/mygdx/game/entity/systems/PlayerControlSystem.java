@@ -19,7 +19,7 @@ public class PlayerControlSystem extends IteratingSystem {
     ComponentMapper<BodyComponent> cmBody;
     OrthographicCamera camera;
     float velocity = 5;
-    boolean jump = false;
+    int jump = 0;
 
     public PlayerControlSystem(OrthographicCamera camera) {
         super(Family.all(PlayerComponent.class).get());
@@ -32,7 +32,7 @@ public class PlayerControlSystem extends IteratingSystem {
             @Override
             public void onUp() {
                 System.out.println("up input");
-                jump = true;
+                jump = 25;
             }
 
             @Override
@@ -49,9 +49,9 @@ public class PlayerControlSystem extends IteratingSystem {
 
         // moves the player towards the right
         body.body.applyForceToCenter(100000, 0, true);
-        if(jump) {
-            body.body.applyForceToCenter(0, 1000000, true);
-            jump = false;
+        if(jump > 0) {
+            body.body.applyForceToCenter(100000, 1000000, true);
+            jump--;
         }
         // camera follows player
         camera.position.x = body.body.getPosition().x + camera.viewportWidth/2 - 100;
