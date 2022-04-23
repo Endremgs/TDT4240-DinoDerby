@@ -128,8 +128,8 @@ public class AndroidInterfaceClass implements FireBaseInterface {
                     if (task.getResult().exists()) {
                         System.out.println("game exists");
                         gameExists.set(true);
-                        reqFinished.set(true);
                     }
+                        reqFinished.set(true);
                 } else {
                     throw new IllegalArgumentException("Failed to retrieve data for reference: " + refString);
                 }
