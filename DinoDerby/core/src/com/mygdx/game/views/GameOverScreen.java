@@ -2,9 +2,10 @@ package com.mygdx.game.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -12,60 +13,63 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.MyGdxGame;
 
+public class GameOverScreen implements Screen {
 
-public class MenuScreen implements Screen {
-
-    private final MyGdxGame parent;
+    private final MyGdxGame game;
     private Stage stage;
+    private Texture texture;
+    private final static int GAMEO_WIDTH= 650;
+    private final static int GAMEO_HEIGHT= 200;
+    private final SpriteBatch batch;
 
-    public MenuScreen(MyGdxGame dinoDerby) {
-        parent = dinoDerby;
-        stage = new Stage(new ScreenViewport());
+
+
+    public GameOverScreen(MyGdxGame game){
+
+        this.game= game;
+        this.texture= new Texture("Game Over.png");
+        stage= new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
+        batch = new SpriteBatch();
 
     }
 
+
     @Override
     public void show() {
-        // Create a table that fills the screen. Everything else will go inside this table.
-        Table table = new Table();
+        Table table= new Table();
         table.setFillParent(true);
         stage.addActor(table);
-
         Skin skin = new Skin(Gdx.files.internal("skin/buttonskin.json"));
+        TextButton retry= new TextButton("Retry", skin);
+        table.add(retry).fillX().uniformX();
 
-        TextButton play = new TextButton("Play", skin);
-        TextButton settings = new TextButton("Settings", skin);
-        TextButton lb = new TextButton("Leaderboard", skin);
-
-        table.add(play).fillX().uniformX();
-        table.row().pad(10, 0, 10, 0);
-        table.add(settings).fillX().uniformX();
-        table.row();
-        table.add(lb).fillX().uniformX();
-
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
-
-        play.addListener(new ChangeListener() {
+        retry.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                parent.changeScreen(MyGdxGame.PLAY);
+                game.changeScreen(MyGdxGame.PLAY);
             }
         });
+
+
+
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        batch.begin();
         stage.draw();
+        batch.draw(texture,Gdx.graphics.getWidth()/2-GAMEO_WIDTH/2, Gdx.graphics.getHeight()-GAMEO_HEIGHT-50, GAMEO_WIDTH,GAMEO_HEIGHT );
+        batch.end();
+
     }
+
+
+
+
 
     @Override
     public void resize(int width, int height) {
-
 
     }
 
