@@ -138,7 +138,7 @@ public class AndroidInterfaceClass implements FireBaseInterface {
 
         System.out.println("før oncompletelistener");
         System.out.println(myRef.getRef());
-//        myRef.addValueEventListener(new ValueEventListener() {
+    //        myRef.addValueEventListener(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(@NonNull DataSnapshot snapshot) {
 //                System.out.println("du er i on data change");

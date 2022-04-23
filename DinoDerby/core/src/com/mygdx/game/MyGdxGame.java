@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -31,7 +32,7 @@ public class MyGdxGame extends Game {
 	public static final int CREATEGAME = 2;
 	public static final int JOINGAME = 3;
 	public static final int LOBBY = 4;
-
+	private int currentScreen;
 
 
 	FireBaseInterface FBIC;
@@ -60,6 +61,10 @@ public class MyGdxGame extends Game {
 		this.players = new HashMap<>(players);
 		System.out.println("setting players");
 		System.out.println(this.players);
+
+		if (this.currentScreen == MyGdxGame.LOBBY) {
+			this.lobbyScreen.render(Gdx.graphics.getDeltaTime());
+		}
 	}
 
 	public Map<String, Map<String, Integer>> getPlayers() {
@@ -71,6 +76,7 @@ public class MyGdxGame extends Game {
 	}
 	public void changeScreen(int screen) {
 		System.out.println("navigerer til" + screen);
+		this.currentScreen = screen;
 		switch (screen) {
 			case MENU:
 				menuScreen = new MenuScreen(this);
