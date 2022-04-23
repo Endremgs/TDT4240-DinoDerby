@@ -44,12 +44,24 @@ public class GameOverScreen implements Screen {
         TextButton retry= new TextButton("Retry", skin);
         table.add(retry).fillX().uniformX();
 
+        TextButton backToMenu= new TextButton("Back To Menu", skin);
+        table.add(backToMenu).fillX().uniformX();
+
         retry.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.changeScreen(MyGdxGame.PLAY);
             }
         });
+
+        backToMenu.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.changeScreen(MyGdxGame.MENU);
+            }
+        });
+
+
 
 
 
