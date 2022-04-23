@@ -29,21 +29,16 @@ public class LevelFactory{
 
     private BodyFactory bodyFactory;
     private PooledEngine engine;
-    private MyGdxGame parent;
 
     //loading the map
     private TmxMapLoader mapLoader;
     private TiledMap map;
 
-    private TiledMapTileLayer collisionLayer;
-    private int objectLayerID = 2;
-    private PolygonShape shape;
 
     public LevelFactory(PooledEngine eng, World world) {
 
         map = new TiledMap();
         engine = eng;
-        PolygonShape shape = new PolygonShape();
         bodyFactory = BodyFactory.getInstance(world);
     }
 
@@ -57,32 +52,6 @@ public class LevelFactory{
         mapLoader = new TmxMapLoader();
         this.map = mapLoader.load("maps/DinoDerbySkyMap.tmx");
         //CollisionComponent collision = engine.createComponent(CollisionComponent.class);
-        MapObjects objects = map.getLayers().get(objectLayerID).getObjects();
-        Entity entity = engine.createEntity();
-
-        BodyComponent body = engine.createComponent(BodyComponent.class);
-        TypeComponent type = engine.createComponent(TypeComponent.class);
-        CollisionComponent collision = engine.createComponent(CollisionComponent.class);
-        int mapWidth = 0;
-        int mapHeight = 32;
-        for(MapObject object : objects){
-            if(object instanceof RectangleMapObject){
-                Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
-                // do somthing with rect, må hente player body og si at det er en collision
-                mapWidth += rectangle.getWidth();
-                System.out.println(mapWidth + "gamer");
-            }
-        }
-
-        body.body = bodyFactory.makeBody(0,0,
-                mapHeight, mapWidth, BodyDef.BodyType.StaticBody, true
-        );
-        type.type = TypeComponent.GROUND;
-
-        entity.add(body);
-        entity.add(type);
-        entity.add(collision);
-        engine.addEntity(entity);
 
     }
 
@@ -100,12 +69,12 @@ public class LevelFactory{
         CollisionComponent collision = engine.createComponent(CollisionComponent.class);
 
         texture.region = new TextureRegion(new Texture("player2.png"));
-        body.body = bodyFactory.makeBody(5, 100,
+        body.body = bodyFactory.makeBody(5, 0,
                 getTextureSize(texture.region).x, getTextureSize(texture.region).y,
                 BodyDef.BodyType.DynamicBody, true);
 
 
-        position.position.set(5, 100, 0);
+        position.position.set(5, 0, 0);
         body.body.setUserData(entity);
 
         entity.add(body);

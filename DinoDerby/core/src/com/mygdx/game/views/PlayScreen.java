@@ -42,7 +42,7 @@ public class PlayScreen implements Screen {
 
         engine = new PooledEngine();
 
-        levelFactory = new LevelFactory(engine);
+        levelFactory = new LevelFactory(engine, world);
         levelFactory.createPlayer();
 //        levelFactory.createPlayer();
         levelFactory.createObstacle(500, 5);
