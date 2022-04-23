@@ -8,24 +8,16 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.MyGdxGame;
 
+import java.util.ArrayList;
+
 public class LobbyScreen implements Screen {
-    /**
-     * Called when this screen becomes the current screen for a {link_Game}.
-     */
+
     private final MyGdxGame parent;
     private Stage stage;
-
-    //ui elements
-    private Table table;
-    private TextButton createGame;
-    private TextButton joinGame;
-    private TextField lobbyIdField;
-
 
     public LobbyScreen(MyGdxGame dinoDerby){
         parent = dinoDerby;
@@ -35,61 +27,80 @@ public class LobbyScreen implements Screen {
     @Override
     public void show() {
 
-        table = new Table();
+
+        Table table = new Table();
+        Table leftTable = new Table();
+        Table rightTable = new Table();
+
+
         table.setFillParent(true);
+
         stage.addActor(table);
+
+        table.add(leftTable);
+        table.add(rightTable);
+
         Skin skin = new Skin(Gdx.files.internal("skin/buttonskin.json"));
 
-        joinGame = new TextButton("Join game", skin);
-        createGame = new TextButton("create game", skin);
-        lobbyIdField = new TextField("", skin);
+        TextButton startGame = new TextButton("Start Game", skin);
+        TextButton backBtn = new TextButton("Back", skin);
 
-        table.add(lobbyIdField).fillX().uniformX();
-        table.row().pad(10, 0, 10, 0);
-        table.add(joinGame).fillX().uniformX();
-        table.row();
-        table.add(createGame).fillX().uniformX();
+        //Create a list view rendering a text element for each player in the lobby.
+        //Ensure rerender of this list upon update.
+//        List listView = new List(List.ListStyl);
+
+        TextButton checkPlayers = new TextButton("check", skin);
+
+        leftTable.add(startGame).fillX().uniformX();
+        leftTable.row().pad(10, 0, 10, 0);
+        leftTable.row();
+        leftTable.add(backBtn).fillX().uniformX();
+        leftTable.row();
+        leftTable.add(checkPlayers).fillX().uniformX();
+
+
+        TextButton lobbyText = new TextButton("Players", skin);
+        rightTable.add(lobbyText);
+        rightTable.row().pad(10, 0, 10, 0);
+        System.out.println("-----------");
+        System.out.println(parent.getPlayers());
+        for (String player: parent.getPlayers().keySet()) {
+            System.out.println("-----------");
+            System.out.println(player);
+            TextButton playerBtn = new TextButton(player, skin);
+            rightTable.add(playerBtn);
+            rightTable.row().pad(10, 0, 10, 0);
+        }
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
-        joinGame.addListener(new ChangeListener() {
+        startGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //temporary play link
                 try {
-                    System.out.println("GameID: " + lobbyIdField.getText());
-                    parent.getFirebaseInstance().joinGame(lobbyIdField.getText(),parent.getPlayerID());
                     parent.changeScreen(MyGdxGame.PLAY);
-
-                }catch (Error err) {
-                    System.err.println(err);
+                }catch (IllegalArgumentException i) {
+                    System.out.println(i);
                 }
             }
         });
-        createGame.addListener(new ChangeListener() {
+        backBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //temporary play link
-                try {
-                    String gameID = parent.getFirebaseInstance().createGame(parent.getPlayerID());
-                    parent.setCurrGameID(gameID);
-                    System.out.println("GameID: " + gameID);
-                    parent.changeScreen(MyGdxGame.PLAY);
-
-                }catch (Error err) {
-                    System.err.println(err);
-                }
+                parent.changeScreen(MyGdxGame.MENU);
             }
         });
-
+        checkPlayers.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.out.println("--------");
+                System.out.println("players in game are:");
+                System.out.println(parent.getPlayers());
+            }
+        });
     }
 
-    /**
-     * Called when the screen should render itself.
-     *
-     * @param delta The time in seconds since the last render.
-     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
@@ -98,43 +109,26 @@ public class LobbyScreen implements Screen {
         stage.draw();
     }
 
-    /**
-     * param width
-     * param height
-     * see_ApplicationListener#resize(int, int)
-     */
     @Override
     public void resize(int width, int height) {
 
     }
 
-    /**
-     * see_ApplicationListener#pause()
-     */
     @Override
     public void pause() {
 
     }
 
-    /**
-     * see_ApplicationListener#resume()
-     */
     @Override
     public void resume() {
 
     }
 
-    /**
-     * Called when this screen is no longer the current screen for a {link_Game}.
-     */
     @Override
     public void hide() {
-
+        stage.clear();
     }
 
-    /**
-     * Called when this screen should release all resources.
-     */
     @Override
     public void dispose() {
 

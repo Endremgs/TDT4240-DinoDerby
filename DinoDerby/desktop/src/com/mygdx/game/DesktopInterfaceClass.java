@@ -1,7 +1,7 @@
 package com.mygdx.game;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 public class DesktopInterfaceClass implements FireBaseInterface {
 
@@ -13,8 +13,7 @@ public class DesktopInterfaceClass implements FireBaseInterface {
 
 
     @Override
-    public String createGame(String playerID) {
-        return "";
+    public void createGame(String playerID) {
     }
 
     @Override
@@ -22,12 +21,16 @@ public class DesktopInterfaceClass implements FireBaseInterface {
     }
 
     @Override
-    public List<HashMap> getPlayersInGame(String gameID, String playerID) {
-        return null;
+    public void  getPlayersInGame(String gameID, String playerID) {
     }
 
     @Override
     public void updatePlayerInGame(String gameID, String playerID, Integer xPos, Integer yPos, Integer zPos) {
+
+    }
+
+    @Override
+    public void setParent(MyGdxGame parent) {
 
     }
 

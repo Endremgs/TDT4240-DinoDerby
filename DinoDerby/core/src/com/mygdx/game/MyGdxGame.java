@@ -1,16 +1,17 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.views.CreateGameScreen;
+import com.mygdx.game.views.JoinGameScreen;
 import com.mygdx.game.views.LobbyScreen;
 import com.mygdx.game.views.MenuScreen;
 import com.mygdx.game.views.PlayScreen;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class MyGdxGame extends Game {
@@ -21,12 +22,15 @@ public class MyGdxGame extends Game {
 
 	private MenuScreen menuScreen;
 	private PlayScreen playScreen;
+	private CreateGameScreen createGameScreen;
+	private JoinGameScreen joinGameScreen;
 	private LobbyScreen lobbyScreen;
 
 	public static final int MENU = 0;
 	public static final int PLAY = 1;
-	public static final int LOBBY = 2;
-
+	public static final int CREATEGAME = 2;
+	public static final int JOINGAME = 3;
+	public static final int LOBBY = 4;
 
 
 
@@ -38,6 +42,7 @@ public class MyGdxGame extends Game {
 
 	private String playerID;
 	private String currGameID;
+	private Map<String, Map<String, Integer>> players;
 
 	public String getPlayerID() {
 		return this.playerID;
@@ -51,21 +56,40 @@ public class MyGdxGame extends Game {
 		this.currGameID = gameID;
 	}
 
+	public void setPlayers(Map<String, Map<String, Integer>> players) {
+		this.players = new HashMap<>(players);
+		System.out.println("setting players");
+		System.out.println(this.players);
+	}
+
+	public Map<String, Map<String, Integer>> getPlayers() {
+		return new HashMap<>(players);
+	}
+
 	public FireBaseInterface getFirebaseInstance() {
 		return this.FBIC;
 	}
 	public void changeScreen(int screen) {
+		System.out.println("navigerer til" + screen);
 		switch (screen) {
 			case MENU:
-				if (menuScreen == null) menuScreen = new MenuScreen(this);
+				menuScreen = new MenuScreen(this);
 				this.setScreen(menuScreen);
 				break;
 			case PLAY:
-				if (playScreen == null) playScreen = new PlayScreen(this);
+				playScreen = new PlayScreen(this);
 				this.setScreen(playScreen);
 				break;
+			case CREATEGAME:
+				createGameScreen = new CreateGameScreen(this);
+				this.setScreen(createGameScreen);
+				break;
+			case JOINGAME:
+				joinGameScreen = new JoinGameScreen(this);
+				this.setScreen(joinGameScreen);
+				break;
 			case LOBBY:
-				if (lobbyScreen == null) lobbyScreen = new LobbyScreen(this);
+				lobbyScreen = new LobbyScreen(this);
 				this.setScreen(lobbyScreen);
 				break;
 		}
@@ -74,6 +98,7 @@ public class MyGdxGame extends Game {
 
 	public MyGdxGame(FireBaseInterface FBIC) {
 		this.FBIC = FBIC;
+		this.FBIC.setParent(this);
 		this.playerID = UUID.randomUUID().toString();
 	}
 

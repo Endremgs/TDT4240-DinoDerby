@@ -1,51 +1,60 @@
 package com.mygdx.game;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
 
 public class AndroidInterfaceClass implements FireBaseInterface {
 
     private final FirebaseDatabase database;
     private DatabaseReference myRef;
+    private MyGdxGame parent;
 
     public AndroidInterfaceClass() {
         this.database = FirebaseDatabase.getInstance("https://dino-derby-default-rtdb.europe-west1.firebasedatabase.app");
     }
 
+    public void setParent(MyGdxGame parent) {
+        this.parent = parent;
+    }
+
     @Override
-    public String createGame(String playerID) {
+    public void createGame(String playerID) {
         String gameID = UUID.randomUUID().toString();
         try {
             myRef = database.getReference(gameID+"/"+playerID);
-            HashMap playerData = this.createPlayerMap();
-            myRef.setValue(playerData);
-            return gameID;
+            myRef.setValue(this.createPlayerMap());
+            this.getPlayersInGame(gameID, playerID);
         } catch (Error err) {
             throw new IllegalArgumentException("Failed creating game with gameID: " + gameID + " for player: " + playerID + err);
         }
     }
 
     @Override
-    public void joinGame(String gameID, String playerID) throws IllegalArgumentException{
-        System.out.println("playerID: "+ playerID);
-        System.out.println("gameID: "+ gameID);
+    public void joinGame(String gameID, String playerID) {
         if (this.gameExists(gameID)) {
+            System.out.println("gamet du prøver å joine fins");
             try {
-                System.out.println("game exists, gameID: "+ gameID);
                 myRef = database.getReference(gameID+"/"+playerID);
                 myRef.setValue(this.createPlayerMap());
+                this.getPlayersInGame(gameID, playerID);
             } catch (Error err) {
+                System.out.println("kaster exception");
                 throw new IllegalArgumentException("Failed joining game: " + gameID + " for player: " + playerID + err);
             }
+        }
+        else {
+            throw new IllegalArgumentException("Game does not exist");
         }
     }
 
@@ -64,44 +73,47 @@ public class AndroidInterfaceClass implements FireBaseInterface {
     }
 
     @Override
-    public List<HashMap> getPlayersInGame(String gameID, String playerID) {
+    public void getPlayersInGame(String gameID, String playerID) {
         AtomicBoolean reqFinished = new AtomicBoolean(false);
-        List<HashMap> players = new ArrayList<>();
-        if (gameExists(gameID)) {
             try {
                 myRef = database.getReference(gameID);
-                myRef.get().addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        if (task.getResult().exists()) {
-                            DataSnapshot dataSnapshot = task.getResult();
-                            System.out.println(dataSnapshot.getChildren());
-                            for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                if (child.getKey() != playerID) {
-                                    Integer xPos = (Integer) child.child("xPos").getValue();
-                                    Integer yPos = (Integer) child.child("yPos").getValue();
-                                    Integer zPos = (Integer) child.child("zPos").getValue();
-                                    players.add(this.createPlayerMap(xPos, yPos, zPos));
-                                    reqFinished.set(true);
-                                }
+                myRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        System.out.println("player data changed, refetching i getPlayersInGame()");
+                        System.out.println(snapshot.getChildren());
+                        if (snapshot.exists()) {
+                            //clear List
+                            Map<String, Map<String, Integer>> players = new HashMap<>();
+                            for (DataSnapshot player : snapshot.getChildren()) {
+                                System.out.println("i ondata change i getPlayersInGame()");
+                                System.out.println(player);
+                                System.out.println(player.getKey());
+                                Map<String, Integer> playerMap = (Map<String, Integer>) player.getValue();
+                                players.put(player.getKey(), playerMap);
                             }
+                            parent.setPlayers(players);
                         }
-                        throw new IllegalArgumentException("Game " + gameID + "does not exist");
-                    } else {
-                        throw new IllegalArgumentException("Failed retrieving game: " + gameID);
+                        reqFinished.set(true);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
                     }
                 });
             } catch (Error err) {
                 throw new IllegalArgumentException("Failed retrieving players in game: " + gameID + err);
             }
-        }
         //While loop to pause code until request is finished
         while (!reqFinished.get()) {
+            System.out.println("fetching i getPlayersInGame");
         }
-        return players;
+
     }
 
     private HashMap createPlayerMap() {
-        HashMap playerData = new HashMap();
+        HashMap playerData = new HashMap<String, Integer>();
         playerData.put("xPos", 0);
         playerData.put("yPos", 0);
         playerData.put("zPos", 0);
@@ -109,39 +121,65 @@ public class AndroidInterfaceClass implements FireBaseInterface {
     }
 
     private HashMap createPlayerMap(Integer xPos, Integer yPos, Integer zPos) {
-        HashMap playerData = new HashMap();
+        HashMap playerData = new HashMap<String, Integer>();
         playerData.put("xPos", xPos);
         playerData.put("yPos", yPos);
         playerData.put("zPos", zPos);
         return playerData;
     }
 
-    private Boolean gameExists(String gameID) throws IllegalArgumentException{
+    public Boolean gameExists(String gameID) throws IllegalArgumentException{
+        if (gameID.isEmpty()) {
+            throw new IllegalArgumentException("GameID is empty");
+        }
         AtomicBoolean reqFinished = new AtomicBoolean(false);
         AtomicBoolean gameExists = new AtomicBoolean(false);
-        String refString = gameID;
         myRef = database.getReference(gameID);
+
+        System.out.println("før oncompletelistener");
+        System.out.println(myRef.getRef());
+//        myRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                System.out.println("du er i on data change");
+//                System.out.println(snapshot.getValue());
+//                if (snapshot.exists()) {
+//                    System.out.println("game exists");
+//                    gameExists.set(true);
+//                }
+//                    reqFinished.set(true);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                System.out.println("cancelled");
+//            }
+//        });
             myRef.get().addOnCompleteListener(task -> {
-                System.out.println("checking if task is successfull");
+                System.out.println("før successful i gameExists()");
                 if (task.isSuccessful()) {
-                    System.out.println("Task is succesfull");
+                    System.out.println("før exists i gameExists()");
                     if (task.getResult().exists()) {
-                        System.out.println("game exists");
                         gameExists.set(true);
                     }
                         reqFinished.set(true);
                 } else {
-                    throw new IllegalArgumentException("Failed to retrieve data for reference: " + refString);
+                    throw new IllegalArgumentException("Failed to retrieve data for reference: " + myRef.getRef());
                 }
             });
-            //While loop to pause code until request is finished
+        //While loop to pause code until request is finished
         while (!reqFinished.get()) {
+            System.out.println("fetching ... i gameExists()");
         }
 
         return gameExists.get();
     }
 
     private Boolean playerIsInGame(String gameID, String playerID) {
+        if (gameID.isEmpty() || playerID.isEmpty()) {
+            throw new IllegalArgumentException("GameID or playerID is empty");
+        }
+        AtomicBoolean reqFinished = new AtomicBoolean(false);
         AtomicBoolean playerInGame = new AtomicBoolean(false);
         String refString = gameID+"/"+playerID;
         myRef = database.getReference(refString);
@@ -150,11 +188,16 @@ public class AndroidInterfaceClass implements FireBaseInterface {
                 if (task.getResult().exists()) {
                     playerInGame.set(true);
                 }
+                reqFinished.set(true);
             }
             else {
                 throw new IllegalArgumentException("Failed to retrieve data for reference: " + refString);
             }
         });
+        while (!reqFinished.get()) {
+            System.out.println("fetching ...");
+        }
+
         return playerInGame.get();
     }
 
