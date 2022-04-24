@@ -43,6 +43,7 @@ public class LevelFactory{
     }
 
     private Vector2 getTextureSize(TextureRegion region) {
+
         return new Vector2(RenderingSystem.PixelToMeters(region.getRegionWidth()) / 2,
                 RenderingSystem.PixelToMeters(region.getRegionHeight()) / 2);
     }
@@ -67,21 +68,27 @@ public class LevelFactory{
         TextureComponent texture = engine.createComponent(TextureComponent.class);
         PlayerComponent player = engine.createComponent(PlayerComponent.class);
         CollisionComponent collision = engine.createComponent(CollisionComponent.class);
+        TypeComponent type = engine.createComponent(TypeComponent.class);
 
         texture.region = new TextureRegion(new Texture("player2.png"));
-        body.body = bodyFactory.makeBody(5, 0,
+
+        System.out.println("texture size: " + getTextureSize(texture.region));
+        body.body = bodyFactory.makeBody(5, 15,
                 getTextureSize(texture.region).x, getTextureSize(texture.region).y,
                 BodyDef.BodyType.DynamicBody, true);
 
+        System.out.println("player size: "+body.body.getFixtureList().first().getShape().getRadius());
 
-        position.position.set(5, 0, 0);
+        position.position.set(5, 15, 0);
         body.body.setUserData(entity);
+        type.type = TypeComponent.PLAYER;
 
         entity.add(body);
         entity.add(position);
         entity.add(texture);
         entity.add(player);
         entity.add(collision);
+        entity.add(type);
 
         engine.addEntity(entity);
 
@@ -112,19 +119,43 @@ public class LevelFactory{
         //Configures the obstacle to have a static position
         //position.setIsStatic(true);
         TextureComponent texture = engine.createComponent(TextureComponent.class);
-        CollisionComponent collision = engine.createComponent(CollisionComponent.class);
 
-        texture.region = new TextureRegion(new Texture("player2.png"));
+        TypeComponent type = engine.createComponent(TypeComponent.class);
+        type.type = TypeComponent.OBSTACLE;
+
+        if (posY >= 80) {
+            System.out.println("created meteor");
+            texture.region = new TextureRegion(new Texture("meteor2.png"));
+        } else {
+            System.out.println("created car");
+            texture.region = new TextureRegion(new Texture("car2.png"));
+        }
         body.body = bodyFactory.makeBody(posX, posY,
                 getTextureSize(texture.region).x, getTextureSize(texture.region).y,
-                BodyDef.BodyType.DynamicBody, true);
-        position.position.set(posX, posY, 0);
+                BodyDef.BodyType.StaticBody, true);
+        position.position.set(posX, posY, -1);
         body.body.setUserData(entity);
 
         entity.add(body);
         entity.add(position);
         entity.add(texture);
-        entity.add(collision);
+        entity.add(type);
+
+        engine.addEntity(entity);
+    }
+
+    public void createFinish() {
+        Entity  entity = engine.createEntity();
+        BodyComponent body = engine.createComponent(BodyComponent.class);
+        TypeComponent type = engine.createComponent(TypeComponent.class);
+
+        body.body = bodyFactory.makeBody(3050, 0, 1, 1000, BodyDef.BodyType.StaticBody, true);
+        body.body.setUserData(entity);
+
+        type.type = TypeComponent.OTHER;
+
+        entity.add(body);
+        entity.add(type);
 
         engine.addEntity(entity);
     }
