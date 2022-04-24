@@ -52,7 +52,8 @@ public class MyGdxGame extends Game {
 		System.out.println(gameStarted);
 		if (gameStarted) {
 //			this.setScreen(this.playScreen);
-			this.changeScreen(PLAY);
+//			this.changeScreen(PLAY);
+			this.lobbyScreen.startGame();
 		}
 	}
 

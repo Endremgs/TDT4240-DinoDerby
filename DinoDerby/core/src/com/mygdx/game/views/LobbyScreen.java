@@ -81,7 +81,7 @@ public class LobbyScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 try {
                     parent.getFirebaseInstance().setGameStarted(parent.getCurrGameID(), true);
-                    parent.changeScreen(MyGdxGame.PLAY);
+//                    parent.changeScreen(MyGdxGame.PLAY);
                 }catch (IllegalArgumentException i) {
                     System.out.println(i);
                 }
@@ -101,6 +101,10 @@ public class LobbyScreen implements Screen {
                 System.out.println(parent.getPlayers());
             }
         });
+    }
+
+    public void startGame() {
+        parent.changeScreen(MyGdxGame.PLAY);
     }
 
     @Override
