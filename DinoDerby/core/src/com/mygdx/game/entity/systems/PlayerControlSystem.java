@@ -18,9 +18,10 @@ public class PlayerControlSystem extends IteratingSystem {
     ComponentMapper<PlayerComponent> cmPlayer;
     ComponentMapper<BodyComponent> cmBody;
     OrthographicCamera camera;
-    float velocity = 5;
     int jump = 0;
     int position = 200;
+    float zoom = 0.66f;
+    int initVelocity = 20;
 
     public PlayerControlSystem(OrthographicCamera camera) {
         super(Family.all(PlayerComponent.class).get());
@@ -34,7 +35,7 @@ public class PlayerControlSystem extends IteratingSystem {
             @Override
             public void onUp() {
                 System.out.println("up input");
-                jump = 50;
+                jump = 25;
             }
 
             @Override
@@ -43,24 +44,31 @@ public class PlayerControlSystem extends IteratingSystem {
             }
         }));
 
+        camera.zoom -= zoom;
+
     }
 
     @Override
     protected void processEntity(Entity entity, float dt) {
         BodyComponent body = cmBody.get(entity);
 
+        body.body.applyLinearImpulse(500, 0, body.body.getWorldCenter().x, body.body.getWorldCenter().y, true);
         // moves the player towards the right
-        body.body.applyForceToCenter(100000, 0, true);
+
         if(jump > 0) {
-            body.body.applyForceToCenter(10000, 100000,false);
+            body.body.setLinearVelocity(body.body.getLinearVelocity().x, 60);
             jump--;
-        } else if (body.body.getPosition().y >= 10) {
-            body.body.applyForceToCenter(10000, -100000, false);
+        } else if (body.body.getPosition().y >= 20) {
+            body.body.setLinearVelocity(body.body.getLinearVelocity().x, -50);
+        }
+        if (body.body.getPosition().y <= 15 && jump == 0) {
+            body.body.setLinearVelocity(body.body.getLinearVelocity().x, 0);
         }
         // camera follows player
-        if (body.body.getPosition().x >= camera.viewportWidth/2 - position)
-        camera.position.x = body.body.getPosition().x + position;
+        if (body.body.getPosition().x >= (camera.viewportWidth/2 * zoom)- position)
+        camera.translate(((body.body.getPosition().x) - camera.position.x ), 0) ;
 
+        System.out.println("position: "+body.body.getPosition());
         //System.out.printf("test: %s %s\n", body.body.getLinearVelocity(), body.body.getPosition());
 
     }

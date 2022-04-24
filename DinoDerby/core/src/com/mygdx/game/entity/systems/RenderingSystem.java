@@ -23,7 +23,7 @@ import java.util.Comparator;
 public class RenderingSystem extends SortedIteratingSystem {
 
     // convert pixel per meter
-    static final float PPM = 32.0f;
+    static final float PPM = 4.0f;
 
     // height and with of camera
     static final float FRUSTUM_WIDTH = Gdx.graphics.getWidth()/PPM;
@@ -111,7 +111,7 @@ public class RenderingSystem extends SortedIteratingSystem {
             sb.draw(texture.region,
                     transform.position.x - originX, transform.position.y -originY,
                     originX, originY,
-                    width*20, height*20,
+                    width, height,
                     PixelToMeters(transform.scale.x), PixelToMeters(transform.scale.y),
                     transform.rotation);
         }
