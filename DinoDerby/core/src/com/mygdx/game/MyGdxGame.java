@@ -121,6 +121,7 @@ public class MyGdxGame extends Game {
 			case LOBBY:
 				lobbyScreen = new LobbyScreen(this);
 				this.setScreen(lobbyScreen);
+				break;
 			case GAMEOVER:
 				gameOverScreen= new GameOverScreen(this);
 				this.setScreen(gameOverScreen);
