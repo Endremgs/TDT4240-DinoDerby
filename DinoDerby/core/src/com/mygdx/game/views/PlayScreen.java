@@ -36,17 +36,35 @@ public class PlayScreen implements Screen {
     public PlayScreen(MyGdxGame myGdxGame) {
         parent = myGdxGame;
 
-        world = new World(new Vector2(0, -10000), true);
+        world = new World(new Vector2(0, 0), true);
         world.setContactListener(new B2dContactListener());
         bodyFactory = BodyFactory.getInstance(world);
 
         engine = new PooledEngine();
 
-        levelFactory = new LevelFactory(engine);
+        levelFactory = new LevelFactory(engine, world);
         levelFactory.createPlayer();
 //        levelFactory.createPlayer();
-        levelFactory.createObstacle(5, 5);
+
         levelFactory.createMap();
+
+        /* creates all obstacles for the level */
+        for (int i = 0; i <= 150; i++) {
+            if (i < 7) {
+                continue;
+            }
+            int yLevel = i % 5;
+
+            System.out.println(yLevel);
+            if (yLevel >= 2) {
+                levelFactory.createObstacle(70 * i, 200 - (25 * yLevel));
+            }
+            if (i % 3 != 0) {
+                levelFactory.createObstacle(70*i, 10);
+            }
+        }
+
+        levelFactory.createFinish();
 
         sb = new SpriteBatch();
         RenderingSystem renderingSystem = new RenderingSystem(sb, levelFactory.getMap());
@@ -64,26 +82,7 @@ public class PlayScreen implements Screen {
         return new Vector2(RenderingSystem.PixelToMeters(region.getRegionWidth()) / 2,
                 RenderingSystem.PixelToMeters(region.getRegionHeight()) / 2);
     }
-    /*private void createRoad() {
-        Entity entity = engine.createEntity();
-        BodyComponent body = engine.createComponent(BodyComponent.class);
-        TransformComponent position = engine.createComponent(TransformComponent.class);
-        TextureComponent texture = engine.createComponent(TextureComponent.class);
 
-
-        position.position.set(0,0, -1);
-        texture.region = new TextureRegion(new Texture("road.png"));
-
-        body.body = bodyFactory.makeGround(0, 0,
-                getTextureSize(texture.region).x, getTextureSize(texture.region).y);
-        body.body.setUserData(entity);
-
-        entity.add(body);
-        entity.add(position);
-        entity.add(texture);
-
-        engine.addEntity(entity);
-    }*/
     @Override
     public void show() {
 
@@ -129,6 +128,5 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
-
     }
 }

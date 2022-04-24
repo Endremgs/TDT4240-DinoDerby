@@ -18,7 +18,8 @@ public class CollisionSystem extends IteratingSystem {
 
 
     public CollisionSystem(MyGdxGame parent) {
-        super(Family.all(CollisionComponent.class).get());
+        super(Family.all(CollisionComponent.class, PlayerComponent.class).get());
+
         cmCollision = ComponentMapper.getFor(CollisionComponent.class);
         cmPlayer = ComponentMapper.getFor(PlayerComponent.class);
         this.parent = parent;
@@ -34,9 +35,6 @@ public class CollisionSystem extends IteratingSystem {
             System.out.println(type.type);
             if(type != null){
                 switch(type.type){
-                    case TypeComponent.PLAYER:
-                        System.out.println("player hit player");
-                        break;
                     case TypeComponent.OBSTACLE:
                         System.out.println("player hit obstacle");
                         parent.changeScreen(MyGdxGame.GAMEOVER);
@@ -49,6 +47,8 @@ public class CollisionSystem extends IteratingSystem {
                         break;
                     case TypeComponent.OTHER:
                         System.out.println("player hit other");
+                        //Winning the game
+                        parent.getFirebaseInstance().finishGame(parent.getCurrGameID(), parent.getPlayerID());
                         break;
                 }
                 cc.collisionEntity = null; // collision handled reset component
