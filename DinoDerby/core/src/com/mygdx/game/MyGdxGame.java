@@ -27,6 +27,8 @@ public class MyGdxGame extends Game {
 	private JoinGameScreen joinGameScreen;
 	private LobbyScreen lobbyScreen;
 	private GameOverScreen gameOverScreen;
+
+	public boolean gameStarted = false;
 	
 	public static final int MENU = 0;
 	public static final int PLAY = 1;
