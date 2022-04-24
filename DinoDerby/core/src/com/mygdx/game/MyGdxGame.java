@@ -59,6 +59,16 @@ public class MyGdxGame extends Game {
 		}
 	}
 
+	public void finishGame(String winner) {
+		System.out.println("playerID: " + playerID);
+		if (winner.equals(playerID)) {
+			System.out.println("You won");
+		}
+		else {
+			System.out.println("you lost");
+		}
+	}
+
 	public String getPlayerID() {
 		return this.playerID;
 	}

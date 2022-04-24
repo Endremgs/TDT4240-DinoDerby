@@ -56,6 +56,37 @@ public class AndroidInterfaceClass implements FireBaseInterface {
         }
     }
 
+    public void listenToGameFinish(String gameID) {
+        if (gameExists(gameID)) {
+            try {
+                myRef = database.getReference(gameID+"/winner");
+                myRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            String winner = snapshot.getValue(String.class);
+//                            parent.startGame(gameStarted);
+                            if (!winner.isEmpty()) {
+                                System.out.println("The winenr is:  " + winner);
+                                parent.finishGame(winner);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            } catch (Error err) {
+                throw new IllegalArgumentException(err);
+            }
+        }
+        else {
+            throw new IllegalArgumentException("Game does not exist ListenToGameStart()");
+        }
+    }
+
     public void setGameStarted(String gameID, Boolean gameStarted) {
         if (gameExists(gameID)) {
             try {
@@ -77,6 +108,7 @@ public class AndroidInterfaceClass implements FireBaseInterface {
         try {
             myRef = database.getReference(gameID);
             myRef.child("gameStarted").setValue(false);
+            myRef.child("winner").setValue("");
             myRef = database.getReference(gameID+"/players/"+playerID);
             myRef.setValue(this.createPlayerMap());
             this.getPlayersInGame(gameID, playerID);
