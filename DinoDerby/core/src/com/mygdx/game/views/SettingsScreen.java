@@ -42,10 +42,10 @@ public class SettingsScreen implements Screen {
         stage.addActor(table);
 
         //TODO add a skin.
-        Skin skin = new Skin(Gdx.files.internal(""));
+        Skin skin = new Skin(Gdx.files.internal("skin/buttonskin.json"));
 
         TextButton back = new TextButton("Back", skin);
-
+/*
         //music
         final Slider musicSlider = new Slider(0, 1f, 0.1f, false, skin);
         musicSlider.setValue(parent.getSettings().getMusicVolume());
@@ -87,7 +87,7 @@ public class SettingsScreen implements Screen {
                 return false;
             }
         });
-
+*/
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -105,26 +105,26 @@ public class SettingsScreen implements Screen {
         //adding our labels to the table
         table.add(title);
         table.row();
-        table.add(musicSlider);
-        table.add(musicSlider);
+        //table.add(musicSlider);
+        //table.add(musicSlider);
+        //table.row();
+        //table.add(musicEnabled);
+        //table.add(musicCheckbox);
         table.row();
-        table.add(musicEnabled);
-        table.add(musicCheckbox);
+        //table.add(soundLabel);
+        //table.add(soundSlider);
         table.row();
-        table.add(soundLabel);
-        table.add(soundSlider);
-        table.row();
-        table.add(soundEnabled);
-        table.add(soundCheckbox);
+        //table.add(soundEnabled);
+        //table.add(soundCheckbox);
         table.row();
         table.add(back);
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
 

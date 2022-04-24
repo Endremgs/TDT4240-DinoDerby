@@ -1,28 +1,53 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.mygdx.game.states.GameStateManager;
-import com.mygdx.game.states.MenuState;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.views.MenuScreen;
+import com.mygdx.game.views.PlayScreen;
+import com.mygdx.game.views.SettingsScreen;
 
-public class MyGdxGame extends ApplicationAdapter {
+public class MyGdxGame extends Game {
 	public static final int WIDTH = 480;
 	public static final int HEIGHT = 800;
 
-
-	private GameSettings settings;
-
 	public static final int MENU = 0;
-	public static final int SETTINGS = 1;
+	public static final int PLAY = 1;
+	public static final int SETTINGS = 3;
 
 	public static final String TITLE = "Dino Derby";
 
+	private MenuScreen menuScreen;
+	private PlayScreen playScreen;
+	private SettingsScreen settings;
+
 	FireBaseInterface FBIC;
 
-	private GameStateManager gsm;
 	SpriteBatch batch;
+	protected OrthographicCamera camera;
+	Viewport viewport;
+
+	public void changeScreen(int screen) {
+		switch (screen) {
+			case MENU:
+				menuScreen = new MenuScreen(this);
+				this.setScreen(menuScreen);
+				break;
+			case PLAY:
+				playScreen = new PlayScreen(this);
+				this.setScreen(playScreen);
+				break;
+			case SETTINGS:
+				settings = new SettingsScreen(this);
+				this.setScreen(settings);
+				break;
+		}
+
+	}
 
 	public MyGdxGame(FireBaseInterface FBIC) {
 		this.FBIC = FBIC;
@@ -30,37 +55,33 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		gsm = new GameStateManager();
-		settings = new GameSettings();
-		gsm.push(new MenuState(gsm));
-		FBIC.SomeFunction();
-		FBIC.firstFireBaseText();
+
+		menuScreen = new MenuScreen(this);
+		setScreen(menuScreen);
+
+		camera  = new OrthographicCamera();
+		camera.setToOrtho(false, 800, 480);
 	}
 
-	public GameSettings getSettings(){
+
+	public SettingsScreen getSettings(){
 		return this.settings;
 	}
-
+	/*
 	@Override
 	public void render () {
 		ScreenUtils.clear(0, 0, 0, 1);
+		batch.setProjectionMatrix(camera.combined);
 		gsm.update(Gdx.graphics.getDeltaTime());
+		camera.update();
 		gsm.render(batch);
 
-	}
-
-	public void changeScreen(int screen){
-		switch (screen){
-			case SETTINGS:
-				if (settings == null) settings = new GameSettings();
-				this.setScreen(settings);
-				break;
-		}
 	}
 
 	@Override
 	public void dispose () {
 		batch.dispose();
 	}
+
+	 */
 }
