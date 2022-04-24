@@ -66,6 +66,7 @@ public class MyGdxGame extends Game {
 		}
 		else {
 			System.out.println("you lost");
+			this.changeScreen(GAMEOVER);
 		}
 	}
 
