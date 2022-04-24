@@ -9,7 +9,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.LevelFactory;
 import com.mygdx.game.entity.components.GhostComponent;
 import com.mygdx.game.entity.components.TextureComponent;
 import com.mygdx.game.entity.components.TransformComponent;
@@ -27,6 +31,7 @@ public class RenderingSystem extends SortedIteratingSystem {
 
     public static final float PIXEL_TO_METERS = 1.0f / PPM;
 
+
     /*
     public RenderingSystem(Family family, Comparator<Entity> comparator) {
         super(family, comparator);
@@ -42,18 +47,19 @@ public class RenderingSystem extends SortedIteratingSystem {
     private Array<Entity> renderQueue;
     private Comparator<Entity> comparator;
     private OrthographicCamera cam;
+    private OrthogonalTiledMapRenderer mapRenderer;
 
     private ComponentMapper<TextureComponent> cmTexture;
     private ComponentMapper<TransformComponent> cmTransform;
     private ComponentMapper<GhostComponent> cmGhost;
-    private Texture background = new Texture("bg.jpg");
+    
 
     @SuppressWarnings("unchecked")
-    public RenderingSystem(SpriteBatch sb) {
+    public RenderingSystem(SpriteBatch sb, TiledMap map) {
         super(Family.all(TransformComponent.class, TextureComponent.class).get(), new ZComparator());
 
         comparator = new ZComparator();
-
+        this.mapRenderer = new OrthogonalTiledMapRenderer(map);
         // component mappers
         cmTexture = ComponentMapper.getFor(TextureComponent.class);
         cmTransform = ComponentMapper.getFor(TransformComponent.class);
@@ -65,6 +71,7 @@ public class RenderingSystem extends SortedIteratingSystem {
 
         cam = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
         cam.position.set(FRUSTUM_WIDTH / 2f, FRUSTUM_HEIGHT/ 2f, 0);
+
         System.out.println("Created rendering system");
     }
 
@@ -74,12 +81,13 @@ public class RenderingSystem extends SortedIteratingSystem {
 
         renderQueue.sort(comparator);
 
+        mapRenderer.setView(cam);
+        mapRenderer.render();
+
         cam.update();
         sb.setProjectionMatrix(cam.combined);
         sb.enableBlending();
         sb.begin();
-
-        sb.draw(background, 0, 0, FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
 
         for (Entity entity : renderQueue) {
             TextureComponent texture = cmTexture.get(entity);
@@ -103,10 +111,9 @@ public class RenderingSystem extends SortedIteratingSystem {
             sb.draw(texture.region,
                     transform.position.x - originX, transform.position.y -originY,
                     originX, originY,
-                    width, height,
+                    width*20, height*20,
                     PixelToMeters(transform.scale.x), PixelToMeters(transform.scale.y),
                     transform.rotation);
-            sb.setColor(c.r, c.g, c.b, 1f);
         }
         sb.end();
         renderQueue.clear();

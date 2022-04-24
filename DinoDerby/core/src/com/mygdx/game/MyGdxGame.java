@@ -1,15 +1,12 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.views.MenuScreen;
 import com.mygdx.game.views.PlayScreen;
 import com.mygdx.game.views.SettingsScreen;
+import com.mygdx.game.views.GameOverScreen;
 
 public class MyGdxGame extends Game {
 	public static final int WIDTH = 480;
@@ -17,17 +14,19 @@ public class MyGdxGame extends Game {
 
 	public static final int MENU = 0;
 	public static final int PLAY = 1;
+    public static final int GAMEOVER= 2;
 	public static final int SETTINGS = 3;
 
 	public static final String TITLE = "Dino Derby";
 
 	private MenuScreen menuScreen;
 	private PlayScreen playScreen;
+	private GameOverScreen gameOverScreen;
 	private SettingsScreen settings;
 
 	FireBaseInterface FBIC;
 
-	SpriteBatch batch;
+
 	protected OrthographicCamera camera;
 	Viewport viewport;
 
@@ -44,6 +43,10 @@ public class MyGdxGame extends Game {
 			case SETTINGS:
 				settings = new SettingsScreen(this);
 				this.setScreen(settings);
+				break;
+			case GAMEOVER:
+				if(gameOverScreen==null) gameOverScreen= new GameOverScreen(this);
+				this.setScreen(gameOverScreen);
 				break;
 		}
 
