@@ -1,6 +1,7 @@
 package com.mygdx.game.views;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -28,6 +29,16 @@ public class SettingsScreen implements Screen {
     private Label soundLabel;
     private Label soundEnabled;
 
+    private static final String MUSIC_VOLUME = "volume";
+    private static final String MUSIC_ENABLED = "music.enabled";
+    private static final String SOUND_VOLUME = "sound";
+    private static final String SOUND_ENABLED = "sound.enabled";
+    private static final String PREFERENCES_NAME = "gameSett";
+
+    public Preferences getPrefs(){
+        return Gdx.app.getPreferences(PREFERENCES_NAME);
+    }
+
     public SettingsScreen(MyGdxGame gdxGame){
         parent = gdxGame;
         stage = new Stage(new ScreenViewport());
@@ -41,10 +52,11 @@ public class SettingsScreen implements Screen {
         table.setDebug(true);
         stage.addActor(table);
 
-        //TODO add a skin.
         Skin skin = new Skin(Gdx.files.internal("skin/buttonskin.json"));
 
-        TextButton back = new TextButton("Back", skin);
+        final TextButton back = new TextButton("Back", skin);
+        final CheckBox musicCheckbox = new CheckBox("null", skin);
+
 /*
         //music
         final Slider musicSlider = new Slider(0, 1f, 0.1f, false, skin);
@@ -56,8 +68,7 @@ public class SettingsScreen implements Screen {
                 return false;
             }
         });
-
-        final CheckBox musicCheckbox = new CheckBox(null, skin);
+*/
         musicCheckbox.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
@@ -67,6 +78,8 @@ public class SettingsScreen implements Screen {
             }
         });
 
+
+/*
         //sound
         final Slider soundSlider = new Slider(0, 1f, 0.1f, false, skin);
         musicSlider.setValue(parent.getSettings().getSoundVolume());
@@ -98,27 +111,33 @@ public class SettingsScreen implements Screen {
         //labels
         title = new Label("Settings", skin);
         musicLabel = new Label(null, skin);
-        musicEnabled = new Label(null, skin);
+        musicEnabled = new Label("Enable Music", skin);
         soundLabel = new Label(null, skin);
         soundEnabled = new Label(null, skin);
 
         //adding our labels to the table
-        table.add(title);
+        table.add(title).fillX().uniformX();
         table.row();
         //table.add(musicSlider);
         //table.add(musicSlider);
         //table.row();
-        //table.add(musicEnabled);
-        //table.add(musicCheckbox);
-        table.row();
+        table.add(musicEnabled);
+        table.add(musicCheckbox);
+        //table.row();
         //table.add(soundLabel);
         //table.add(soundSlider);
-        table.row();
+        //table.row();
         //table.add(soundEnabled);
         //table.add(soundCheckbox);
         table.row();
-        table.add(back);
+        table.add(back).fillX().uniformX();
     }
+
+    private void setMusicEnabled(boolean enabled) {
+        getPrefs().putBoolean(MUSIC_ENABLED, enabled);
+        getPrefs().flush();
+    }
+
 
     @Override
     public void render(float delta) {

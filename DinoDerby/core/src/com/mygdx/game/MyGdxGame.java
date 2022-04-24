@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -26,6 +28,7 @@ public class MyGdxGame extends Game {
 
 	FireBaseInterface FBIC;
 
+	private Music music;
 
 	protected OrthographicCamera camera;
 	Viewport viewport;
@@ -45,7 +48,7 @@ public class MyGdxGame extends Game {
 				this.setScreen(settings);
 				break;
 			case GAMEOVER:
-				if(gameOverScreen==null) gameOverScreen= new GameOverScreen(this);
+				gameOverScreen= new GameOverScreen(this);
 				this.setScreen(gameOverScreen);
 				break;
 		}
@@ -64,6 +67,10 @@ public class MyGdxGame extends Game {
 
 		camera  = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);
+		music = Gdx.audio.newMusic(Gdx.files.internal("kahoot.wav"));
+		music.setLooping(true);
+		music.setVolume(0.05f);
+		music.play();
 	}
 
 

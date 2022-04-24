@@ -128,6 +128,7 @@ com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: { default: { font: DoHyeon, fontColor: white }}
+com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: { default: { checkboxOn: checkbox-on, checkboxOff: checkbox, font: DoHyeon, fontColor: white }}
 com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
 	default: {
 		background: list

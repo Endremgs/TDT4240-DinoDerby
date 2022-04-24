@@ -15,11 +15,11 @@ public class GameSettings {
     public Preferences getPrefs(){
         return Gdx.app.getPreferences(PREFERENCES_NAME);
     }
-
+/*
     public void setMusicEnabled(boolean musicEnabled){
         getPrefs().putBoolean(MUSIC_ENABLED, musicEnabled);
         getPrefs().flush();
-    }
+    }*/
 
     public boolean isMusicEnabled(){
         return getPrefs().getBoolean(MUSIC_ENABLED, true);
