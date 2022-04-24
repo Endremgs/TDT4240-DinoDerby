@@ -1,13 +1,13 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.views.CreateGameScreen;
 import com.mygdx.game.views.JoinGameScreen;
 import com.mygdx.game.views.LobbyScreen;
+import com.mygdx.game.views.GameOverScreen;
 import com.mygdx.game.views.MenuScreen;
 import com.mygdx.game.views.PlayScreen;
 
@@ -26,19 +26,21 @@ public class MyGdxGame extends Game {
 	private CreateGameScreen createGameScreen;
 	private JoinGameScreen joinGameScreen;
 	private LobbyScreen lobbyScreen;
-
+	private GameOverScreen gameOverScreen;
+	
 	public static final int MENU = 0;
 	public static final int PLAY = 1;
 	public static final int CREATEGAME = 2;
 	public static final int JOINGAME = 3;
 	public static final int LOBBY = 4;
+	public static final int GAMEOVER = 5;
 	private int currentScreen;
 //	private Boolean gameStarted = false;
 
 
 	FireBaseInterface FBIC;
 
-	SpriteBatch batch;
+
 	protected OrthographicCamera camera;
 	Viewport viewport;
 
@@ -109,6 +111,9 @@ public class MyGdxGame extends Game {
 			case LOBBY:
 				lobbyScreen = new LobbyScreen(this);
 				this.setScreen(lobbyScreen);
+			case GAMEOVER:
+				gameOverScreen= new GameOverScreen(this);
+				this.setScreen(gameOverScreen);
 				break;
 		}
 

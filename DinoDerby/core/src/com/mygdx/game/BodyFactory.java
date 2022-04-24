@@ -35,22 +35,22 @@ public class BodyFactory {
         Body body = world.createBody(bodyDef);
         PolygonShape poly = new PolygonShape();
         poly.setAsBox(width, height);
-        body.createFixture(poly, 3f);
+        body.createFixture(poly, 1f);
 
         // create body with definition
         return body;
     }
 
-    public Body makeGround(float posX, float posY, float width, float height) {
+    /*public Body makeBodyW(float posX, float posY) {
+
         BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.x = posX;
         bodyDef.position.y = posY;
 
         Body body = world.createBody(bodyDef);
         PolygonShape poly = new PolygonShape();
-        poly.setAsBox(10f, 0.5f);
-        body.createFixture(poly, 4f);
 
         return body;
-    }
+    }*/
 }
