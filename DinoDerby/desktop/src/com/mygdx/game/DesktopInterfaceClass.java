@@ -17,7 +17,7 @@ public class DesktopInterfaceClass implements FireBaseInterface {
     }
 
     @Override
-    public void setGameStarted(String gameID, Boolean gameStarted) {
+    public void setGameStarted(String gameID, String playerID) {
 
     }
 

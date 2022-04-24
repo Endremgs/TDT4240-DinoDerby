@@ -28,33 +28,33 @@ public class AndroidInterfaceClass implements FireBaseInterface {
         this.parent = parent;
     }
 
-    public void listenToGameStart(String gameID) {
-        if (gameExists(gameID)) {
-            try {
-                myRef = database.getReference(gameID+"/gameStarted");
-                myRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            Boolean gameStarted = snapshot.getValue(Boolean.class);
-                            parent.startGame(gameStarted);
-
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-            } catch (Error err) {
-                throw new IllegalArgumentException(err);
-            }
-        }
-        else {
-            throw new IllegalArgumentException("Game does not exist ListenToGameStart()");
-        }
-    }
+//    public void listenToGameStart(String gameID) {
+//        if (gameExists(gameID)) {
+//            try {
+//                myRef = database.getReference(gameID+"/players");
+//                myRef.addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        if (snapshot.exists()) {
+//                            Boolean gameStarted = snapshot.getValue(Boolean.class);
+//                            parent.startGame(gameStarted);
+//
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                    }
+//                });
+//            } catch (Error err) {
+//                throw new IllegalArgumentException(err);
+//            }
+//        }
+//        else {
+//            throw new IllegalArgumentException("Game does not exist ListenToGameStart()");
+//        }
+//    }
 
     public void finishGame(String gameID, String playerID) {
         if (gameExists(gameID)) {
@@ -100,18 +100,17 @@ public class AndroidInterfaceClass implements FireBaseInterface {
         }
     }
 
-    public void setGameStarted(String gameID, Boolean gameStarted) {
+    public void setGameStarted(String gameID, String playerID) {
         if (gameExists(gameID)) {
             try {
-
-            myRef = database.getReference(gameID);
-            myRef.child("gameStarted").setValue(gameStarted);
+            myRef = database.getReference(gameID+"/players/"+playerID);
+            myRef.child("gameStarted").setValue(true);
             }catch (Error err) {
                 throw new IllegalArgumentException(err);
             }
         }
         else {
-            throw  new IllegalArgumentException("Game does not exist");
+            throw new IllegalArgumentException("Game does not exist");
         }
     }
 
@@ -126,7 +125,7 @@ public class AndroidInterfaceClass implements FireBaseInterface {
             myRef.setValue(this.createPlayerMap());
             this.getPlayersInGame(gameID, playerID);
             parent.setCurrGameID(gameID);
-            this.listenToGameStart(gameID);
+//            this.listenToGameStart(gameID);
             this.listenToGameFinish(gameID);
         } catch (Error err) {
             throw new IllegalArgumentException("Failed creating game with gameID: " + gameID + " for player: " + playerID + err);
@@ -142,7 +141,7 @@ public class AndroidInterfaceClass implements FireBaseInterface {
                 myRef.setValue(this.createPlayerMap());
                 this.getPlayersInGame(gameID, playerID);
                 parent.setCurrGameID(gameID);
-                this.listenToGameStart(gameID);
+//                this.listenToGameStart(gameID);
                 this.listenToGameFinish(gameID);
             } catch (Error err) {
                 System.out.println("kaster exception");
@@ -189,15 +188,24 @@ public class AndroidInterfaceClass implements FireBaseInterface {
 //                                System.out.println(snapshot.child("gameStarted").getValue());
 //                                parent.checkGameStarted((Boolean) snapshot.child("gameStarted").getValue());
 //                                DataSnapshot playersSnapshot = snapshot.child("players");
+                                Boolean gameStarted = true;
                                 for (DataSnapshot player : snapshot.getChildren()) {
                                     System.out.println("i ondata change i getPlayersInGame()");
                                     System.out.println(player);
 //                                System.out.println(player.);
                                     System.out.println(player.getKey());
                                     Map<String, Integer> playerMap = (Map<String, Integer>) player.getValue();
+                                    if(playerMap.get("gameStarted") == 0) {
+                                        System.out.println("Not all players are ready");
+                                        gameStarted = false;
+                                    }
                                     players.put(player.getKey(), playerMap);
                                 }
                                 parent.setPlayers(players);
+                                if (gameStarted) {
+                                    System.out.println("all players are ready, starting ...");
+                                    parent.gameStarted = true;
+                                }
                             }
                         } catch (Error err) {
                             throw new IllegalArgumentException(err);
@@ -226,6 +234,7 @@ public class AndroidInterfaceClass implements FireBaseInterface {
         playerData.put("xPos", 0);
         playerData.put("yPos", 0);
         playerData.put("zPos", 0);
+        playerData.put("gameStarted", 0);
         return playerData;
     }
 
@@ -234,6 +243,7 @@ public class AndroidInterfaceClass implements FireBaseInterface {
         playerData.put("xPos", xPos);
         playerData.put("yPos", yPos);
         playerData.put("zPos", zPos);
+        playerData.put("gameStarted", 0);
         return playerData;
     }
 
