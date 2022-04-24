@@ -28,6 +28,34 @@ public class AndroidInterfaceClass implements FireBaseInterface {
         this.parent = parent;
     }
 
+    public void listenToGameStart(String gameID) {
+        if (gameExists(gameID)) {
+            try {
+                myRef = database.getReference(gameID+"/gameStarted");
+                myRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            Boolean gameStarted = snapshot.getValue(Boolean.class);
+                            parent.startGame(gameStarted);
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            } catch (Error err) {
+                throw new IllegalArgumentException(err);
+            }
+        }
+        else {
+            throw new IllegalArgumentException("Game does not exist ListenToGameStart()");
+        }
+    }
+
     public void setGameStarted(String gameID, Boolean gameStarted) {
         if (gameExists(gameID)) {
             try {
@@ -48,11 +76,12 @@ public class AndroidInterfaceClass implements FireBaseInterface {
         String gameID = UUID.randomUUID().toString();
         try {
             myRef = database.getReference(gameID);
-            myRef.child("gameStarted").setValue("false");
+            myRef.child("gameStarted").setValue(false);
             myRef = database.getReference(gameID+"/players/"+playerID);
             myRef.setValue(this.createPlayerMap());
             this.getPlayersInGame(gameID, playerID);
             parent.setCurrGameID(gameID);
+            this.listenToGameStart(gameID);
         } catch (Error err) {
             throw new IllegalArgumentException("Failed creating game with gameID: " + gameID + " for player: " + playerID + err);
         }
@@ -67,6 +96,7 @@ public class AndroidInterfaceClass implements FireBaseInterface {
                 myRef.setValue(this.createPlayerMap());
                 this.getPlayersInGame(gameID, playerID);
                 parent.setCurrGameID(gameID);
+                this.listenToGameStart(gameID);
             } catch (Error err) {
                 System.out.println("kaster exception");
                 throw new IllegalArgumentException("Failed joining game: " + gameID + " for player: " + playerID + err);
@@ -95,29 +125,37 @@ public class AndroidInterfaceClass implements FireBaseInterface {
     public void getPlayersInGame(String gameID, String playerID) {
         AtomicBoolean reqFinished = new AtomicBoolean(false);
             try {
-                myRef = database.getReference(gameID);
+                myRef = database.getReference(gameID+"/players");
                 myRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        System.out.println("player data changed, refetching i getPlayersInGame()");
-                        System.out.println(snapshot.getChildren());
-                        if (snapshot.exists()) {
-                            //clear List
-                            Map<String, Map<String, Integer>> players = new HashMap<>();
-                            System.out.println("-----------");
-                            System.out.println("checking if game has started");
-                            System.out.println(snapshot.child("gameStarted").getValue());
-                            parent.checkGameStarted((Boolean) snapshot.child("gameStarted").getValue());
-                            DataSnapshot playersSnapshot = snapshot.child("players");
-                            for (DataSnapshot player : playersSnapshot.getChildren()) {
-                                System.out.println("i ondata change i getPlayersInGame()");
+                        try {
+
+
+                            System.out.println("player data changed, refetching i getPlayersInGame()");
+//                            System.out.println(snapshot.getChildren());
+                            if (snapshot.exists()) {
+                                //clear List
+                                Map<String, Map<String, Integer>> players = new HashMap<>();
+//                                System.out.println("-----------");
+//                                System.out.println("checking if game has started");
+//                                System.out.println(snapshot.child("gameStarted").getValue());
+//                                parent.checkGameStarted((Boolean) snapshot.child("gameStarted").getValue());
+//                                DataSnapshot playersSnapshot = snapshot.child("players");
+                                for (DataSnapshot player : snapshot.getChildren()) {
+                                    System.out.println("i ondata change i getPlayersInGame()");
+                                    System.out.println(player);
 //                                System.out.println(player.);
-                                System.out.println(player.getKey());
-                                Map<String, Integer> playerMap = (Map<String, Integer>) player.getValue();
-                                players.put(player.getKey(), playerMap);
+                                    System.out.println(player.getKey());
+                                    Map<String, Integer> playerMap = (Map<String, Integer>) player.getValue();
+                                    players.put(player.getKey(), playerMap);
+                                }
+                                parent.setPlayers(players);
                             }
-                            parent.setPlayers(players);
-                        }
+                        } catch (Error err) {
+                            throw new IllegalArgumentException(err);
+                            }
+
                         reqFinished.set(true);
                     }
 

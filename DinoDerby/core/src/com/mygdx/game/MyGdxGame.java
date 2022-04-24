@@ -33,7 +33,7 @@ public class MyGdxGame extends Game {
 	public static final int JOINGAME = 3;
 	public static final int LOBBY = 4;
 	private int currentScreen;
-	private Boolean gameStarted = false;
+//	private Boolean gameStarted = false;
 
 
 	FireBaseInterface FBIC;
@@ -46,12 +46,13 @@ public class MyGdxGame extends Game {
 	private String currGameID;
 	private Map<String, Map<String, Integer>> players;
 
-	public void checkGameStarted(Boolean gameStarted) {
+	public void startGame(Boolean gameStarted) {
 		System.out.println("checkGameStarted() i mygdxGame");
-		System.out.println(this.gameStarted);
+//		System.out.println(this.gameStarted);
 		System.out.println(gameStarted);
-		if (gameStarted != this.gameStarted) {
-			this.changeScreen(MyGdxGame.PLAY);
+		if (gameStarted) {
+//			this.setScreen(this.playScreen);
+			this.changeScreen(PLAY);
 		}
 	}
 
@@ -72,7 +73,7 @@ public class MyGdxGame extends Game {
 		System.out.println("setting players");
 		System.out.println(this.players);
 
-		if (this.currentScreen == MyGdxGame.LOBBY) {
+		if (this.currentScreen == LOBBY) {
 			this.lobbyScreen.show();
 		}
 	}
@@ -116,6 +117,7 @@ public class MyGdxGame extends Game {
 		this.FBIC = FBIC;
 		this.FBIC.setParent(this);
 		this.playerID = UUID.randomUUID().toString();
+//		this.playScreen = new PlayScreen(this);
 	}
 
 	@Override
