@@ -21,9 +21,12 @@ public class TutorialScreen implements Screen {
     private final SpriteBatch sb;
     private Texture texture;
 
+    private static final int WIDTH = 480;
+    private static final int HEIGHT = 800;
+
     public TutorialScreen(MyGdxGame dinoDerby){
         parent = dinoDerby;
-        this.texture = new Texture("TutorialPart1.png");
+        this.texture = new Texture("Tutorial.png");
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         sb = new SpriteBatch();
@@ -54,9 +57,12 @@ public class TutorialScreen implements Screen {
     @Override
     public void render(float delta) {
         sb.begin();
-        stage.draw();
-        sb.draw(texture, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        sb.draw(texture, Gdx.graphics.getWidth()/WIDTH,
+                Gdx.graphics.getHeight()/HEIGHT);
+
         sb.end();
+        stage.draw();
     }
 
     @Override
