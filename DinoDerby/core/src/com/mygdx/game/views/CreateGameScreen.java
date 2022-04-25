@@ -27,10 +27,10 @@ public class CreateGameScreen implements Screen {
     public CreateGameScreen(MyGdxGame dinoDerby){
         parent = dinoDerby;
         stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
     }
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(stage);
 
         Table table = new Table();
         table.setFillParent(true);

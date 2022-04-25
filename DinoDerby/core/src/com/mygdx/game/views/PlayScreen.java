@@ -52,22 +52,18 @@ public class PlayScreen implements Screen {
             }
         }
 
-        /* creates all obstacles for the level */
-        for (int i = 0; i <= 150; i++) {
-            if (i < 7) {
-                continue;
-        inputProcessor = (new SimpleDirectionGestureDetector(new SimpleDirectionGestureDetector.DirectionListener() {
-            @Override
-            public void onUp() {
-                System.out.println("up input");
-                jump = 25;
-            }
+                inputProcessor = (new SimpleDirectionGestureDetector(new SimpleDirectionGestureDetector.DirectionListener() {
+                    @Override
+                    public void onUp() {
+                        System.out.println("up input");
+                        jump = 25;
+                    }
 
-            @Override
-            public void onDown() {
+                    @Override
+                    public void onDown() {
 
-            }
-        }));
+                    }
+                }));
         sb = new SpriteBatch();
         RenderingSystem renderingSystem = new RenderingSystem(sb, levelFactory.getMap(), parent);
         cam = renderingSystem.getCamera();

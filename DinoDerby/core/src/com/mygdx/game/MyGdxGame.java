@@ -1,5 +1,8 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -10,6 +13,7 @@ import com.mygdx.game.views.LobbyScreen;
 import com.mygdx.game.views.GameOverScreen;
 import com.mygdx.game.views.MenuScreen;
 import com.mygdx.game.views.PlayScreen;
+import com.mygdx.game.views.SettingsScreen;
 import com.mygdx.game.views.TutorialScreen;
 
 import java.util.HashMap;
@@ -21,25 +25,33 @@ public class MyGdxGame extends Game {
 	public static final int WIDTH = 1600;
 	public static final int HEIGHT = 960;
 
-	public static final String TITLE = "Dino Derby";
 
+
+	public static final String TITLE = "Dino Derby";
+	private static final String MUSIC_ENABLED = "music.enabled";
 	private MenuScreen menuScreen;
 	private PlayScreen playScreen;
 	private CreateGameScreen createGameScreen;
 	private JoinGameScreen joinGameScreen;
 	private LobbyScreen lobbyScreen;
 	private GameOverScreen gameOverScreen;
+
+	private SettingsScreen settings;
+	public boolean musicEnabled = true;
+  
 	private TutorialScreen tutorialScreen;
 
 	public boolean gameStarted = false;
 	
 	public static final int MENU = 0;
 	public static final int PLAY = 1;
-	public static final int CREATEGAME = 2;
-	public static final int JOINGAME = 3;
-	public static final int LOBBY = 4;
-	public static final int GAMEOVER = 5;
-	public static final int TUTORIAL = 6;
+	public static final int TUTORIAL = 2;
+  	public static final int SETTINGS = 3;
+	public static final int CREATEGAME = 4;
+	public static final int JOINGAME = 5;
+	public static final int LOBBY = 6;
+	public static final int GAMEOVER = 7;
+
 	private int currentScreen;
 //	private Boolean gameStarted = false;
 
@@ -47,6 +59,7 @@ public class MyGdxGame extends Game {
 
 	FireBaseInterface FBIC;
 
+	public Music music;
 
 	protected OrthographicCamera camera;
 	Viewport viewport;
@@ -115,23 +128,26 @@ public class MyGdxGame extends Game {
 				this.setScreen(menuScreen);
 				break;
 			case PLAY:
-				if (playScreen == null) playScreen = new PlayScreen(this);
+				if (playScreen == null)playScreen = new PlayScreen(this);
 				this.setScreen(playScreen);
 				break;
+			case SETTINGS:
+				if (settings == null) settings = new SettingsScreen(this);
+				this.setScreen(settings);
 			case CREATEGAME:
-				createGameScreen = new CreateGameScreen(this);
+				if (createGameScreen == null) createGameScreen = new CreateGameScreen(this);
 				this.setScreen(createGameScreen);
 				break;
 			case JOINGAME:
-				joinGameScreen = new JoinGameScreen(this);
+				if (joinGameScreen == null) joinGameScreen = new JoinGameScreen(this);
 				this.setScreen(joinGameScreen);
 				break;
 			case LOBBY:
-				lobbyScreen = new LobbyScreen(this);
+				if (lobbyScreen == null) lobbyScreen = new LobbyScreen(this);
 				this.setScreen(lobbyScreen);
 				break;
 			case GAMEOVER:
-				if (gameOverScreen == null) gameOverScreen = new GameOverScreen(this);
+				if (gameOverScreen == null) gameOverScreen= new GameOverScreen(this);
 				this.setScreen(gameOverScreen);
 				break;
 			case TUTORIAL:
@@ -149,16 +165,33 @@ public class MyGdxGame extends Game {
 //		this.playScreen = new PlayScreen(this);
 	}
 
+	public Preferences getPrefs(){
+		return Gdx.app.getPreferences(SettingsScreen.PREFERENCES_NAME);
+	}
+
+	public void setMusicEnabled(boolean musicEnabled) {
+		this.musicEnabled = musicEnabled;
+	}
+
 	@Override
 	public void create () {
 
 		menuScreen = new MenuScreen(this);
 		setScreen(menuScreen);
 
+		music = Gdx.audio.newMusic(Gdx.files.internal("kahoot.wav"));
+		music.setLooping(true);
+		music.setVolume(0.05f);
+		music.play();
+
 		camera  = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);
 	}
 
+
+	public SettingsScreen getSettings(){
+		return this.settings;
+	}
 	/*
 	@Override
 	public void render () {
