@@ -14,11 +14,14 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.LevelFactory;
+import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.entity.components.GhostComponent;
+import com.mygdx.game.entity.components.PlayerComponent;
 import com.mygdx.game.entity.components.TextureComponent;
 import com.mygdx.game.entity.components.TransformComponent;
 
 import java.util.Comparator;
+import java.util.Map;
 
 public class RenderingSystem extends SortedIteratingSystem {
 
@@ -42,7 +45,7 @@ public class RenderingSystem extends SortedIteratingSystem {
         return pixelValue * PIXEL_TO_METERS;
     }
 
-
+    private MyGdxGame game;
     private SpriteBatch sb;
     private Array<Entity> renderQueue;
     private Comparator<Entity> comparator;
@@ -52,10 +55,10 @@ public class RenderingSystem extends SortedIteratingSystem {
     private ComponentMapper<TextureComponent> cmTexture;
     private ComponentMapper<TransformComponent> cmTransform;
     private ComponentMapper<GhostComponent> cmGhost;
-    
+    private ComponentMapper<PlayerComponent> cmPlayer;
 
     @SuppressWarnings("unchecked")
-    public RenderingSystem(SpriteBatch sb, TiledMap map) {
+    public RenderingSystem(SpriteBatch sb, TiledMap map, MyGdxGame game) {
         super(Family.all(TransformComponent.class, TextureComponent.class).get(), new ZComparator());
 
         comparator = new ZComparator();
@@ -64,10 +67,12 @@ public class RenderingSystem extends SortedIteratingSystem {
         cmTexture = ComponentMapper.getFor(TextureComponent.class);
         cmTransform = ComponentMapper.getFor(TransformComponent.class);
         cmGhost = ComponentMapper.getFor(GhostComponent.class);
+        cmPlayer = ComponentMapper.getFor(PlayerComponent.class);
         // array for rendering entities
         renderQueue = new Array<Entity>();
 
         this.sb = sb;
+        this.game = game;
 
         cam = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
         cam.position.set(FRUSTUM_WIDTH / 2f, FRUSTUM_HEIGHT/ 2f, 0);
@@ -103,10 +108,25 @@ public class RenderingSystem extends SortedIteratingSystem {
             float originX = width / 2f;
             float originY = height / 2f;
 
+            //Posting player position to firebase
+            System.out.println("I rendering system");
+            System.out.println(entity);
+            System.out.println(cmPlayer.has(entity));
+            if (entity != null && cmPlayer.has(entity)) {
+                game.getFirebaseInstance().updatePlayerInGame(game.getCurrGameID(), game.getPlayerID(), transform.position.x, transform.position.y);
+            }
+
             Color c = sb.getColor();
-            //Changing opacity if entity is ghost
             if (cmGhost.has(entity)) {
+                //Changing opacity if entity is ghost
                 sb.setColor(c.r, c.g, c.b, 0.75f);
+
+                //Checking and setting position from firebase database
+                GhostComponent ghostComponent = cmGhost.get(entity);
+                Map<String, Float> playerMap = game.getPlayers().get(ghostComponent);
+                transform.position.x = playerMap.get("xPos");
+                transform.position.y = playerMap.get("yPos");
+
             }
             sb.draw(texture.region,
                     transform.position.x - originX, transform.position.y -originY,

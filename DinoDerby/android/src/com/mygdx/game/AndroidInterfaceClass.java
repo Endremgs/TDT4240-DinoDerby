@@ -104,7 +104,7 @@ public class AndroidInterfaceClass implements FireBaseInterface {
         if (gameExists(gameID)) {
             try {
             myRef = database.getReference(gameID+"/players/"+playerID);
-            myRef.child("gameStarted").setValue(true);
+            myRef.child("gameStarted").setValue(1);
             }catch (Error err) {
                 throw new IllegalArgumentException(err);
             }
@@ -119,7 +119,6 @@ public class AndroidInterfaceClass implements FireBaseInterface {
         String gameID = UUID.randomUUID().toString();
         try {
             myRef = database.getReference(gameID);
-            myRef.child("gameStarted").setValue(false);
             myRef.child("winner").setValue("");
             myRef = database.getReference(gameID+"/players/"+playerID);
             myRef.setValue(this.createPlayerMap());
@@ -153,11 +152,13 @@ public class AndroidInterfaceClass implements FireBaseInterface {
         }
     }
 
-    public void updatePlayerInGame(String gameID, String playerID, Integer xPos, Integer yPos, Integer zPos) {
+    public void updatePlayerInGame(String gameID, String playerID, Float xPos, Float yPos) {
         if (this.playerIsInGame(gameID, playerID)) {
             try {
                 myRef = database.getReference(gameID+"/players/"+playerID);
-                myRef.setValue(createPlayerMap(xPos, yPos, zPos));
+                Map playerMap = this.createPlayerMap(xPos, yPos);
+                playerMap.put("gameStarted", 1);
+                myRef.setValue(playerMap);
             } catch (Error err) {
                 throw new IllegalArgumentException("Failed updating player in game: " + gameID + " for player: " + playerID + err);
             }
@@ -176,30 +177,53 @@ public class AndroidInterfaceClass implements FireBaseInterface {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         try {
-
-
                             System.out.println("player data changed, refetching i getPlayersInGame()");
 //                            System.out.println(snapshot.getChildren());
                             if (snapshot.exists()) {
                                 //clear List
-                                Map<String, Map<String, Integer>> players = new HashMap<>();
+                                Map<String, Map<String, Float>> players = new HashMap<>();
 //                                System.out.println("-----------");
 //                                System.out.println("checking if game has started");
 //                                System.out.println(snapshot.child("gameStarted").getValue());
 //                                parent.checkGameStarted((Boolean) snapshot.child("gameStarted").getValue());
 //                                DataSnapshot playersSnapshot = snapshot.child("players");
+                                System.out.println("snapshot exists getPlayersInGame()");
                                 Boolean gameStarted = true;
+                                System.out.println(snapshot.getChildren());
                                 for (DataSnapshot player : snapshot.getChildren()) {
-                                    System.out.println("i ondata change i getPlayersInGame()");
+                                    System.out.println("i for løkke i getPlayersInGame()");
+//                                    try {
                                     System.out.println(player);
-//                                System.out.println(player.);
-                                    System.out.println(player.getKey());
-                                    Map<String, Integer> playerMap = (Map<String, Integer>) player.getValue();
-                                    if(playerMap.get("gameStarted") == 0) {
+////                                System.out.println(player.);
+//                                    System.out.println(player.getKey());
+//                                    System.out.println(player.getValue());
+//                                    Map<String, Float> playerMap = (HashMap<String, Float>) player.getValue();
+                                    Map<String, Float> playerMap = new HashMap();
+                                    Map<String, Long> firebasePlayerMap = (Map<String, Long>) player.getValue();
+                                    for (String firebasePlayerMapKey: firebasePlayerMap.keySet()) {
+                                        playerMap.put(firebasePlayerMapKey, firebasePlayerMap.get(firebasePlayerMapKey).floatValue());
+                                    }
+                                    System.out.println("||||||||||||");
+                                    System.out.println(playerMap);
+//                                    System.out.println("-------");
+//                                    System.out.println("Skal sjekke long greier nå");
+//                                    System.out.println(playerMap.get("gameStarted"));
+//                                    System.out.println("-------------");
+//                                    System.out.println(playerMap.get("gameStarted").getClass());
+//                                    System.out.println("--------");
+//                                    Long blabla = playerMap.get("gameStarted").longValue();
+//                                    System.out.println(blabla);
+                                    System.out.println(playerMap.get("gameStarted"));
+//                                    System.out.println(playerMap.get("gameStarted").getClass().toString());
+                                    Float playerReady = playerMap.get("gameStarted");
+                                    if (playerReady > 0) {
                                         System.out.println("Not all players are ready");
                                         gameStarted = false;
                                     }
                                     players.put(player.getKey(), playerMap);
+//                                    } catch (Error err) {
+//                                        throw new IllegalArgumentException(err);
+//                                    }
                                 }
                                 parent.setPlayers(players);
                                 if (gameStarted) {
@@ -230,20 +254,18 @@ public class AndroidInterfaceClass implements FireBaseInterface {
     }
 
     private HashMap createPlayerMap() {
-        HashMap playerData = new HashMap<String, Integer>();
-        playerData.put("xPos", 0);
-        playerData.put("yPos", 0);
-        playerData.put("zPos", 0);
-        playerData.put("gameStarted", 0);
+        HashMap playerData = new HashMap<String, Float>();
+        playerData.put("xPos", Float.valueOf(0));
+        playerData.put("yPos", Float.valueOf(0));
+        playerData.put("gameStarted", Float.valueOf(0));
         return playerData;
     }
 
-    private HashMap createPlayerMap(Integer xPos, Integer yPos, Integer zPos) {
-        HashMap playerData = new HashMap<String, Integer>();
-        playerData.put("xPos", xPos);
-        playerData.put("yPos", yPos);
-        playerData.put("zPos", zPos);
-        playerData.put("gameStarted", 0);
+    private HashMap createPlayerMap(Float xPos, Float yPos) {
+        HashMap playerData = new HashMap<String, Float>();
+        playerData.put("xPos", Float.valueOf(xPos));
+        playerData.put("yPos", Float.valueOf(yPos));
+//        playerData.put("gameStarted", Float.valueOf(0));
         return playerData;
     }
 

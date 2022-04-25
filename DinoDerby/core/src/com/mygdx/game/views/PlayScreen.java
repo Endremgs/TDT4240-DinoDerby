@@ -67,7 +67,7 @@ public class PlayScreen implements Screen {
         levelFactory.createFinish();
 
         sb = new SpriteBatch();
-        RenderingSystem renderingSystem = new RenderingSystem(sb, levelFactory.getMap());
+        RenderingSystem renderingSystem = new RenderingSystem(sb, levelFactory.getMap(), parent);
         cam = renderingSystem.getCamera();
         sb.setProjectionMatrix(cam.combined);
 

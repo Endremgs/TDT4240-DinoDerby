@@ -35,7 +35,7 @@ public class DesktopInterfaceClass implements FireBaseInterface {
     }
 
     @Override
-    public void updatePlayerInGame(String gameID, String playerID, Integer xPos, Integer yPos, Integer zPos) {
+    public void updatePlayerInGame(String gameID, String playerID, Float xPos, Float yPos) {
 
     }
 

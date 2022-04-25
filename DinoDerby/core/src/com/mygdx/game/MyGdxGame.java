@@ -48,7 +48,7 @@ public class MyGdxGame extends Game {
 
 	private String playerID;
 	private String currGameID;
-	private Map<String, Map<String, Integer>> players;
+	private Map<String, Map<String, Float>> players;
 
 	public void startGame(Boolean gameStarted) {
 		System.out.println("checkGameStarted() i mygdxGame");
@@ -84,8 +84,8 @@ public class MyGdxGame extends Game {
 		this.currGameID = gameID;
 	}
 
-	public void setPlayers(Map<String, Map<String, Integer>> players) {
-		this.players = new HashMap<>(players);
+	public void setPlayers(Map<String, Map<String, Float>> players) {
+		this.players = new HashMap(players);
 		System.out.println("setting players");
 		System.out.println(this.players);
 
@@ -94,8 +94,8 @@ public class MyGdxGame extends Game {
 		}
 	}
 
-	public Map<String, Map<String, Integer>> getPlayers() {
-		return new HashMap<>(players);
+	public Map<String, Map<String, Float>> getPlayers() {
+		return new HashMap(players);
 	}
 
 	public FireBaseInterface getFirebaseInstance() {
