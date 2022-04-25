@@ -73,6 +73,9 @@ public class LobbyScreen implements Screen {
         if (stage.getBatch().isDrawing()) {
             stage.getBatch().end();
         }
+        else {
+            stage.getBatch().begin();
+        }
         stage.draw();
 
         startGame.addListener(new ChangeListener() {
@@ -112,6 +115,9 @@ public class LobbyScreen implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         if (stage.getBatch().isDrawing()) {
             stage.getBatch().end();
+        }
+        else {
+            stage.getBatch().begin();
         }
          stage.draw();
     }
