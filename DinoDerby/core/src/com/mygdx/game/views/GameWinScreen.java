@@ -29,7 +29,7 @@ public class GameWinScreen implements Screen {
     public GameWinScreen(MyGdxGame game){
 
         this.game= game;
-        this.texture= new Texture("GameOver.png");
+        this.texture= new Texture("win.png");
         background = new Texture("gamefinishBG.png");
         stage= new Stage(new ScreenViewport());
         batch = new SpriteBatch();
