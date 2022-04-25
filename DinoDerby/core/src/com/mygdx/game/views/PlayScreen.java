@@ -17,6 +17,7 @@ import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.SimpleDirectionGestureDetector;
 import com.mygdx.game.entity.systems.B2dContactListener;
 import com.mygdx.game.entity.systems.CollisionSystem;
+import com.mygdx.game.entity.systems.GhostSystem;
 import com.mygdx.game.entity.systems.PhysicsSystem;
 import com.mygdx.game.entity.systems.PlayerControlSystem;
 import com.mygdx.game.entity.systems.RenderingSystem;
@@ -46,9 +47,11 @@ public class PlayScreen implements Screen {
         levelFactory = new LevelFactory(engine, world);
         levelFactory.createMap();
 
+        int sprite = 0;
         for (String ghostPlayerID: parent.getPlayers().keySet()) {
             if (!ghostPlayerID.equals(parent.getPlayerID())) {
-                levelFactory.createGhost(ghostPlayerID);
+                levelFactory.createGhost(ghostPlayerID, sprite % 2);
+                sprite++;
             }
         }
 
@@ -74,6 +77,7 @@ public class PlayScreen implements Screen {
         engine.addSystem(new PlayerControlSystem(cam, parent, this));
         engine.addSystem(new PhysicsSystem(world));
         engine.addSystem(new CollisionSystem(parent));
+        engine.addSystem(new GhostSystem(parent));
 
     }
 

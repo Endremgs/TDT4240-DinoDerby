@@ -94,7 +94,7 @@ public class LevelFactory{
 
     }
 
-    public void createGhost(String playerID) {
+    public void createGhost(String playerID, int sprite) {
         Entity entity = engine.createEntity();
 
         TransformComponent position = engine.createComponent(TransformComponent.class);
@@ -102,7 +102,11 @@ public class LevelFactory{
         GhostComponent ghost = engine.createComponent(GhostComponent.class);
         ghost.playerID = playerID;
 
-        texture.region = new TextureRegion(new Texture("player2.png"));
+        if (sprite == 1) {
+            texture.region = new TextureRegion(new Texture("player3.png"));
+        } else {
+            texture.region = new TextureRegion(new Texture("player1.png"));
+        }
         position.position.set(10, 5, 0);
         entity.add(position);
         entity.add(texture);

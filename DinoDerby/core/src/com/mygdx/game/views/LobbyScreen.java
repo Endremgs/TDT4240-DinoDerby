@@ -117,11 +117,6 @@ public class LobbyScreen implements Screen {
         });
     }
 
-    public void startGame() {
-
-        parent.changeScreen(MyGdxGame.PLAY);
-    }
-
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
