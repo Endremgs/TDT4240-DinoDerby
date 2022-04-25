@@ -24,12 +24,12 @@ public class MenuScreen implements Screen {
     public MenuScreen(MyGdxGame dinoDerby) {
         parent = dinoDerby;
         stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
 
     }
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(stage);
         // Create a table that fills the screen. Everything else will go inside this table.
         Table table = new Table();
         table.setFillParent(true);

@@ -29,7 +29,6 @@ public class GameOverScreen implements Screen {
         this.game= game;
         this.texture= new Texture("Game Over.png");
         stage= new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
         batch = new SpriteBatch();
 
     }
@@ -37,6 +36,7 @@ public class GameOverScreen implements Screen {
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(stage);
         Table table= new Table();
         table.setFillParent(true);
         stage.addActor(table);

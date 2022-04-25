@@ -38,7 +38,6 @@ public class SettingsScreen implements Screen {
     private static final String MUSIC_ENABLED = "music.enabled";
     public static final String PREFERENCES_NAME = "gameSett";
 
-    private Music music;
 
     public Preferences getPrefs(){
         return Gdx.app.getPreferences(PREFERENCES_NAME);
@@ -47,34 +46,28 @@ public class SettingsScreen implements Screen {
     public SettingsScreen(MyGdxGame gdxGame){
         parent = gdxGame;
         stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
-
     }
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(stage);
         Table table = new Table();
         table.setFillParent(true);
-        table.setDebug(true);
+        //table.setDebug(true);
         stage.addActor(table);
 
         Skin skin = new Skin(Gdx.files.internal("skin/buttonskin.json"));
 
         final TextButton back = new TextButton("Back", skin);
-        final CheckBox musicCheckbox = new CheckBox("null", skin);
-        musicCheckbox.setChecked(parent.musicEnabled);
-        music = Gdx.audio.newMusic(Gdx.files.internal("kahoot.wav"));
-        music.setLooping(true);
-        music.setVolume(0.5f);
-        music.play();
+        final CheckBox musicCheckbox = new CheckBox("", skin);
 
         musicCheckbox.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
                 if(musicCheckbox.isChecked()){
-                    music.play();
+                    parent.music.pause();
                 } else{
-                    music.pause();
+                    parent.music.play();
                 }
                 return false;
             }
@@ -93,7 +86,6 @@ public class SettingsScreen implements Screen {
         musicEnabled = new Label("Enable Music", skin);
         soundLabel = new Label(null, skin);
         soundEnabled = new Label(null, skin);
-
         //adding our labels to the table
         table.add(title).fillX().uniformX();
         table.row();
@@ -106,7 +98,6 @@ public class SettingsScreen implements Screen {
 
     public boolean setMusicEnabled(boolean enabled) {
         return getPrefs().getBoolean(MUSIC_ENABLED, true);
-        //return false;
     }
 
 
@@ -141,8 +132,6 @@ public class SettingsScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        music.dispose();
-
     }
 
 }

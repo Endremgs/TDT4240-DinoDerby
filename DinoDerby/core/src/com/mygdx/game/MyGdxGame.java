@@ -74,6 +74,11 @@ public class MyGdxGame extends Game {
 		menuScreen = new MenuScreen(this);
 		setScreen(menuScreen);
 
+		music = Gdx.audio.newMusic(Gdx.files.internal("kahoot.wav"));
+		music.setLooping(true);
+		music.setVolume(0.05f);
+		music.play();
+
 		camera  = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);
 	}
