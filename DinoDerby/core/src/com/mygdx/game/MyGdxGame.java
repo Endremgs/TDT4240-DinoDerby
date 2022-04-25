@@ -70,16 +70,6 @@ public class MyGdxGame extends Game {
 	private String currGameID;
 	private Map<String, Map<String, Float>> players;
 
-	public void startGame(Boolean gameStarted) {
-		System.out.println("checkGameStarted() i mygdxGame");
-//		System.out.println(this.gameStarted);
-		System.out.println(gameStarted);
-		if (gameStarted) {
-//			this.setScreen(this.playScreen);
-//			this.changeScreen(PLAY);
-			this.lobbyScreen.startGame();
-		}
-	}
 
 	public void finishGame(String winner) {
 		System.out.println("playerID: " + playerID);
