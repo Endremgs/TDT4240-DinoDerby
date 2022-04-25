@@ -89,9 +89,9 @@ public class MyGdxGame extends Game {
 		System.out.println("setting players");
 		System.out.println(this.players);
 
-		if (this.currentScreen == LOBBY) {
-			this.lobbyScreen.show();
-		}
+//		if (this.currentScreen == LOBBY) {
+//			this.lobbyScreen.show();
+//		}
 	}
 
 	public Map<String, Map<String, Float>> getPlayers() {

@@ -76,14 +76,17 @@ public class LobbyScreen implements Screen {
 //        if (stage.)
 //            stage
 
-        try {
-
-        stage.draw();
-        } catch (IllegalStateException i) {
+//        try {
+        if (stage.getBatch().isDrawing()) {
             stage.getBatch().end();
-            stage.draw();
-            System.out.println("Restarting stage");
         }
+        stage.draw();
+//        } catch (IllegalStateException i) {
+//            stage.getBatch().end();
+//            stage.getBatch().begin();
+//            stage.draw();
+//            System.out.println("Restarting stage");
+//        }
 
         startGame.addListener(new ChangeListener() {
             @Override
@@ -124,13 +127,17 @@ public class LobbyScreen implements Screen {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        try {
-         stage.draw();
-        } catch (IllegalStateException i) {
+        if (stage.getBatch().isDrawing()) {
             stage.getBatch().end();
-            stage.draw();
-            System.out.println("Restarting stage");
         }
+//        try {
+         stage.draw();
+//        } catch (IllegalStateException i) {
+//            stage.getBatch().end();
+//            stage.getBatch().begin();
+//            stage.draw();
+//            System.out.println("Restarting stage");
+//        }
     }
 
     @Override
