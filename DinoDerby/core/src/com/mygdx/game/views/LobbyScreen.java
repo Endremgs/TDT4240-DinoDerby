@@ -43,7 +43,7 @@ public class LobbyScreen implements Screen {
         Skin skin = new Skin(Gdx.files.internal("skin/buttonskin.json"));
 
         TextButton startGame = new TextButton("Start Game", skin);
-        TextButton backBtn = new TextButton("Back", skin);
+        TextButton leaveBtn = new TextButton("Leave Game", skin);
 
         //Create a list view rendering a text element for each player in the lobby.
         //Ensure rerender of this list upon update.
@@ -54,7 +54,7 @@ public class LobbyScreen implements Screen {
         leftTable.add(startGame).fillX().uniformX();
         leftTable.row().pad(10, 0, 10, 0);
         leftTable.row();
-        leftTable.add(backBtn).fillX().uniformX();
+        leftTable.add(leaveBtn).fillX().uniformX();
         leftTable.row();
         leftTable.add(checkPlayers).fillX().uniformX();
 
@@ -101,10 +101,15 @@ public class LobbyScreen implements Screen {
                 }
             }
         });
-        backBtn.addListener(new ChangeListener() {
+        leaveBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                try {
+                    parent.getFirebaseInstance().leaveGame(parent.getCurrGameID(), parent.getPlayerID());
                 parent.changeScreen(MyGdxGame.MENU);
+                } catch (IllegalArgumentException i) {
+                    System.err.println(i);
+                }
             }
         });
         checkPlayers.addListener(new ChangeListener() {

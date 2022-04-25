@@ -69,6 +69,29 @@ public class AndroidInterfaceClass implements FireBaseInterface {
             throw  new IllegalArgumentException("Game does not exist");
         }
     }
+
+    @Override
+    public void leaveGame(String gameID, String playerID) {
+        if (this.gameExists(gameID)) {
+            System.out.println("gamet du prøver å leave fins");
+            try {
+                myRef = database.getReference(gameID+"/players/"+playerID);
+                myRef.removeValue();
+//                myRef.setValue(this.createPlayerMap());
+//                this.getPlayersInGame(gameID, playerID);
+                parent.setCurrGameID("");
+//                this.listenToGameStart(gameID);
+//                this.listenToGameFinish(gameID);
+            } catch (Error err) {
+                System.out.println("kaster exception");
+                throw new IllegalArgumentException("Failed leaving game: " + gameID + " for player: " + playerID + err);
+            }
+        }
+        else {
+            throw new IllegalArgumentException("Game does not exist");
+        }
+    }
+
     public void listenToGameFinish(String gameID) {
         if (gameExists(gameID)) {
             try {
