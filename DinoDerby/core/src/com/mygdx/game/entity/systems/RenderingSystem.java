@@ -55,7 +55,7 @@ public class RenderingSystem extends SortedIteratingSystem {
     private ComponentMapper<TextureComponent> cmTexture;
     private ComponentMapper<TransformComponent> cmTransform;
     private ComponentMapper<GhostComponent> cmGhost;
-    private ComponentMapper<PlayerComponent> cmPlayer;
+//    private ComponentMapper<PlayerComponent> cmPlayer;
 
     @SuppressWarnings("unchecked")
     public RenderingSystem(SpriteBatch sb, TiledMap map, MyGdxGame game) {
@@ -67,7 +67,7 @@ public class RenderingSystem extends SortedIteratingSystem {
         cmTexture = ComponentMapper.getFor(TextureComponent.class);
         cmTransform = ComponentMapper.getFor(TransformComponent.class);
         cmGhost = ComponentMapper.getFor(GhostComponent.class);
-        cmPlayer = ComponentMapper.getFor(PlayerComponent.class);
+//        cmPlayer = ComponentMapper.getFor(PlayerComponent.class);
         // array for rendering entities
         renderQueue = new Array<Entity>();
 
@@ -108,13 +108,13 @@ public class RenderingSystem extends SortedIteratingSystem {
             float originX = width / 2f;
             float originY = height / 2f;
 
-            //Posting player position to firebase
-            System.out.println("I rendering system");
-            System.out.println(entity);
-            System.out.println(cmPlayer.has(entity));
-            if (entity != null && cmPlayer.has(entity)) {
-                game.getFirebaseInstance().updatePlayerInGame(game.getCurrGameID(), game.getPlayerID(), transform.position.x, transform.position.y);
-            }
+//            //Posting player position to firebase
+//            System.out.println("I rendering system");
+//            System.out.println(entity);
+//            System.out.println(cmPlayer.has(entity));
+//            if (entity != null && cmPlayer.has(entity)) {
+//                game.getFirebaseInstance().updatePlayerInGame(game.getCurrGameID(), game.getPlayerID(), transform.position.x, transform.position.y);
+//            }
 
             Color c = sb.getColor();
             if (cmGhost.has(entity)) {

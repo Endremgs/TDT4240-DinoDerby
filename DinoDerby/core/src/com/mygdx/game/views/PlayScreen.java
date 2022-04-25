@@ -73,7 +73,7 @@ public class PlayScreen implements Screen {
 
 
         engine.addSystem(renderingSystem);
-        engine.addSystem(new PlayerControlSystem(cam));
+        engine.addSystem(new PlayerControlSystem(cam, parent));
         engine.addSystem(new PhysicsSystem(world));
         engine.addSystem(new CollisionSystem(parent));
 

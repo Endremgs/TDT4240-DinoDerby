@@ -255,16 +255,16 @@ public class AndroidInterfaceClass implements FireBaseInterface {
 
     private HashMap createPlayerMap() {
         HashMap playerData = new HashMap<String, Float>();
-        playerData.put("xPos", Float.valueOf(0));
-        playerData.put("yPos", Float.valueOf(0));
-        playerData.put("gameStarted", Float.valueOf(0));
+        playerData.put("xPos", Double.valueOf(0).longValue());
+        playerData.put("yPos", Double.valueOf(0).longValue());
+        playerData.put("gameStarted",Double.valueOf(0).longValue());
         return playerData;
     }
 
     private HashMap createPlayerMap(Float xPos, Float yPos) {
-        HashMap playerData = new HashMap<String, Float>();
-        playerData.put("xPos", Float.valueOf(xPos));
-        playerData.put("yPos", Float.valueOf(yPos));
+        HashMap playerData = new HashMap<String, Long>();
+        playerData.put("xPos", Double.valueOf(xPos.doubleValue()).longValue());
+        playerData.put("yPos",Double.valueOf(yPos.doubleValue()).longValue());
 //        playerData.put("gameStarted", Float.valueOf(0));
         return playerData;
     }
