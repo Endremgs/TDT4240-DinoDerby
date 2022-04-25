@@ -1,22 +1,20 @@
 package com.mygdx.game.views;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.BodyFactory;
 import com.mygdx.game.LevelFactory;
 import com.mygdx.game.MyGdxGame;
-import com.mygdx.game.entity.components.BodyComponent;
-import com.mygdx.game.entity.components.TextureComponent;
-import com.mygdx.game.entity.components.TransformComponent;
+import com.mygdx.game.SimpleDirectionGestureDetector;
 import com.mygdx.game.entity.systems.B2dContactListener;
 import com.mygdx.game.entity.systems.CollisionSystem;
 import com.mygdx.game.entity.systems.PhysicsSystem;
@@ -32,6 +30,9 @@ public class PlayScreen implements Screen {
     private final SpriteBatch sb;
     private final OrthographicCamera cam;
     private final PooledEngine engine;
+    private final InputProcessor inputProcessor;
+
+    public int jump = 0;
 
     public PlayScreen(MyGdxGame myGdxGame) {
         parent = myGdxGame;
@@ -43,9 +44,6 @@ public class PlayScreen implements Screen {
         engine = new PooledEngine();
 
         levelFactory = new LevelFactory(engine, world);
-        levelFactory.createPlayer();
-//        levelFactory.createPlayer();
-
         levelFactory.createMap();
 
         for (String ghostPlayerID: parent.getPlayers().keySet()) {
@@ -55,6 +53,39 @@ public class PlayScreen implements Screen {
         }
 
         /* creates all obstacles for the level */
+        for (int i = 0; i <= 150; i++) {
+            if (i < 7) {
+                continue;
+        inputProcessor = (new SimpleDirectionGestureDetector(new SimpleDirectionGestureDetector.DirectionListener() {
+            @Override
+            public void onUp() {
+                System.out.println("up input");
+                jump = 25;
+            }
+
+            @Override
+            public void onDown() {
+
+            }
+        }));
+        sb = new SpriteBatch();
+        RenderingSystem renderingSystem = new RenderingSystem(sb, levelFactory.getMap(), parent);
+        cam = renderingSystem.getCamera();
+        sb.setProjectionMatrix(cam.combined);
+
+
+        engine.addSystem(renderingSystem);
+        engine.addSystem(new PlayerControlSystem(cam, parent, this));
+        engine.addSystem(new PhysicsSystem(world));
+        engine.addSystem(new CollisionSystem(parent));
+
+    }
+
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(inputProcessor);
+        levelFactory.createPlayer();
+
         for (int i = 0; i <= 150; i++) {
             if (i < 7) {
                 continue;
@@ -71,26 +102,6 @@ public class PlayScreen implements Screen {
         }
 
         levelFactory.createFinish();
-
-        sb = new SpriteBatch();
-        RenderingSystem renderingSystem = new RenderingSystem(sb, levelFactory.getMap(), parent);
-        cam = renderingSystem.getCamera();
-        sb.setProjectionMatrix(cam.combined);
-
-
-        engine.addSystem(renderingSystem);
-        engine.addSystem(new PlayerControlSystem(cam, parent));
-        engine.addSystem(new PhysicsSystem(world));
-        engine.addSystem(new CollisionSystem(parent));
-
-    }
-    private Vector2 getTextureSize(TextureRegion region) {
-        return new Vector2(RenderingSystem.PixelToMeters(region.getRegionWidth()) / 2,
-                RenderingSystem.PixelToMeters(region.getRegionHeight()) / 2);
-    }
-
-    @Override
-    public void show() {
 
     }
 
@@ -130,6 +141,12 @@ public class PlayScreen implements Screen {
 
     @Override
     public void hide() {
+        engine.removeAllEntities();
+        Array<Body> bodies = new Array<Body>();
+        world.getBodies(bodies);
+        for(int i = 0; i < bodies.size; i++) {
+            world.destroyBody(bodies.get(i));
+        }
     }
 
     @Override

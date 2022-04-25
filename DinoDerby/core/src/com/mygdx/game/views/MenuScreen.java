@@ -21,13 +21,15 @@ public class MenuScreen implements Screen {
     public MenuScreen(MyGdxGame dinoDerby) {
         parent = dinoDerby;
         stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
+
 
     }
 
     @Override
     public void show() {
-        // table fills screen. table will be filled with ui elements
+        // Create a table that fills the screen. Everything else will go inside this table.
+        Gdx.input.setInputProcessor(stage);
+
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
@@ -36,13 +38,13 @@ public class MenuScreen implements Screen {
 
         TextButton play = new TextButton("Play", skin);
         TextButton settings = new TextButton("Settings", skin);
-        TextButton lb = new TextButton("Leaderboard", skin);
+        TextButton tutorial = new TextButton("Tutorial", skin);
 
         table.add(play).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
         table.add(settings).fillX().uniformX();
         table.row();
-        table.add(lb).fillX().uniformX();
+        table.add(tutorial).fillX().uniformX();
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
@@ -51,6 +53,12 @@ public class MenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 parent.changeScreen(MyGdxGame.CREATEGAME);
+            }
+        });
+        tutorial.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                parent.changeScreen(MyGdxGame.TUTORIAL);
             }
         });
     }

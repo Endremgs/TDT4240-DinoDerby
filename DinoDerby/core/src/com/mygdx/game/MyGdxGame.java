@@ -10,10 +10,12 @@ import com.mygdx.game.views.LobbyScreen;
 import com.mygdx.game.views.GameOverScreen;
 import com.mygdx.game.views.MenuScreen;
 import com.mygdx.game.views.PlayScreen;
+import com.mygdx.game.views.TutorialScreen;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
 
 public class MyGdxGame extends Game {
 	public static final int WIDTH = 1600;
@@ -27,6 +29,7 @@ public class MyGdxGame extends Game {
 	private JoinGameScreen joinGameScreen;
 	private LobbyScreen lobbyScreen;
 	private GameOverScreen gameOverScreen;
+	private TutorialScreen tutorialScreen;
 
 	public boolean gameStarted = false;
 	
@@ -36,8 +39,10 @@ public class MyGdxGame extends Game {
 	public static final int JOINGAME = 3;
 	public static final int LOBBY = 4;
 	public static final int GAMEOVER = 5;
+	public static final int TUTORIAL = 6;
 	private int currentScreen;
 //	private Boolean gameStarted = false;
+
 
 
 	FireBaseInterface FBIC;
@@ -106,11 +111,11 @@ public class MyGdxGame extends Game {
 		this.currentScreen = screen;
 		switch (screen) {
 			case MENU:
-				menuScreen = new MenuScreen(this);
+				if (menuScreen == null) menuScreen = new MenuScreen(this);
 				this.setScreen(menuScreen);
 				break;
 			case PLAY:
-				playScreen = new PlayScreen(this);
+				if (playScreen == null) playScreen = new PlayScreen(this);
 				this.setScreen(playScreen);
 				break;
 			case CREATEGAME:
@@ -126,8 +131,12 @@ public class MyGdxGame extends Game {
 				this.setScreen(lobbyScreen);
 				break;
 			case GAMEOVER:
-				gameOverScreen= new GameOverScreen(this);
+				if (gameOverScreen == null) gameOverScreen = new GameOverScreen(this);
 				this.setScreen(gameOverScreen);
+				break;
+			case TUTORIAL:
+				if (tutorialScreen == null) tutorialScreen = new TutorialScreen(this);
+				this.setScreen(tutorialScreen);
 				break;
 		}
 
