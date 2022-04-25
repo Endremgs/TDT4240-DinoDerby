@@ -61,6 +61,7 @@ public class MyGdxGame extends Game {
 	FireBaseInterface FBIC;
 
 	public Music music;
+	public boolean musicPlaying = false;
 
 	protected OrthographicCamera camera;
 	Viewport viewport;
@@ -191,8 +192,10 @@ public class MyGdxGame extends Game {
 
 		music = Gdx.audio.newMusic(Gdx.files.internal("kahoot.wav"));
 		music.setLooping(true);
-		music.setVolume(0.05f);
+		music.setVolume(1f);
 		music.play();
+		musicPlaying = true;
+
 
 		camera  = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);

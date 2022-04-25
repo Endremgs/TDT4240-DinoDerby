@@ -240,7 +240,7 @@ public class AndroidInterfaceClass implements FireBaseInterface {
                                     System.out.println(playerMap.get("gameStarted"));
 //                                    System.out.println(playerMap.get("gameStarted").getClass().toString());
                                     Float playerReady = playerMap.get("gameStarted");
-                                    if (playerReady==0) {
+                                    if (playerReady == 0) {
                                         System.out.println("Not all players are ready");
                                         gameStarted = false;
                                     }
