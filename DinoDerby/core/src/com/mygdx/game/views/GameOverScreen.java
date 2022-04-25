@@ -50,6 +50,7 @@ public class GameOverScreen implements Screen {
         mainMenu.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                game.leaveGame();
                 game.changeScreen(MyGdxGame.MENU);
             }
         });

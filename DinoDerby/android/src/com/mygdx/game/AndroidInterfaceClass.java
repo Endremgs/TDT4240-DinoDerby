@@ -80,6 +80,7 @@ public class AndroidInterfaceClass implements FireBaseInterface {
 //                myRef.setValue(this.createPlayerMap());
 //                this.getPlayersInGame(gameID, playerID);
                 parent.setCurrGameID("");
+                parent.gameStarted = false;
 //                this.listenToGameStart(gameID);
 //                this.listenToGameFinish(gameID);
             } catch (Error err) {

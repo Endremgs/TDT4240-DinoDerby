@@ -108,6 +108,10 @@ public class MyGdxGame extends Game {
 		return new HashMap(players);
 	}
 
+	public void leaveGame() {
+		FBIC.leaveGame(currGameID, playerID);
+	}
+
 	public FireBaseInterface getFirebaseInstance() {
 		return this.FBIC;
 	}
