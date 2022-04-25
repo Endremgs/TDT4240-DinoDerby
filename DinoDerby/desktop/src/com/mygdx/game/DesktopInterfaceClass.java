@@ -1,7 +1,6 @@
 package com.mygdx.game;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.mygdx.game.util.FireBaseInterface;
 
 public class DesktopInterfaceClass implements FireBaseInterface {
 

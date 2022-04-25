@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -14,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.MyGdxGame;
-import com.mygdx.game.Toast;
+import com.mygdx.game.util.Toast;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -24,7 +23,7 @@ public class JoinGameScreen implements Screen {
 
     private final MyGdxGame parent;
     private Stage stage;
-    Skin skin = new Skin(Gdx.files.internal("skin/buttonskin.json"));
+    private Skin skin = new Skin(Gdx.files.internal("skin/buttonskin.json"));
     private final List<Toast> toasts = new LinkedList<Toast>();
     private Toast.ToastFactory toastFactory;
 
@@ -34,7 +33,7 @@ public class JoinGameScreen implements Screen {
 
         BitmapFont font = skin.getFont("DoHyeon");
 
-        // create factory
+        // create factory for toasts
         toastFactory = new Toast.ToastFactory.Builder()
                 .font(font)
                 .build();

@@ -58,7 +58,7 @@ public class ChooseGameScreen implements Screen {
                     parent.changeScreen(MyGdxGame.JOINGAME);
 
                 }catch (IllegalArgumentException i) {
-                    System.out.println("kaster exception i joingame" + i);
+                    System.err.println(i);
                 }
             }
         });
@@ -69,7 +69,6 @@ public class ChooseGameScreen implements Screen {
                     parent.changeScreen(MyGdxGame.CREATEGAME);
 
                 }catch (IllegalArgumentException i) {
-                    System.out.println("kaster exception i create game" + i);
                     System.err.println(i);
                 }
             }
