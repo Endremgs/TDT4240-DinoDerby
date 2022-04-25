@@ -101,6 +101,7 @@ public class AndroidInterfaceClass implements FireBaseInterface {
 
     @Override
     public void leaveGame(String gameID, String playerID) {
+        System.out.println("in leavegame FBIC");
         if (this.gameExists(gameID)) {
             System.out.println("gamet du prøver å leave fins");
             try {
@@ -108,6 +109,7 @@ public class AndroidInterfaceClass implements FireBaseInterface {
                 myRef.removeValue();
                 parent.setCurrGameID("");
                 parent.gameStarted = false;
+                this.deleteGame(gameID);
             } catch (Error err) {
                 System.out.println("kaster exception");
                 throw new IllegalArgumentException("Failed leaving game: " + gameID + " for player: " + playerID + err);
@@ -116,6 +118,26 @@ public class AndroidInterfaceClass implements FireBaseInterface {
         else {
             throw new IllegalArgumentException("Game does not exist");
         }
+
+
+    }
+
+    private void deleteGame(String gameID) {
+        myRef = database.getReference(gameID+"/players");
+        myRef.get().addOnCompleteListener(task -> {
+            System.out.println("before task successfull deleteGAme()");
+            if (task.isSuccessful()) {
+                System.out.println("before task exists deleteGAme()");
+                if (task.getResult().exists()) {
+
+                }
+                else {
+                    System.out.println("deleting game");
+                    myRef = database.getReference(gameID);
+                    myRef.removeValue();
+                }
+            }
+        });
     }
 
     public void listenToGameFinish(String gameID) {
