@@ -56,15 +56,9 @@ public class ChooseGameScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 try {
                     parent.changeScreen(MyGdxGame.JOINGAME);
-//                    System.out.println("GameID: " + lobbyIdField.getText());
-//                    parent.getFirebaseInstance().joinGame(lobbyIdField.getText(),parent.getPlayerID());
-//                    parent.changeScreen(MyGdxGame.PLAY);
 
                 }catch (IllegalArgumentException i) {
                     System.out.println("kaster exception i joingame" + i);
-//                    System.out.println("----------");
-//                    System.out.println("du fikk en exception");
-//                    System.err.println(i);
                 }
             }
         });
@@ -72,13 +66,6 @@ public class ChooseGameScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 try {
-//                parent.getFirebaseInstance().createGame(parent.getPlayerID());
-//                    String gameID = game.keySet().toArray()[0].toString();
-//                    parent.setCurrGameID(gameID);
-//                    Map<String, Map<String, Integer>> players = new HashMap<>();
-//                    players.put(parent.getPlayerID(), game.get(gameID));
-//                    parent.setPlayers(players);
-//                    System.out.println("GameID: " + gameID);
                     parent.changeScreen(MyGdxGame.CREATEGAME);
 
                 }catch (IllegalArgumentException i) {

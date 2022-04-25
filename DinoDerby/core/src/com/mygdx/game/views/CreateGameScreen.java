@@ -35,10 +35,6 @@ public class CreateGameScreen implements Screen {
         final TextField lobbyIdField = new TextField("Game1", skin);
         TextButton createGame = new TextButton("Create Game", skin);
         TextButton backBtn = new TextButton("Back", skin);
-//        Label text = new Label("Enter game ID:", skin);
-
-//        table.add(text).fillX().uniformX();
-//        table.row();
         table.add(lobbyIdField).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
         table.add(createGame).fillX().uniformX();
@@ -53,13 +49,8 @@ public class CreateGameScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 try {
                     parent.getFirebaseInstance().createGame(parent.getPlayerID(), lobbyIdField.getText());
-//                    System.out.println("GameID: " + lobbyIdField.getText());
-//                    parent.setPlayers(parent.getFirebaseInstance().getPlayersInGame(parent.getCurrGameID(), parent.getPlayerID()));
                     parent.changeScreen(MyGdxGame.LOBBY);
                 }catch (IllegalArgumentException i) {
-//                    System.out.println("----------");
-//                    System.out.println("du fikk en exception");
-//                    System.err.println(i);
                 }
             }
         });

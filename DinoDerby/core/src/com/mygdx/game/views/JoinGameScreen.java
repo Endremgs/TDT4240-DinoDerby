@@ -35,10 +35,6 @@ public class JoinGameScreen implements Screen {
         final TextField lobbyIdField = new TextField("", skin);
         TextButton joinGame = new TextButton("Join game", skin);
         TextButton backBtn = new TextButton("Back", skin);
-//        Label text = new Label("Enter game ID:", skin);
-
-//        table.add(text).fillX().uniformX();
-//        table.row();
         table.add(lobbyIdField).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
         table.add(joinGame).fillX().uniformX();
