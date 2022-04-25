@@ -46,11 +46,7 @@ public class SettingsScreen implements Screen {
     public SettingsScreen(MyGdxGame gdxGame){
         parent = gdxGame;
         stage = new Stage(new ScreenViewport());
-    }
 
-    @Override
-    public void show() {
-        Gdx.input.setInputProcessor(stage);
         Table table = new Table();
         table.setFillParent(true);
         //table.setDebug(true);
@@ -61,13 +57,21 @@ public class SettingsScreen implements Screen {
         final TextButton back = new TextButton("Back", skin);
         final CheckBox musicCheckbox = new CheckBox("", skin);
 
+        if (parent.musicPlaying) {
+            musicCheckbox.setChecked(true);
+        } else {
+            musicCheckbox.setChecked(false);
+        }
+
         musicCheckbox.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
                 if(musicCheckbox.isChecked()){
-                    parent.music.pause();
-                } else{
                     parent.music.play();
+                    parent.musicPlaying = true;
+                } else{
+                    parent.music.pause();
+                    parent.musicPlaying = false;
                 }
                 return false;
             }
@@ -90,10 +94,16 @@ public class SettingsScreen implements Screen {
         table.add(title).fillX().uniformX();
         table.row();
         table.add(musicEnabled);
-        table.add(musicCheckbox);
+        table.add(musicCheckbox).width(128).height(128);
 
         table.row();
         table.add(back).fillX().uniformX();
+    }
+
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
+
     }
 
     public boolean setMusicEnabled(boolean enabled) {
