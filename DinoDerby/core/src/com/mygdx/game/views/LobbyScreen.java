@@ -35,7 +35,6 @@ public class LobbyScreen implements Screen {
 
 
         table.setFillParent(true);
-
         stage.addActor(table);
 
         table.add(leftTable);
@@ -74,7 +73,17 @@ public class LobbyScreen implements Screen {
         }
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+//        if (stage.)
+//            stage
+
+        try {
+
         stage.draw();
+        } catch (IllegalStateException i) {
+            stage.getBatch().end();
+            stage.draw();
+            System.out.println("Restarting stage");
+        }
 
         startGame.addListener(new ChangeListener() {
             @Override

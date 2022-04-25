@@ -92,9 +92,8 @@ public class RenderingSystem extends SortedIteratingSystem {
         cam.update();
         sb.setProjectionMatrix(cam.combined);
         sb.enableBlending();
-        if (sb.isDrawing()) {
-            sb.end();
-        }
+
+
         sb.begin();
 
         for (Entity entity : renderQueue) {
