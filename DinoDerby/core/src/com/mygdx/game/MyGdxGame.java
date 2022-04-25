@@ -33,19 +33,19 @@ public class MyGdxGame extends Game {
 	public void changeScreen(int screen) {
 		switch (screen) {
 			case MENU:
-				menuScreen = new MenuScreen(this);
+				if (menuScreen == null) menuScreen = new MenuScreen(this);
 				this.setScreen(menuScreen);
 				break;
 			case PLAY:
-				playScreen = new PlayScreen(this);
+				if (playScreen == null) playScreen = new PlayScreen(this);
 				this.setScreen(playScreen);
 				break;
 			case GAMEOVER:
-				gameOverScreen= new GameOverScreen(this);
+				if (gameOverScreen == null) gameOverScreen = new GameOverScreen(this);
 				this.setScreen(gameOverScreen);
 				break;
 			case TUTORIAL:
-				tutorialScreen = new TutorialScreen(this);
+				if (tutorialScreen == null) tutorialScreen = new TutorialScreen(this);
 				this.setScreen(tutorialScreen);
 				break;
 		}

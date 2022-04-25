@@ -28,12 +28,13 @@ public class TutorialScreen implements Screen {
         parent = dinoDerby;
         this.texture = new Texture("Tutorial.png");
         stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
+
         sb = new SpriteBatch();
     }
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(stage);
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
