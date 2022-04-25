@@ -12,39 +12,28 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.SimpleDirectionGestureDetector;
 import com.mygdx.game.entity.components.BodyComponent;
 import com.mygdx.game.entity.components.PlayerComponent;
+import com.mygdx.game.views.PlayScreen;
 
 public class PlayerControlSystem extends IteratingSystem {
 
     ComponentMapper<PlayerComponent> cmPlayer;
     ComponentMapper<BodyComponent> cmBody;
     OrthographicCamera camera;
-    int jump = 0;
     int position = 200;
     float zoom = 0.66f;
     int initVelocity = 20;
+    PlayScreen playScreen;
 
-    public PlayerControlSystem(OrthographicCamera camera) {
+    public PlayerControlSystem(OrthographicCamera camera, PlayScreen playScreen) {
         super(Family.all(PlayerComponent.class).get());
 
         cmPlayer = ComponentMapper.getFor(PlayerComponent.class);
         cmBody = ComponentMapper.getFor(BodyComponent.class);
         this.camera = camera;
 
-
-        Gdx.input.setInputProcessor(new SimpleDirectionGestureDetector(new SimpleDirectionGestureDetector.DirectionListener() {
-            @Override
-            public void onUp() {
-                System.out.println("up input");
-                jump = 25;
-            }
-
-            @Override
-            public void onDown() {
-                System.out.println("down input");
-            }
-        }));
-
         camera.zoom -= zoom;
+
+        this.playScreen = playScreen;
 
     }
 
@@ -55,13 +44,13 @@ public class PlayerControlSystem extends IteratingSystem {
         body.body.applyLinearImpulse(500, 0, body.body.getWorldCenter().x, body.body.getWorldCenter().y, true);
         // moves the player towards the right
 
-        if(jump > 0) {
+        if(playScreen.jump > 0) {
             body.body.setLinearVelocity(body.body.getLinearVelocity().x, 60);
-            jump--;
+            playScreen.jump--;
         } else if (body.body.getPosition().y >= 20) {
             body.body.setLinearVelocity(body.body.getLinearVelocity().x, -50);
         }
-        if (body.body.getPosition().y <= 15 && jump == 0) {
+        if (body.body.getPosition().y <= 15 && playScreen.jump == 0) {
             body.body.setLinearVelocity(body.body.getLinearVelocity().x, 0);
         }
         // camera follows player
