@@ -107,6 +107,7 @@ public class AndroidInterfaceClass implements FireBaseInterface {
                 myRef = database.getReference(gameID+"/players/"+playerID);
                 myRef.removeValue();
                 parent.setCurrGameID("");
+                parent.gameStarted = false;
             } catch (Error err) {
                 System.out.println("kaster exception");
                 throw new IllegalArgumentException("Failed leaving game: " + gameID + " for player: " + playerID + err);
