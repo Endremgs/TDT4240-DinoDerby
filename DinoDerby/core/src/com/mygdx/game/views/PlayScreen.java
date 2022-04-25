@@ -46,26 +46,32 @@ public class PlayScreen implements Screen {
         levelFactory = new LevelFactory(engine, world);
         levelFactory.createMap();
 
-        inputProcessor = (new SimpleDirectionGestureDetector(new SimpleDirectionGestureDetector.DirectionListener() {
-            @Override
-            public void onUp() {
-                System.out.println("up input");
-                jump = 25;
+        for (String ghostPlayerID: parent.getPlayers().keySet()) {
+            if (!ghostPlayerID.equals(parent.getPlayerID())) {
+                levelFactory.createGhost(ghostPlayerID);
             }
+        }
 
-            @Override
-            public void onDown() {
+                inputProcessor = (new SimpleDirectionGestureDetector(new SimpleDirectionGestureDetector.DirectionListener() {
+                    @Override
+                    public void onUp() {
+                        System.out.println("up input");
+                        jump = 25;
+                    }
 
-            }
-        }));
+                    @Override
+                    public void onDown() {
+
+                    }
+                }));
         sb = new SpriteBatch();
-        RenderingSystem renderingSystem = new RenderingSystem(sb, levelFactory.getMap());
+        RenderingSystem renderingSystem = new RenderingSystem(sb, levelFactory.getMap(), parent);
         cam = renderingSystem.getCamera();
         sb.setProjectionMatrix(cam.combined);
 
 
         engine.addSystem(renderingSystem);
-        engine.addSystem(new PlayerControlSystem(cam, this));
+        engine.addSystem(new PlayerControlSystem(cam, parent, this));
         engine.addSystem(new PhysicsSystem(world));
         engine.addSystem(new CollisionSystem(parent));
 
@@ -100,6 +106,9 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        if(!parent.gameStarted) {
+            return;
+        }
 
         engine.update(delta);
 

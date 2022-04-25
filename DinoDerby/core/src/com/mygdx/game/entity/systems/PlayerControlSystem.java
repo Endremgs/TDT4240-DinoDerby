@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.SimpleDirectionGestureDetector;
 import com.mygdx.game.entity.components.BodyComponent;
 import com.mygdx.game.entity.components.PlayerComponent;
@@ -19,17 +20,21 @@ public class PlayerControlSystem extends IteratingSystem {
     ComponentMapper<PlayerComponent> cmPlayer;
     ComponentMapper<BodyComponent> cmBody;
     OrthographicCamera camera;
+    private MyGdxGame game;
+    int jump = 0;
     int position = 200;
     float zoom = 0.66f;
     int initVelocity = 20;
     PlayScreen playScreen;
 
-    public PlayerControlSystem(OrthographicCamera camera, PlayScreen playScreen) {
+
+    public PlayerControlSystem(OrthographicCamera camera, MyGdxGame game, PlayScreen playScreen) {
         super(Family.all(PlayerComponent.class).get());
 
         cmPlayer = ComponentMapper.getFor(PlayerComponent.class);
         cmBody = ComponentMapper.getFor(BodyComponent.class);
         this.camera = camera;
+        this.game = game;
 
         camera.zoom -= zoom;
 
@@ -59,6 +64,9 @@ public class PlayerControlSystem extends IteratingSystem {
 
         System.out.println("position: "+body.body.getPosition());
         //System.out.printf("test: %s %s\n", body.body.getLinearVelocity(), body.body.getPosition());
+
+        //posting the player position to firebase
+        this.game.getFirebaseInstance().updatePlayerInGame(game.getCurrGameID(), game.getPlayerID(), body.body.getPosition().x, body.body.getPosition().y);
 
     }
 }
