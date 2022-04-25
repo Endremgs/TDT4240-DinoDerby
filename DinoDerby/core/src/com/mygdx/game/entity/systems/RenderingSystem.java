@@ -123,7 +123,7 @@ public class RenderingSystem extends SortedIteratingSystem {
 
                 //Checking and setting position from firebase database
                 GhostComponent ghostComponent = cmGhost.get(entity);
-                Map<String, Float> playerMap = game.getPlayers().get(ghostComponent);
+                Map<String, Float> playerMap = game.getPlayers().get(ghostComponent.playerID);
                 transform.position.x = playerMap.get("xPos");
                 transform.position.y = playerMap.get("yPos");
 
