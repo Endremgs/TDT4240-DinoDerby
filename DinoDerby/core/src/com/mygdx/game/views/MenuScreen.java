@@ -55,7 +55,7 @@ public class MenuScreen implements Screen {
         play.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                parent.changeScreen(MyGdxGame.CREATEGAME);
+                parent.changeScreen(MyGdxGame.CHOOSEGAME);
             }
         });
 

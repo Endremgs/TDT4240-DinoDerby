@@ -115,9 +115,9 @@ public class AndroidInterfaceClass implements FireBaseInterface {
     }
 
     @Override
-    public void createGame(String playerID) {
+    public void createGame(String playerID, String gameID) {
 //        String gameID = UUID.randomUUID().toString();
-        String gameID = "hei";
+//        String gameID = "hei";
         try {
             myRef = database.getReference(gameID);
             myRef.child("winner").setValue("");

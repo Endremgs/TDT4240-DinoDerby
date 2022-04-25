@@ -13,7 +13,7 @@ public class DesktopInterfaceClass implements FireBaseInterface {
 
 
     @Override
-    public void createGame(String playerID) {
+    public void createGame(String playerID, String gameID) {
     }
 
     @Override
