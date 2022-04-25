@@ -28,7 +28,7 @@ public class MyGdxGame extends Game {
 
 	FireBaseInterface FBIC;
 
-	private Music music;
+	public Music music;
 
 	protected OrthographicCamera camera;
 	Viewport viewport;
