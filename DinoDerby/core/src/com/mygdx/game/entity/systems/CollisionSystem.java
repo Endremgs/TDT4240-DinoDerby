@@ -47,7 +47,8 @@ public class CollisionSystem extends IteratingSystem {
                         break;
                     case TypeComponent.OTHER:
                         System.out.println("player hit other");
-                        parent.changeScreen(MyGdxGame.GAMEOVER);
+                        //Winning the game
+                        parent.getFirebaseInstance().finishGame(parent.getCurrGameID(), parent.getPlayerID());
                         break;
                 }
                 cc.collisionEntity = null; // collision handled reset component

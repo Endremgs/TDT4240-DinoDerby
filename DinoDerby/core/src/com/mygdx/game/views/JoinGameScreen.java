@@ -3,62 +3,71 @@ package com.mygdx.game.views;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.MyGdxGame;
 
-
-public class MenuScreen implements Screen {
+public class JoinGameScreen implements Screen {
 
     private final MyGdxGame parent;
     private Stage stage;
 
-    public MenuScreen(MyGdxGame dinoDerby) {
+    public JoinGameScreen(MyGdxGame dinoDerby){
         parent = dinoDerby;
         stage = new Stage(new ScreenViewport());
-
-
+        Gdx.input.setInputProcessor(stage);
     }
-
     @Override
     public void show() {
-        // Create a table that fills the screen. Everything else will go inside this table.
-        Gdx.input.setInputProcessor(stage);
-
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
-
         Skin skin = new Skin(Gdx.files.internal("skin/buttonskin.json"));
 
-        TextButton play = new TextButton("Play", skin);
-        TextButton settings = new TextButton("Settings", skin);
-        TextButton tutorial = new TextButton("Tutorial", skin);
+        final TextField lobbyIdField = new TextField("", skin);
+        TextButton joinGame = new TextButton("Join game", skin);
+        TextButton backBtn = new TextButton("Back", skin);
+//        Label text = new Label("Enter game ID:", skin);
 
-        table.add(play).fillX().uniformX();
+//        table.add(text).fillX().uniformX();
+//        table.row();
+        table.add(lobbyIdField).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
-        table.add(settings).fillX().uniformX();
+        table.add(joinGame).fillX().uniformX();
         table.row();
-        table.add(tutorial).fillX().uniformX();
+        table.add(backBtn).fillX().uniformX();
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
-        play.addListener(new ChangeListener() {
+        joinGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                parent.changeScreen(MyGdxGame.CREATEGAME);
+                try {
+                    System.out.println("GameID: " + lobbyIdField.getText());
+                    parent.getFirebaseInstance().joinGame(lobbyIdField.getText(),parent.getPlayerID());
+//                    parent.setPlayers(parent.getFirebaseInstance().getPlayersInGame(parent.getCurrGameID(), parent.getPlayerID()));
+                    parent.changeScreen(MyGdxGame.LOBBY);
+                }catch (IllegalArgumentException i) {
+//                    System.out.println("----------");
+//                    System.out.println("du fikk en exception");
+//                    System.err.println(i);
+                }
             }
         });
-        tutorial.addListener(new ChangeListener() {
+
+        backBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                parent.changeScreen(MyGdxGame.TUTORIAL);
+                parent.changeScreen(MyGdxGame.MENU);
             }
         });
     }
@@ -73,7 +82,6 @@ public class MenuScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
 
     }
 
