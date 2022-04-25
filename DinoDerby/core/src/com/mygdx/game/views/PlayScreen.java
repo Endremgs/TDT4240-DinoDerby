@@ -48,6 +48,12 @@ public class PlayScreen implements Screen {
 
         levelFactory.createMap();
 
+        for (String ghostPlayerID: parent.getPlayers().keySet()) {
+            if (!ghostPlayerID.equals(parent.getPlayerID())) {
+                levelFactory.createGhost(ghostPlayerID);
+            }
+        }
+
         /* creates all obstacles for the level */
         for (int i = 0; i <= 150; i++) {
             if (i < 7) {
