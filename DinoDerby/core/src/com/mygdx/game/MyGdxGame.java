@@ -134,6 +134,7 @@ public class MyGdxGame extends Game {
 			case SETTINGS:
 				if (settings == null) settings = new SettingsScreen(this);
 				this.setScreen(settings);
+				break;
 			case CREATEGAME:
 				if (createGameScreen == null) createGameScreen = new CreateGameScreen(this);
 				this.setScreen(createGameScreen);
