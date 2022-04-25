@@ -29,8 +29,10 @@ public class GhostSystem extends IteratingSystem {
         GhostComponent ghost = cmGhost.get(entity);
         TransformComponent transform = cmTransform.get(entity);
         Map<String, Float> playerMap = game.getPlayers().get(ghost.playerID);
-        transform.position.x = playerMap.get("xPos");
-        transform.position.y = playerMap.get("yPos");
+        if (playerMap != null) {
+            transform.position.x = playerMap.get("xPos");
+            transform.position.y = playerMap.get("yPos");
+        }
 
     }
 }
