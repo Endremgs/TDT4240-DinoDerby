@@ -2,17 +2,15 @@ package com.mygdx.game;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mygdx.game.util.FireBaseInterface;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
@@ -37,30 +35,19 @@ public class AndroidInterfaceClass implements FireBaseInterface {
                 if (snapshot.isSuccessful()) {
                     if (snapshot.getResult().exists()) {
                             Map<String, Map<String, Float>> players = new HashMap<>();
-                            System.out.println("snapshot exists checkGameStarted()");
-                            System.out.println(snapshot.getResult().getChildren());
                             for (DataSnapshot player : snapshot.getResult().getChildren()) {
-                                System.out.println("i for løkke i checkGameStarted()");
-                                System.out.println(player);
                                 Map<String, Float> playerMap = new HashMap();
                                 Map<String, Long> firebasePlayerMap = (Map<String, Long>) player.getValue();
                                 for (String firebasePlayerMapKey: firebasePlayerMap.keySet()) {
                                     playerMap.put(firebasePlayerMapKey, firebasePlayerMap.get(firebasePlayerMapKey).floatValue());
                                 }
-                                System.out.println("||||||||||||");
-                                System.out.println(playerMap);
-                                System.out.println(playerMap.get("gameStarted"));
                                 Float playerReady = playerMap.get("gameStarted");
                                 if (playerReady == 0) {
-                                    System.out.println("Not all players are ready");
                                     gameStarted.set(false);
                                 }
                                 players.put(player.getKey(), playerMap);
                             }
                             parent.setPlayers(players);
-                            if (gameStarted.get()) {
-                                System.out.println("all players are ready, starting ...");
-                            }
                         }
                         else {
                             gameStarted.set(false);
@@ -75,8 +62,6 @@ public class AndroidInterfaceClass implements FireBaseInterface {
                 System.out.println("fetching i checkGameStarted");
             }
         }
-        System.out.println("returning game started variable");
-        System.out.println(gameStarted.get());
         return gameStarted.get();
 
     }
@@ -101,9 +86,7 @@ public class AndroidInterfaceClass implements FireBaseInterface {
 
     @Override
     public void leaveGame(String gameID, String playerID) {
-        System.out.println("in leavegame FBIC");
         if (this.gameExists(gameID)) {
-            System.out.println("gamet du prøver å leave fins");
             try {
                 myRef = database.getReference(gameID+"/players/"+playerID);
                 myRef.removeValue();
@@ -125,14 +108,10 @@ public class AndroidInterfaceClass implements FireBaseInterface {
     private void deleteGame(String gameID) {
         myRef = database.getReference(gameID+"/players");
         myRef.get().addOnCompleteListener(task -> {
-            System.out.println("before task successfull deleteGAme()");
             if (task.isSuccessful()) {
-                System.out.println("before task exists deleteGAme()");
                 if (task.getResult().exists()) {
-
                 }
                 else {
-                    System.out.println("deleting game");
                     myRef = database.getReference(gameID);
                     myRef.removeValue();
                 }
@@ -149,9 +128,7 @@ public class AndroidInterfaceClass implements FireBaseInterface {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
                             String winner = snapshot.getValue(String.class);
-//                            parent.startGame(gameStarted);
                             if (!winner.isEmpty()) {
-                                System.out.println("The winenr is:  " + winner);
                                 parent.finishGame(winner);
                             }
                         }
@@ -209,7 +186,6 @@ public class AndroidInterfaceClass implements FireBaseInterface {
     @Override
     public void joinGame(String gameID, String playerID) {
         if (this.gameExists(gameID)) {
-            System.out.println("gamet du prøver å joine fins");
             try {
                 myRef = database.getReference(gameID+"/players/"+playerID);
                 myRef.setValue(this.createPlayerMap());
@@ -217,7 +193,6 @@ public class AndroidInterfaceClass implements FireBaseInterface {
                 parent.setCurrGameID(gameID);
                 this.listenToGameFinish(gameID);
             } catch (Error err) {
-                System.out.println("kaster exception");
                 throw new IllegalArgumentException("Failed joining game: " + gameID + " for player: " + playerID + err);
             }
         }
@@ -251,35 +226,23 @@ public class AndroidInterfaceClass implements FireBaseInterface {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         try {
-                            System.out.println("player data changed, refetching i getPlayersInGame()");
                             if (snapshot.exists()) {
-                                //clear List
                                 Map<String, Map<String, Float>> players = new HashMap<>();
-                                System.out.println("snapshot exists getPlayersInGame()");
                                 Boolean gameStarted = true;
-                                System.out.println(snapshot.getChildren());
                                 for (DataSnapshot player : snapshot.getChildren()) {
-                                    System.out.println("i for løkke i getPlayersInGame()");
-//                                    try {
-                                    System.out.println(player);
                                     Map<String, Float> playerMap = new HashMap();
                                     Map<String, Long> firebasePlayerMap = (Map<String, Long>) player.getValue();
                                     for (String firebasePlayerMapKey: firebasePlayerMap.keySet()) {
                                         playerMap.put(firebasePlayerMapKey, firebasePlayerMap.get(firebasePlayerMapKey).floatValue());
                                     }
-                                    System.out.println("||||||||||||");
-                                    System.out.println(playerMap);
-                                    System.out.println(playerMap.get("gameStarted"));
                                     Float playerReady = playerMap.get("gameStarted");
                                     if (playerReady == 0) {
-                                        System.out.println("Not all players are ready");
                                         gameStarted = false;
                                     }
                                     players.put(player.getKey(), playerMap);
                                 }
                                 parent.setPlayers(players);
                                 if (gameStarted) {
-                                    System.out.println("all players are ready, starting ...");
                                     parent.gameStarted = true;
                                 }
                             }
@@ -328,12 +291,8 @@ public class AndroidInterfaceClass implements FireBaseInterface {
         AtomicBoolean gameExists = new AtomicBoolean(false);
         myRef = database.getReference(gameID);
 
-        System.out.println("før oncompletelistener");
-        System.out.println(myRef.getRef());
             myRef.get().addOnCompleteListener(task -> {
-                System.out.println("før successful i gameExists()");
                 if (task.isSuccessful()) {
-                    System.out.println("før exists i gameExists()");
                     if (task.getResult().exists()) {
                         gameExists.set(true);
                     }

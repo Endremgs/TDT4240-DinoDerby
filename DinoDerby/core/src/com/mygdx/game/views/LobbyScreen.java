@@ -57,6 +57,7 @@ public class LobbyScreen implements Screen {
 
 
         Label lobbyText = new Label("Players", skin);
+        lobbyText.setFontScale(1.5F);
         rightTable.add(lobbyText);
         rightTable.row().pad(10, 0, 10, 0);
         System.out.println("-----------");

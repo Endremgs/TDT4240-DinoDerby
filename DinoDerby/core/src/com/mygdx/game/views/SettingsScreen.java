@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.MyGdxGame;
 
@@ -27,21 +28,11 @@ public class SettingsScreen implements Screen {
     private Stage stage;
 
     private Label title;
-    private Label musicLabel;
     private Label musicEnabled;
-    private Label soundLabel;
-    private Label soundEnabled;
+    private Color bgColor = Color.ORANGE;
 
-    private Color bgColor = Color.CYAN;
-
-    private static final String MUSIC_VOLUME = "volume";
-    private static final String MUSIC_ENABLED = "music.enabled";
     public static final String PREFERENCES_NAME = "gameSett";
 
-
-    public Preferences getPrefs(){
-        return Gdx.app.getPreferences(PREFERENCES_NAME);
-    }
 
     public SettingsScreen(MyGdxGame gdxGame){
         parent = gdxGame;
@@ -49,13 +40,14 @@ public class SettingsScreen implements Screen {
 
         Table table = new Table();
         table.setFillParent(true);
-        //table.setDebug(true);
         stage.addActor(table);
 
         Skin skin = new Skin(Gdx.files.internal("skin/buttonskin.json"));
 
         final TextButton back = new TextButton("Back", skin);
         final CheckBox musicCheckbox = new CheckBox("", skin);
+        musicCheckbox.getImage().setScaling(Scaling.fill);
+        musicCheckbox.getImageCell().size(75);
 
         if (parent.musicPlaying) {
             musicCheckbox.setChecked(true);
@@ -86,10 +78,9 @@ public class SettingsScreen implements Screen {
 
         //labels
         title = new Label("Settings", skin);
-        musicLabel = new Label(null, skin);
+        title.setFontScale(1.75F);
         musicEnabled = new Label("Enable Music", skin);
-        soundLabel = new Label(null, skin);
-        soundEnabled = new Label(null, skin);
+        musicEnabled.setFontScale(1.25F);
         //adding our labels to the table
         table.add(title).fillX().uniformX();
         table.row();
@@ -105,11 +96,6 @@ public class SettingsScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
 
     }
-
-    public boolean setMusicEnabled(boolean enabled) {
-        return getPrefs().getBoolean(MUSIC_ENABLED, true);
-    }
-
 
     @Override
     public void render(float delta) {

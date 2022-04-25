@@ -21,11 +21,11 @@ public class TutorialScreen implements Screen {
     private final SpriteBatch sb;
     private Texture texture;
     public TutorialScreen(MyGdxGame dinoDerby){
-        parent = dinoDerby;
+        this.parent = dinoDerby;
         this.texture = new Texture("Tutorial.png");
-        stage = new Stage(new ScreenViewport());
+        this.stage = new Stage(new ScreenViewport());
 
-        sb = new SpriteBatch();
+        this.sb = new SpriteBatch();
     }
 
     @Override
@@ -85,8 +85,5 @@ public class TutorialScreen implements Screen {
 
     @Override
     public void dispose() {
-        //texture.dispose();
-        //parent.dispose();
-        //sb.dispose();
     }
 }

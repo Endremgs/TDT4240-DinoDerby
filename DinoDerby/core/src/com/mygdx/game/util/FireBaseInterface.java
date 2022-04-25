@@ -1,7 +1,6 @@
-package com.mygdx.game;
+package com.mygdx.game.util;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.mygdx.game.MyGdxGame;
 
 public interface FireBaseInterface {
 

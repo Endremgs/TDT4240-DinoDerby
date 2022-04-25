@@ -1,8 +1,9 @@
-package com.mygdx.game;
+package com.mygdx.game.util;
 
 
 
 /*
+Taken from https://github.com/wentsa/Toast-LibGDX
  * Copyright (c) 2017-present, Tomas Chalupnik (tchalupnik.cz)
  * All rights reserved.
  *
