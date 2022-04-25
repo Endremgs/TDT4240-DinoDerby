@@ -10,6 +10,7 @@ import com.mygdx.game.views.MenuScreen;
 import com.mygdx.game.views.PlayScreen;
 import com.mygdx.game.views.SettingsScreen;
 import com.mygdx.game.views.GameOverScreen;
+import com.mygdx.game.views.TutorialScreen;
 
 public class MyGdxGame extends Game {
 	public static final int WIDTH = 480;
@@ -25,8 +26,18 @@ public class MyGdxGame extends Game {
 	private MenuScreen menuScreen;
 	private PlayScreen playScreen;
 	private GameOverScreen gameOverScreen;
+
 	private SettingsScreen settings;
 	public boolean musicEnabled = true;
+  
+	private TutorialScreen tutorialScreen;
+
+	public static final int MENU = 0;
+	public static final int PLAY = 1;
+	public static final int GAMEOVER = 2;
+	public static final int TUTORIAL = 3;
+  public static final int SETTINGS = 4;
+
 	FireBaseInterface FBIC;
 
 	public Music music;
@@ -50,7 +61,12 @@ public class MyGdxGame extends Game {
 				break;
 			case GAMEOVER:
 				gameOverScreen= new GameOverScreen(this);
+				if (gameOverScreen == null) gameOverScreen = new GameOverScreen(this);
 				this.setScreen(gameOverScreen);
+				break;
+			case TUTORIAL:
+				if (tutorialScreen == null) tutorialScreen = new TutorialScreen(this);
+				this.setScreen(tutorialScreen);
 				break;
 		}
 

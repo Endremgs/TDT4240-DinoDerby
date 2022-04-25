@@ -2,6 +2,7 @@ package com.mygdx.game.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -13,61 +14,57 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.MyGdxGame;
 
-public class GameOverScreen implements Screen {
+public class TutorialScreen implements Screen {
 
-    private final MyGdxGame game;
+    private final MyGdxGame parent;
     private Stage stage;
+    private final SpriteBatch sb;
     private Texture texture;
-    private final static int GAMEO_WIDTH= 650;
-    private final static int GAMEO_HEIGHT= 200;
-    private final SpriteBatch batch;
 
+    private static final int WIDTH = 480;
+    private static final int HEIGHT = 800;
 
+    public TutorialScreen(MyGdxGame dinoDerby){
+        parent = dinoDerby;
+        this.texture = new Texture("Tutorial.png");
+        stage = new Stage(new ScreenViewport());
 
-    public GameOverScreen(MyGdxGame game){
-
-        this.game= game;
-        this.texture= new Texture("GameOver.png");
-        stage= new Stage(new ScreenViewport());
-        batch = new SpriteBatch();
-
+        sb = new SpriteBatch();
     }
-
 
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        Table table= new Table();
+        Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
-        Skin skin = new Skin(Gdx.files.internal("skin/buttonskin.json"));
-        TextButton retry= new TextButton("Retry", skin);
-        table.add(retry).fillX().uniformX();
 
-        retry.addListener(new ChangeListener() {
+        Skin skin = new Skin(Gdx.files.internal("skin/buttonskin.json"));
+        TextButton back = new TextButton("Back", skin);
+        table.add(back).fillX().uniformX();
+        back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(MyGdxGame.MENU);
+                parent.changeScreen(MyGdxGame.MENU);
             }
         });
-
 
 
     }
 
     @Override
     public void render(float delta) {
-        batch.begin();
+        sb.begin();
+
+        sb.draw(texture, Gdx.graphics.getWidth()/WIDTH,
+                Gdx.graphics.getHeight()/HEIGHT);
+
+        sb.end();
         stage.draw();
-        batch.draw(texture,Gdx.graphics.getWidth()/2-GAMEO_WIDTH/2, Gdx.graphics.getHeight()-GAMEO_HEIGHT-50, GAMEO_WIDTH,GAMEO_HEIGHT );
-        batch.end();
-
     }
-
-
-
-
 
     @Override
     public void resize(int width, int height) {
@@ -91,6 +88,8 @@ public class GameOverScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        //texture.dispose();
+        //parent.dispose();
+        //sb.dispose();
     }
 }
