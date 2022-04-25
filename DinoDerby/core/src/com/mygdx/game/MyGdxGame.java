@@ -4,12 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.views.GameWinScreen;
 import com.mygdx.game.views.CreateGameScreen;
+import com.mygdx.game.views.GameWinScreen;
+import com.mygdx.game.views.ChooseGameScreen;
 import com.mygdx.game.views.JoinGameScreen;
 import com.mygdx.game.views.LobbyScreen;
 import com.mygdx.game.views.GameOverScreen;
@@ -29,10 +28,11 @@ public class MyGdxGame extends Game {
 	private static final String MUSIC_ENABLED = "music.enabled";
 	private MenuScreen menuScreen;
 	private PlayScreen playScreen;
-	private CreateGameScreen createGameScreen;
+	private ChooseGameScreen chooseGameScreen;
 	private JoinGameScreen joinGameScreen;
 	private LobbyScreen lobbyScreen;
 	private GameOverScreen gameOverScreen;
+	private CreateGameScreen createGameScreen;
 
 	private SettingsScreen settings;
 	public boolean musicEnabled = true;
@@ -46,11 +46,12 @@ public class MyGdxGame extends Game {
 	public static final int PLAY = 1;
 	public static final int TUTORIAL = 2;
   	public static final int SETTINGS = 3;
-	public static final int CREATEGAME = 4;
+	public static final int CHOOSEGAME = 4;
 	public static final int JOINGAME = 5;
 	public static final int LOBBY = 6;
 	public static final int GAMEOVER = 7;
 	public static final int GAMEWIN = 8;
+	public static final int CREATEGAME = 9;
 
 	private int currentScreen;
 //	private Boolean gameStarted = false;
@@ -136,9 +137,9 @@ public class MyGdxGame extends Game {
 				if (settings == null) settings = new SettingsScreen(this);
 				this.setScreen(settings);
 				break;
-			case CREATEGAME:
-				if (createGameScreen == null) createGameScreen = new CreateGameScreen(this);
-				this.setScreen(createGameScreen);
+			case CHOOSEGAME:
+				if (chooseGameScreen == null) chooseGameScreen = new ChooseGameScreen(this);
+				this.setScreen(chooseGameScreen);
 				break;
 			case JOINGAME:
 				if (joinGameScreen == null) joinGameScreen = new JoinGameScreen(this);
@@ -159,6 +160,10 @@ public class MyGdxGame extends Game {
 			case GAMEWIN:
 				if (gameWinScreen == null) gameWinScreen = new GameWinScreen(this);
 				this.setScreen(gameWinScreen);
+				break;
+			case CREATEGAME:
+				if (createGameScreen == null) createGameScreen = new CreateGameScreen(this);
+				this.setScreen(createGameScreen);
 				break;
 		}
 
