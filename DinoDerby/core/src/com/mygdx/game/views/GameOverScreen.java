@@ -27,7 +27,7 @@ public class GameOverScreen implements Screen {
     public GameOverScreen(MyGdxGame game){
 
         this.game= game;
-        this.texture= new Texture("Game Over.png");
+        this.texture= new Texture("GameOver.png");
         stage= new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         batch = new SpriteBatch();

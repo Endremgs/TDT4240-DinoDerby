@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.views.MenuScreen;
 import com.mygdx.game.views.PlayScreen;
 import com.mygdx.game.views.GameOverScreen;
+import com.mygdx.game.views.TutorialScreen;
 
 public class MyGdxGame extends Game {
 	public static final int WIDTH = 480;
@@ -16,10 +17,12 @@ public class MyGdxGame extends Game {
 	private MenuScreen menuScreen;
 	private PlayScreen playScreen;
 	private GameOverScreen gameOverScreen;
+	private TutorialScreen tutorialScreen;
 
 	public static final int MENU = 0;
 	public static final int PLAY = 1;
-	public static final int GAMEOVER= 2;
+	public static final int GAMEOVER = 2;
+	public static final int TUTORIAL = 3;
 
 	FireBaseInterface FBIC;
 
@@ -40,6 +43,10 @@ public class MyGdxGame extends Game {
 			case GAMEOVER:
 				gameOverScreen= new GameOverScreen(this);
 				this.setScreen(gameOverScreen);
+				break;
+			case TUTORIAL:
+				tutorialScreen = new TutorialScreen(this);
+				this.setScreen(tutorialScreen);
 				break;
 		}
 
