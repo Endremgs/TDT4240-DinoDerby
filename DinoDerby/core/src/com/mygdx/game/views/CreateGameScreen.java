@@ -14,15 +14,30 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.Toast;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class CreateGameScreen implements Screen {
 
     private final MyGdxGame parent;
     private Stage stage;
+    private Skin skin = new Skin(Gdx.files.internal("skin/buttonskin.json"));
+    private final List<Toast> toasts = new LinkedList<Toast>();
+    private Toast.ToastFactory toastFactory;
 
     public CreateGameScreen(MyGdxGame dinoDerby){
         parent = dinoDerby;
         stage = new Stage(new ScreenViewport());
+
+        BitmapFont font = skin.getFont("DoHyeon");
+
+        // create factory
+        toastFactory = new Toast.ToastFactory.Builder()
+                .font(font)
+                .build();
     }
     @Override
     public void show() {
@@ -30,7 +45,6 @@ public class CreateGameScreen implements Screen {
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
-        Skin skin = new Skin(Gdx.files.internal("skin/buttonskin.json"));
 
         final TextField lobbyIdField = new TextField("Game1", skin);
         TextButton createGame = new TextButton("Create Game", skin);
@@ -51,6 +65,7 @@ public class CreateGameScreen implements Screen {
                     parent.getFirebaseInstance().createGame(parent.getPlayerID(), lobbyIdField.getText());
                     parent.changeScreen(MyGdxGame.LOBBY);
                 }catch (IllegalArgumentException i) {
+                    toasts.add(toastFactory.create("Game ID is already taken", Toast.Length.LONG));
                 }
             }
         });
@@ -69,6 +84,15 @@ public class CreateGameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+        Iterator<Toast> it = toasts.iterator();
+        while(it.hasNext()) {
+            Toast t = it.next();
+            if (!t.render(Gdx.graphics.getDeltaTime())) {
+                it.remove(); // toast finished -> remove
+            } else {
+                break; // first toast still active, break the loop
+            }
+        }
     }
 
     @Override
