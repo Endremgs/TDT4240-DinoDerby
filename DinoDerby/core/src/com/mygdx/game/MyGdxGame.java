@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -20,12 +21,12 @@ public class MyGdxGame extends Game {
 	public static final int SETTINGS = 3;
 
 	public static final String TITLE = "Dino Derby";
-
+	private static final String MUSIC_ENABLED = "music.enabled";
 	private MenuScreen menuScreen;
 	private PlayScreen playScreen;
 	private GameOverScreen gameOverScreen;
 	private SettingsScreen settings;
-
+	public boolean musicEnabled = true;
 	FireBaseInterface FBIC;
 
 	public Music music;
@@ -59,6 +60,14 @@ public class MyGdxGame extends Game {
 		this.FBIC = FBIC;
 	}
 
+	public Preferences getPrefs(){
+		return Gdx.app.getPreferences(SettingsScreen.PREFERENCES_NAME);
+	}
+
+	public void setMusicEnabled(boolean musicEnabled) {
+		this.musicEnabled = musicEnabled;
+	}
+
 	@Override
 	public void create () {
 
@@ -67,10 +76,6 @@ public class MyGdxGame extends Game {
 
 		camera  = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);
-		music = Gdx.audio.newMusic(Gdx.files.internal("kahoot.wav"));
-		music.setLooping(true);
-		music.setVolume(0.05f);
-		music.play();
 	}
 
 

@@ -5,7 +5,7 @@ import com.badlogic.gdx.Preferences;
 
 public class GameSettings {
 
-    //https://libgdx.badlogicgames.com/ci/nightlies/docs/api/com/badlogic/gdx/Preferences.html
+
     private static final String MUSIC_VOLUME = "volume";
     private static final String MUSIC_ENABLED = "music.enabled";
     private static final String SOUND_VOLUME = "sound";

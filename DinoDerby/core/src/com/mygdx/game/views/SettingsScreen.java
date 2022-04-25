@@ -3,6 +3,8 @@ package com.mygdx.game.views;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -32,12 +34,11 @@ public class SettingsScreen implements Screen {
 
     private Color bgColor = Color.CYAN;
 
-
     private static final String MUSIC_VOLUME = "volume";
     private static final String MUSIC_ENABLED = "music.enabled";
-    private static final String SOUND_VOLUME = "sound";
-    private static final String SOUND_ENABLED = "sound.enabled";
-    private static final String PREFERENCES_NAME = "gameSett";
+    public static final String PREFERENCES_NAME = "gameSett";
+
+    private Music music;
 
     public Preferences getPrefs(){
         return Gdx.app.getPreferences(PREFERENCES_NAME);
@@ -47,6 +48,7 @@ public class SettingsScreen implements Screen {
         parent = gdxGame;
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
+
     }
 
     @Override
@@ -60,51 +62,24 @@ public class SettingsScreen implements Screen {
 
         final TextButton back = new TextButton("Back", skin);
         final CheckBox musicCheckbox = new CheckBox("null", skin);
+        musicCheckbox.setChecked(parent.musicEnabled);
+        music = Gdx.audio.newMusic(Gdx.files.internal("kahoot.wav"));
+        music.setLooping(true);
+        music.setVolume(0.5f);
+        music.play();
 
-/*
-        //music
-        final Slider musicSlider = new Slider(0, 1f, 0.1f, false, skin);
-        musicSlider.setValue(parent.getSettings().getMusicVolume());
-        musicSlider.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                parent.getSettings().setMusicVolume(musicSlider.getMusicVolume());
-                return false;
-            }
-        });
-*/
         musicCheckbox.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                boolean enabled = musicCheckbox.isChecked();
-                parent.getSettings().setMusicEnabled(enabled);
+                if(musicCheckbox.isChecked()){
+                    music.play();
+                } else{
+                    music.pause();
+                }
                 return false;
             }
         });
 
-
-/*
-        //sound
-        final Slider soundSlider = new Slider(0, 1f, 0.1f, false, skin);
-        musicSlider.setValue(parent.getSettings().getSoundVolume());
-        musicSlider.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                parent.getSettings().setSoundVolume(soundSlider.getSoundVolume());
-                return false;
-            }
-        });
-
-        final CheckBox soundCheckbox = new CheckBox(null, skin);
-        soundCheckbox.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                boolean enabled = soundCheckbox.isChecked();
-                parent.getSettings().setSoundEnabled(enabled);
-                return false;
-            }
-        });
-*/
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -122,24 +97,16 @@ public class SettingsScreen implements Screen {
         //adding our labels to the table
         table.add(title).fillX().uniformX();
         table.row();
-        //table.add(musicSlider);
-        //table.add(musicSlider);
-        //table.row();
         table.add(musicEnabled);
         table.add(musicCheckbox);
-        //table.row();
-        //table.add(soundLabel);
-        //table.add(soundSlider);
-        //table.row();
-        //table.add(soundEnabled);
-        //table.add(soundCheckbox);
+
         table.row();
         table.add(back).fillX().uniformX();
     }
 
-    private void setMusicEnabled(boolean enabled) {
-        getPrefs().putBoolean(MUSIC_ENABLED, enabled);
-        getPrefs().flush();
+    public boolean setMusicEnabled(boolean enabled) {
+        return getPrefs().getBoolean(MUSIC_ENABLED, true);
+        //return false;
     }
 
 
@@ -174,6 +141,8 @@ public class SettingsScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        music.dispose();
+
     }
 
 }
