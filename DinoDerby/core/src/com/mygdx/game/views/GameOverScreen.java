@@ -2,6 +2,7 @@ package com.mygdx.game.views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -18,6 +19,7 @@ public class GameOverScreen implements Screen {
     private final MyGdxGame game;
     private Stage stage;
     private Texture texture;
+    private Texture background;
     private final static int GAMEO_WIDTH= 650;
     private final static int GAMEO_HEIGHT= 200;
     private final SpriteBatch batch;
@@ -28,6 +30,7 @@ public class GameOverScreen implements Screen {
 
         this.game= game;
         this.texture= new Texture("GameOver.png");
+        background = new Texture("gameoverBG.png");
         stage= new Stage(new ScreenViewport());
         batch = new SpriteBatch();
 
@@ -37,7 +40,6 @@ public class GameOverScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-
         Table table= new Table();
         table.setFillParent(true);
         stage.addActor(table);
@@ -58,10 +60,15 @@ public class GameOverScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+
         batch.begin();
-        stage.draw();
+        batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.draw(texture,Gdx.graphics.getWidth()/2-GAMEO_WIDTH/2, Gdx.graphics.getHeight()-GAMEO_HEIGHT-50, GAMEO_WIDTH,GAMEO_HEIGHT );
         batch.end();
+        stage.draw();
 
     }
 

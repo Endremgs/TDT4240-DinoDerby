@@ -1,16 +1,16 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.views.GameWinScreen;
 import com.mygdx.game.views.MenuScreen;
 import com.mygdx.game.views.PlayScreen;
 import com.mygdx.game.views.GameOverScreen;
 import com.mygdx.game.views.TutorialScreen;
 
 public class MyGdxGame extends Game {
-	public static final int WIDTH = 480;
-	public static final int HEIGHT = 800;
 
 	public static final String TITLE = "Dino Derby";
 
@@ -18,11 +18,13 @@ public class MyGdxGame extends Game {
 	private PlayScreen playScreen;
 	private GameOverScreen gameOverScreen;
 	private TutorialScreen tutorialScreen;
+	private GameWinScreen gameWinScreen;
 
 	public static final int MENU = 0;
 	public static final int PLAY = 1;
 	public static final int GAMEOVER = 2;
 	public static final int TUTORIAL = 3;
+	public static final int GAMEWIN = 4;
 
 	FireBaseInterface FBIC;
 
@@ -47,6 +49,10 @@ public class MyGdxGame extends Game {
 			case TUTORIAL:
 				if (tutorialScreen == null) tutorialScreen = new TutorialScreen(this);
 				this.setScreen(tutorialScreen);
+				break;
+			case GAMEWIN:
+				if (gameWinScreen == null) gameWinScreen = new GameWinScreen(this);
+				this.setScreen(gameWinScreen);
 				break;
 		}
 
