@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.MyGdxGame;
 
@@ -28,7 +29,7 @@ public class SettingsScreen implements Screen {
 
     private Label title;
     private Label musicEnabled;
-    private Color bgColor = Color.CYAN;
+    private Color bgColor = Color.ORANGE;
 
     public static final String PREFERENCES_NAME = "gameSett";
 
@@ -45,6 +46,8 @@ public class SettingsScreen implements Screen {
 
         final TextButton back = new TextButton("Back", skin);
         final CheckBox musicCheckbox = new CheckBox("", skin);
+        musicCheckbox.getImage().setScaling(Scaling.fill);
+        musicCheckbox.getImageCell().size(75);
 
         if (parent.musicPlaying) {
             musicCheckbox.setChecked(true);
@@ -75,7 +78,9 @@ public class SettingsScreen implements Screen {
 
         //labels
         title = new Label("Settings", skin);
+        title.setFontScale(1.75F);
         musicEnabled = new Label("Enable Music", skin);
+        musicEnabled.setFontScale(1.25F);
         //adding our labels to the table
         table.add(title).fillX().uniformX();
         table.row();
