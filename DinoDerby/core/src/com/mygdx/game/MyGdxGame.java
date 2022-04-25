@@ -119,15 +119,15 @@ public class MyGdxGame extends Game {
 				this.setScreen(playScreen);
 				break;
 			case CREATEGAME:
-				createGameScreen = new CreateGameScreen(this);
+				if (createGameScreen == null) createGameScreen = new CreateGameScreen(this);
 				this.setScreen(createGameScreen);
 				break;
 			case JOINGAME:
-				joinGameScreen = new JoinGameScreen(this);
+				if (joinGameScreen == null) joinGameScreen = new JoinGameScreen(this);
 				this.setScreen(joinGameScreen);
 				break;
 			case LOBBY:
-				lobbyScreen = new LobbyScreen(this);
+				if (lobbyScreen == null) lobbyScreen = new LobbyScreen(this);
 				this.setScreen(lobbyScreen);
 				break;
 			case GAMEOVER:

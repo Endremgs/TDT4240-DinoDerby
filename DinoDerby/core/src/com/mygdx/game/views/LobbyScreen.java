@@ -22,12 +22,12 @@ public class LobbyScreen implements Screen {
     public LobbyScreen(MyGdxGame dinoDerby){
         parent = dinoDerby;
         stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
     }
     @Override
     public void show() {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.input.setInputProcessor(stage);
 
         Table table = new Table();
         Table leftTable = new Table();
