@@ -73,9 +73,6 @@ public class LobbyScreen implements Screen {
         if (stage.getBatch().isDrawing()) {
             stage.getBatch().end();
         }
-        else {
-            stage.getBatch().begin();
-        }
         stage.draw();
 
         startGame.addListener(new ChangeListener() {
@@ -116,10 +113,7 @@ public class LobbyScreen implements Screen {
         if (stage.getBatch().isDrawing()) {
             stage.getBatch().end();
         }
-        else {
-            stage.getBatch().begin();
-        }
-         stage.draw();
+        stage.draw();
     }
 
     @Override
