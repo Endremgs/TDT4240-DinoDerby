@@ -53,13 +53,19 @@ public class JoinGameScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 try {
                     System.out.println("GameID: " + lobbyIdField.getText());
-                    parent.getFirebaseInstance().joinGame(lobbyIdField.getText(),parent.getPlayerID());
-//                    parent.setPlayers(parent.getFirebaseInstance().getPlayersInGame(parent.getCurrGameID(), parent.getPlayerID()));
-                    parent.changeScreen(MyGdxGame.LOBBY);
+                    System.out.println("Game started i joingamescreen");
+                    if (!parent.getFirebaseInstance().checkGameStarted(lobbyIdField.getText())) {
+                        parent.getFirebaseInstance().joinGame(lobbyIdField.getText(),parent.getPlayerID());
+                        parent.changeScreen(MyGdxGame.LOBBY);
+                        System.out.println("--------");
+                        System.out.println("game is not started");
+                    }
+                    else {
+                        System.out.println("--------");
+                        System.out.println("game is started");
+                    }
                 }catch (IllegalArgumentException i) {
-//                    System.out.println("----------");
-//                    System.out.println("du fikk en exception");
-//                    System.err.println(i);
+                    System.err.println(i);
                 }
             }
         });

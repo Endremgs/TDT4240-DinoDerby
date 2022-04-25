@@ -2,6 +2,8 @@ package com.mygdx.game;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,6 +24,61 @@ public class AndroidInterfaceClass implements FireBaseInterface {
 
     public AndroidInterfaceClass() {
         this.database = FirebaseDatabase.getInstance("https://dino-derby-default-rtdb.europe-west1.firebasedatabase.app");
+    }
+
+    public Boolean checkGameStarted(String gameID) {
+        AtomicBoolean reqFinished = new AtomicBoolean(false);
+        AtomicBoolean gameStarted = new AtomicBoolean(false);
+
+        if (gameExists(gameID)) {
+
+            myRef = database.getReference(gameID+"/players");
+            myRef.get().addOnCompleteListener(snapshot -> {
+                if (snapshot.isSuccessful()) {
+                    if (snapshot.getResult().exists()) {
+                            Map<String, Map<String, Float>> players = new HashMap<>();
+                            System.out.println("snapshot exists checkGameStarted()");
+                            System.out.println(snapshot.getResult().getChildren());
+                            for (DataSnapshot player : snapshot.getResult().getChildren()) {
+                                System.out.println("i for løkke i checkGameStarted()");
+                                System.out.println(player);
+                                Map<String, Float> playerMap = new HashMap();
+                                Map<String, Long> firebasePlayerMap = (Map<String, Long>) player.getValue();
+                                for (String firebasePlayerMapKey: firebasePlayerMap.keySet()) {
+                                    playerMap.put(firebasePlayerMapKey, firebasePlayerMap.get(firebasePlayerMapKey).floatValue());
+                                }
+                                System.out.println("||||||||||||");
+                                System.out.println(playerMap);
+                                System.out.println(playerMap.get("gameStarted"));
+                                Float playerReady = playerMap.get("gameStarted");
+                                if (playerReady == 0) {
+                                    System.out.println("Not all players are ready");
+                                    gameStarted.set(false);
+                                }
+                                players.put(player.getKey(), playerMap);
+                            }
+                            parent.setPlayers(players);
+                            if (gameStarted.get()) {
+                                System.out.println("all players are ready, starting ...");
+                            }
+                        }
+                        else {
+                            gameStarted.set(false);
+                    }
+                }
+                else {
+                    throw new IllegalArgumentException("Failed to retrieve data for reference: ");
+                }
+                    reqFinished.set(true);
+            });
+            while (!reqFinished.get()) {
+                System.out.println("fetching i checkGameStarted");
+            }
+        }
+        System.out.println("returning game started variable");
+        System.out.println(gameStarted.get());
+        return gameStarted.get();
+
     }
 
     public void setParent(MyGdxGame parent) {
@@ -141,6 +198,9 @@ public class AndroidInterfaceClass implements FireBaseInterface {
     public void createGame(String playerID, String gameID) {
 //        String gameID = UUID.randomUUID().toString();
 //        String gameID = "hei";
+        if (!gameExists(gameID)) {
+
+
         try {
             myRef = database.getReference(gameID);
             myRef.child("winner").setValue("");
@@ -152,6 +212,9 @@ public class AndroidInterfaceClass implements FireBaseInterface {
             this.listenToGameFinish(gameID);
         } catch (Error err) {
             throw new IllegalArgumentException("Failed creating game with gameID: " + gameID + " for player: " + playerID + err);
+        }
+        } else {
+            throw new IllegalArgumentException("Game already exists");
         }
     }
 
