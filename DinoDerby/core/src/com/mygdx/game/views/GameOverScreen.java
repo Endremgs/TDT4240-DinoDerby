@@ -44,12 +44,13 @@ public class GameOverScreen implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
         Skin skin = new Skin(Gdx.files.internal("skin/buttonskin.json"));
-        TextButton retry= new TextButton("Retry", skin);
-        table.add(retry).fillX().uniformX();
+        TextButton mainMenu= new TextButton("Main Menu", skin);
+        table.add(mainMenu).fillX().uniformX();
 
-        retry.addListener(new ChangeListener() {
+        mainMenu.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                game.leaveGame();
                 game.changeScreen(MyGdxGame.MENU);
             }
         });

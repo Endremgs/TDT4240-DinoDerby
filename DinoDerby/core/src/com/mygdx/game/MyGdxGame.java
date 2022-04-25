@@ -4,12 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.views.GameWinScreen;
 import com.mygdx.game.views.CreateGameScreen;
+import com.mygdx.game.views.GameWinScreen;
+import com.mygdx.game.views.ChooseGameScreen;
 import com.mygdx.game.views.JoinGameScreen;
 import com.mygdx.game.views.LobbyScreen;
 import com.mygdx.game.views.GameOverScreen;
@@ -29,10 +28,11 @@ public class MyGdxGame extends Game {
 	private static final String MUSIC_ENABLED = "music.enabled";
 	private MenuScreen menuScreen;
 	private PlayScreen playScreen;
-	private CreateGameScreen createGameScreen;
+	private ChooseGameScreen chooseGameScreen;
 	private JoinGameScreen joinGameScreen;
 	private LobbyScreen lobbyScreen;
 	private GameOverScreen gameOverScreen;
+	private CreateGameScreen createGameScreen;
 
 	private SettingsScreen settings;
 	public boolean musicEnabled = true;
@@ -46,11 +46,12 @@ public class MyGdxGame extends Game {
 	public static final int PLAY = 1;
 	public static final int TUTORIAL = 2;
   	public static final int SETTINGS = 3;
-	public static final int CREATEGAME = 4;
+	public static final int CHOOSEGAME = 4;
 	public static final int JOINGAME = 5;
 	public static final int LOBBY = 6;
 	public static final int GAMEOVER = 7;
 	public static final int GAMEWIN = 8;
+	public static final int CREATEGAME = 9;
 
 	private int currentScreen;
 //	private Boolean gameStarted = false;
@@ -60,6 +61,7 @@ public class MyGdxGame extends Game {
 	FireBaseInterface FBIC;
 
 	public Music music;
+	public boolean musicPlaying = false;
 
 	protected OrthographicCamera camera;
 	Viewport viewport;
@@ -68,16 +70,6 @@ public class MyGdxGame extends Game {
 	private String currGameID;
 	private Map<String, Map<String, Float>> players;
 
-	public void startGame(Boolean gameStarted) {
-		System.out.println("checkGameStarted() i mygdxGame");
-//		System.out.println(this.gameStarted);
-		System.out.println(gameStarted);
-		if (gameStarted) {
-//			this.setScreen(this.playScreen);
-//			this.changeScreen(PLAY);
-			this.lobbyScreen.startGame();
-		}
-	}
 
 	public void finishGame(String winner) {
 		System.out.println("playerID: " + playerID);
@@ -107,13 +99,18 @@ public class MyGdxGame extends Game {
 		System.out.println("setting players");
 		System.out.println(this.players);
 
-//		if (this.currentScreen == LOBBY) {
-//			this.lobbyScreen.show();
-//		}
+		if (this.currentScreen == LOBBY) {
+			System.out.println("bør rerendere table");
+			this.lobbyScreen.reDrawPlayerTable();
+		}
 	}
 
 	public Map<String, Map<String, Float>> getPlayers() {
 		return new HashMap(players);
+	}
+
+	public void leaveGame() {
+		FBIC.leaveGame(currGameID, playerID);
 	}
 
 	public FireBaseInterface getFirebaseInstance() {
@@ -134,9 +131,10 @@ public class MyGdxGame extends Game {
 			case SETTINGS:
 				if (settings == null) settings = new SettingsScreen(this);
 				this.setScreen(settings);
-			case CREATEGAME:
-				if (createGameScreen == null) createGameScreen = new CreateGameScreen(this);
-				this.setScreen(createGameScreen);
+				break;
+			case CHOOSEGAME:
+				if (chooseGameScreen == null) chooseGameScreen = new ChooseGameScreen(this);
+				this.setScreen(chooseGameScreen);
 				break;
 			case JOINGAME:
 				if (joinGameScreen == null) joinGameScreen = new JoinGameScreen(this);
@@ -157,6 +155,10 @@ public class MyGdxGame extends Game {
 			case GAMEWIN:
 				if (gameWinScreen == null) gameWinScreen = new GameWinScreen(this);
 				this.setScreen(gameWinScreen);
+				break;
+			case CREATEGAME:
+				if (createGameScreen == null) createGameScreen = new CreateGameScreen(this);
+				this.setScreen(createGameScreen);
 				break;
 		}
 
@@ -185,8 +187,10 @@ public class MyGdxGame extends Game {
 
 		music = Gdx.audio.newMusic(Gdx.files.internal("kahoot.wav"));
 		music.setLooping(true);
-		music.setVolume(0.05f);
+		music.setVolume(1f);
 		music.play();
+		musicPlaying = true;
+
 
 		camera  = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);

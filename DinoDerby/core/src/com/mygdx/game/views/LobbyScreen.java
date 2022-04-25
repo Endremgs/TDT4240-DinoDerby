@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -18,6 +19,8 @@ public class LobbyScreen implements Screen {
 
     private final MyGdxGame parent;
     private Stage stage;
+    private Table rightTable;
+    private Skin skin = new Skin(Gdx.files.internal("skin/buttonskin.json"));
 
     public LobbyScreen(MyGdxGame dinoDerby){
         parent = dinoDerby;
@@ -28,10 +31,13 @@ public class LobbyScreen implements Screen {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.input.setInputProcessor(stage);
+        drawStage();
 
+    }
+    private void drawStage() {
         Table table = new Table();
         Table leftTable = new Table();
-        Table rightTable = new Table();
+        rightTable = new Table();
 
 
         table.setFillParent(true);
@@ -40,26 +46,17 @@ public class LobbyScreen implements Screen {
         table.add(leftTable);
         table.add(rightTable);
 
-        Skin skin = new Skin(Gdx.files.internal("skin/buttonskin.json"));
 
         TextButton startGame = new TextButton("Start Game", skin);
-        TextButton backBtn = new TextButton("Back", skin);
-
-        //Create a list view rendering a text element for each player in the lobby.
-        //Ensure rerender of this list upon update.
-//        List listView = new List(List.ListStyl);
-
-        TextButton checkPlayers = new TextButton("check", skin);
+        TextButton leaveBtn = new TextButton("Leave Game", skin);
 
         leftTable.add(startGame).fillX().uniformX();
         leftTable.row().pad(10, 0, 10, 0);
         leftTable.row();
-        leftTable.add(backBtn).fillX().uniformX();
-        leftTable.row();
-        leftTable.add(checkPlayers).fillX().uniformX();
+        leftTable.add(leaveBtn).fillX().uniformX();
 
 
-        TextButton lobbyText = new TextButton("Players", skin);
+        Label lobbyText = new Label("Players", skin);
         rightTable.add(lobbyText);
         rightTable.row().pad(10, 0, 10, 0);
         System.out.println("-----------");
@@ -67,59 +64,45 @@ public class LobbyScreen implements Screen {
         for (String player: parent.getPlayers().keySet()) {
             System.out.println("-----------");
             System.out.println(player);
-            TextButton playerBtn = new TextButton(player, skin);
-            rightTable.add(playerBtn);
+            Label playerText = new Label(player, skin);
+            rightTable.add(playerText);
             rightTable.row().pad(10, 0, 10, 0);
         }
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-//        if (stage.)
-//            stage
-
-//        try {
         if (stage.getBatch().isDrawing()) {
             stage.getBatch().end();
         }
         stage.draw();
-//        } catch (IllegalStateException i) {
-//            stage.getBatch().end();
-//            stage.getBatch().begin();
-//            stage.draw();
-//            System.out.println("Restarting stage");
-//        }
 
         startGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 try {
                     parent.getFirebaseInstance().setGameStarted(parent.getCurrGameID(), parent.getPlayerID());
-//                    parent.changeScreen(MyGdxGame.PLAY);
-//                    parent.getFirebaseInstance().setGameStarted(parent.getCurrGameID(), true);
                     parent.changeScreen(MyGdxGame.PLAY);
                 }catch (IllegalArgumentException i) {
                     System.out.println(i);
                 }
             }
         });
-        backBtn.addListener(new ChangeListener() {
+        leaveBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                parent.changeScreen(MyGdxGame.MENU);
-            }
-        });
-        checkPlayers.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("--------");
-                System.out.println("players in game are:");
-                System.out.println(parent.getPlayers());
+                try {
+                    parent.getFirebaseInstance().leaveGame(parent.getCurrGameID(), parent.getPlayerID());
+                    parent.changeScreen(MyGdxGame.MENU);
+                } catch (IllegalArgumentException i) {
+                    System.err.println(i);
+                }
             }
         });
     }
-
-    public void startGame() {
-
-        parent.changeScreen(MyGdxGame.PLAY);
+    public void reDrawPlayerTable() {
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        stage.clear();
+        drawStage();
     }
 
     @Override
@@ -130,14 +113,7 @@ public class LobbyScreen implements Screen {
         if (stage.getBatch().isDrawing()) {
             stage.getBatch().end();
         }
-//        try {
-         stage.draw();
-//        } catch (IllegalStateException i) {
-//            stage.getBatch().end();
-//            stage.getBatch().begin();
-//            stage.draw();
-//            System.out.println("Restarting stage");
-//        }
+        stage.draw();
     }
 
     @Override

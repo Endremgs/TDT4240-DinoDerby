@@ -17,6 +17,7 @@ import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.SimpleDirectionGestureDetector;
 import com.mygdx.game.entity.systems.B2dContactListener;
 import com.mygdx.game.entity.systems.CollisionSystem;
+import com.mygdx.game.entity.systems.GhostSystem;
 import com.mygdx.game.entity.systems.PhysicsSystem;
 import com.mygdx.game.entity.systems.PlayerControlSystem;
 import com.mygdx.game.entity.systems.RenderingSystem;
@@ -33,6 +34,7 @@ public class PlayScreen implements Screen {
     private final InputProcessor inputProcessor;
 
     public int jump = 0;
+    private boolean ghostsCreated = false;
 
     public PlayScreen(MyGdxGame myGdxGame) {
         parent = myGdxGame;
@@ -45,12 +47,6 @@ public class PlayScreen implements Screen {
 
         levelFactory = new LevelFactory(engine, world);
         levelFactory.createMap();
-
-        for (String ghostPlayerID: parent.getPlayers().keySet()) {
-            if (!ghostPlayerID.equals(parent.getPlayerID())) {
-                levelFactory.createGhost(ghostPlayerID);
-            }
-        }
 
                 inputProcessor = (new SimpleDirectionGestureDetector(new SimpleDirectionGestureDetector.DirectionListener() {
                     @Override
@@ -74,6 +70,7 @@ public class PlayScreen implements Screen {
         engine.addSystem(new PlayerControlSystem(cam, parent, this));
         engine.addSystem(new PhysicsSystem(world));
         engine.addSystem(new CollisionSystem(parent));
+        engine.addSystem(new GhostSystem(parent));
 
     }
 
@@ -101,6 +98,16 @@ public class PlayScreen implements Screen {
 
     }
 
+    private void createGhosts() {
+        int sprite = 0;
+        for (String ghostPlayerID: parent.getPlayers().keySet()) {
+            if (!ghostPlayerID.equals(parent.getPlayerID())) {
+                levelFactory.createGhost(ghostPlayerID, sprite % 2);
+                sprite++;
+            }
+        }
+        ghostsCreated = true;
+    }
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
@@ -110,6 +117,9 @@ public class PlayScreen implements Screen {
             return;
         }
 
+        if(!ghostsCreated) {
+            createGhosts();
+        }
         engine.update(delta);
 
     }
@@ -143,6 +153,7 @@ public class PlayScreen implements Screen {
         for(int i = 0; i < bodies.size; i++) {
             world.destroyBody(bodies.get(i));
         }
+        ghostsCreated = false;
     }
 
     @Override

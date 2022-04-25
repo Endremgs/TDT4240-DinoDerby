@@ -118,6 +118,8 @@ public class RenderingSystem extends SortedIteratingSystem {
 //                game.getFirebaseInstance().updatePlayerInGame(game.getCurrGameID(), game.getPlayerID(), transform.position.x, transform.position.y);
 //            }
 
+
+            /*
             Color c = sb.getColor();
             if (cmGhost.has(entity)) {
                 //Changing opacity if entity is ghost
@@ -130,6 +132,8 @@ public class RenderingSystem extends SortedIteratingSystem {
                 transform.position.y = playerMap.get("yPos");
 
             }
+             */
+
             sb.draw(texture.region,
                     transform.position.x - originX, transform.position.y -originY,
                     originX, originY,

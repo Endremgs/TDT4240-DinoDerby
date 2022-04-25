@@ -14,15 +14,30 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.Toast;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class JoinGameScreen implements Screen {
 
     private final MyGdxGame parent;
     private Stage stage;
+    Skin skin = new Skin(Gdx.files.internal("skin/buttonskin.json"));
+    private final List<Toast> toasts = new LinkedList<Toast>();
+    private Toast.ToastFactory toastFactory;
 
     public JoinGameScreen(MyGdxGame dinoDerby){
         parent = dinoDerby;
         stage = new Stage(new ScreenViewport());
+
+        BitmapFont font = skin.getFont("DoHyeon");
+
+        // create factory
+        toastFactory = new Toast.ToastFactory.Builder()
+                .font(font)
+                .build();
     }
     @Override
     public void show() {
@@ -30,15 +45,10 @@ public class JoinGameScreen implements Screen {
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
-        Skin skin = new Skin(Gdx.files.internal("skin/buttonskin.json"));
 
         final TextField lobbyIdField = new TextField("", skin);
         TextButton joinGame = new TextButton("Join game", skin);
         TextButton backBtn = new TextButton("Back", skin);
-//        Label text = new Label("Enter game ID:", skin);
-
-//        table.add(text).fillX().uniformX();
-//        table.row();
         table.add(lobbyIdField).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
         table.add(joinGame).fillX().uniformX();
@@ -53,17 +63,24 @@ public class JoinGameScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 try {
                     System.out.println("GameID: " + lobbyIdField.getText());
-                    parent.getFirebaseInstance().joinGame(lobbyIdField.getText(),parent.getPlayerID());
-//                    parent.setPlayers(parent.getFirebaseInstance().getPlayersInGame(parent.getCurrGameID(), parent.getPlayerID()));
-                    parent.changeScreen(MyGdxGame.LOBBY);
+                    System.out.println("Game started i joingamescreen");
+                    if (!parent.getFirebaseInstance().checkGameStarted(lobbyIdField.getText())) {
+                        parent.getFirebaseInstance().joinGame(lobbyIdField.getText(),parent.getPlayerID());
+                        parent.changeScreen(MyGdxGame.LOBBY);
+                        System.out.println("--------");
+                        System.out.println("game is not started");
+                    }
+                    else {
+                        System.out.println("--------");
+                        System.out.println("game is started");
+                        toasts.add(toastFactory.create("Game is already started", Toast.Length.LONG));
+                    }
                 }catch (IllegalArgumentException i) {
-//                    System.out.println("----------");
-//                    System.out.println("du fikk en exception");
-//                    System.err.println(i);
+                    System.err.println(i);
+                    toasts.add(toastFactory.create(i.getMessage(), Toast.Length.LONG));
                 }
             }
         });
-
         backBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -78,6 +95,15 @@ public class JoinGameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+        Iterator<Toast> it = toasts.iterator();
+        while(it.hasNext()) {
+            Toast t = it.next();
+            if (!t.render(Gdx.graphics.getDeltaTime())) {
+                it.remove(); // toast finished -> remove
+            } else {
+                break; // first toast still active, break the loop
+            }
+        }
     }
 
     @Override

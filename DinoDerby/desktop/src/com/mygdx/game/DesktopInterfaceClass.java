@@ -11,9 +11,8 @@ public class DesktopInterfaceClass implements FireBaseInterface {
 
     }
 
-
     @Override
-    public void createGame(String playerID) {
+    public void createGame(String playerID, String gameID) {
     }
 
     @Override
@@ -23,6 +22,11 @@ public class DesktopInterfaceClass implements FireBaseInterface {
 
     @Override
     public void finishGame(String gameID, String playerID) {
+
+    }
+
+    @Override
+    public void leaveGame(String gameID, String playerID) {
 
     }
 
@@ -42,6 +46,11 @@ public class DesktopInterfaceClass implements FireBaseInterface {
     @Override
     public void setParent(MyGdxGame parent) {
 
+    }
+
+    @Override
+    public Boolean checkGameStarted(String gameID) {
+        return null;
     }
 
 
