@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.MyGdxGame;
 
-public class GameOverScreen implements Screen {
+public class GameWinScreen implements Screen {
 
     private final MyGdxGame game;
     private Stage stage;
@@ -26,11 +26,11 @@ public class GameOverScreen implements Screen {
 
 
 
-    public GameOverScreen(MyGdxGame game){
+    public GameWinScreen(MyGdxGame game){
 
         this.game= game;
         this.texture= new Texture("GameOver.png");
-        background = new Texture("gameoverBG.png");
+        background = new Texture("gamefinishBG.png");
         stage= new Stage(new ScreenViewport());
         batch = new SpriteBatch();
 

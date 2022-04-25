@@ -20,10 +20,6 @@ public class TutorialScreen implements Screen {
     private Stage stage;
     private final SpriteBatch sb;
     private Texture texture;
-
-    private static final int WIDTH = 480;
-    private static final int HEIGHT = 800;
-
     public TutorialScreen(MyGdxGame dinoDerby){
         parent = dinoDerby;
         this.texture = new Texture("Tutorial.png");
@@ -57,10 +53,11 @@ public class TutorialScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         sb.begin();
 
-        sb.draw(texture, Gdx.graphics.getWidth()/WIDTH,
-                Gdx.graphics.getHeight()/HEIGHT);
+        sb.draw(texture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         sb.end();
         stage.draw();

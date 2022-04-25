@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.views.GameWinScreen;
 import com.mygdx.game.views.CreateGameScreen;
 import com.mygdx.game.views.JoinGameScreen;
 import com.mygdx.game.views.LobbyScreen;
@@ -22,10 +24,6 @@ import java.util.UUID;
 
 
 public class MyGdxGame extends Game {
-	public static final int WIDTH = 1600;
-	public static final int HEIGHT = 960;
-
-
 
 	public static final String TITLE = "Dino Derby";
 	private static final String MUSIC_ENABLED = "music.enabled";
@@ -40,6 +38,7 @@ public class MyGdxGame extends Game {
 	public boolean musicEnabled = true;
   
 	private TutorialScreen tutorialScreen;
+	private GameWinScreen gameWinScreen;
 
 	public boolean gameStarted = false;
 	
@@ -51,6 +50,7 @@ public class MyGdxGame extends Game {
 	public static final int JOINGAME = 5;
 	public static final int LOBBY = 6;
 	public static final int GAMEOVER = 7;
+	public static final int GAMEWIN = 8;
 
 	private int currentScreen;
 //	private Boolean gameStarted = false;
@@ -153,6 +153,10 @@ public class MyGdxGame extends Game {
 			case TUTORIAL:
 				if (tutorialScreen == null) tutorialScreen = new TutorialScreen(this);
 				this.setScreen(tutorialScreen);
+				break;
+			case GAMEWIN:
+				if (gameWinScreen == null) gameWinScreen = new GameWinScreen(this);
+				this.setScreen(gameWinScreen);
 				break;
 		}
 
